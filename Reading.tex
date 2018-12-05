@@ -1,0 +1,1532 @@
+\documentclass{article}
+\usepackage{xcolor}                               % color package for colorful font
+\usepackage{fancyvrb}                             % transcribing package for Verbatim environment
+% +++++ set header and/or footer ++++++
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sf \myleftmark}
+\fancyhead[R]{\sf Tche L.}
+\fancyfoot[C]{\thepage{}}
+% -------------------------------------
+\usepackage[text={148mm,220mm},centering,includehead,vmarginratio=1:1]{geometry} % set paper layout
+\setlength{\headwidth}{\textwidth}                % set header width
+\setlength{\headheight}{14pt}                     % set header height
+% ++++++ set title informations +++++++
+\title{\Huge\bf Paper Reading Note}
+\author{Tche L.}
+\date{\today}
+% -------------------------------------
+% +++++++ set first line indent +++++++
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+% -------------------------------------
+% +++++ set section title format ++++++
+% \usepackage{titlesec}
+% \titleformat{\subsubsection}{}{}{2em}{\bf}
+% \titleformat{\subsubsection}{}{\arabic{subsubsection}}{1em}{\em}
+% \titleformat{\paragraph}{\sc}{}{}{\hspace{2em}}
+% -------------------------------------
+\usepackage{enumerate}                            % sorting package for enumerate environment
+%\usepackage{enumitem}                             % sorting package for enumitem environment
+\usepackage{times}                                % Times font package for Times New Roman font
+\usepackage{mathptmx}
+\usepackage{nicefrac}                             % fraction package for \nicefrac command
+\usepackage{amsmath}
+\usepackage{amssymb}                              % symbol package for \triangleq defination command
+\usepackage{ulem}                                 % underline package for \uline commmand
+\usepackage[stable]{footmisc}                             % footnote package for \footnote in chapter or section title
+\usepackage[colorlinks,linkcolor=blue,anchorcolor=yellow,citecolor=green]{hyperref}      % hyperreference package
+% \usepackage{graphicx}                             % drawing package for \includegraphics command
+% \usepackage{subfig}                               % subgraph package for \subfloat command
+% \usepackage{bm}                                   % bold type package for \bm command
+
+\setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
+\renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
+
+\renewcommand{\part}[1]{{\LARGE\bf\noindent #1}}
+\newcommand{\myleftmark}{\thesection~~~~\textsc{\pmk}} %\MakeUppercase{\pmk}}
+\newcommand{\Ppath}{/home/tche/Learning/Learning/Paper/}
+\newcommand{\prf}{This is relative path from \Papth to the paper file}
+\newcommand{\pmk}{This is the brief info.}
+\newcommand{\pti}{This is the paper tile}
+\newcommand{\pay}{These are authors and year}
+\newcommand{\pjo}{This is the journal}
+\newcommand{\pda}{This is the date}
+\newcommand{\refp}[1]{\href{run:\Ppath\prf}{#1}}
+\newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}}
+\newcommand{\sline}{*************************}
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\myem}[1]{{\color{red}\uline{#1}}}
+\newcommand{\mynem}[1]{\textsl{\uline{#1}}}
+\newcommand{\myno}[1]{{\color{blue}#1}}
+\newcommand{\mynno}[1]{{\color{red}#1}}
+\newcommand{\myde}[1]{{\color{white!45!lightgray!55}#1}}
+\newcommand{\myRe}{\mathfrak{Re}}
+\newcommand{\myIm}{\mathfrak{Im}}
+\newcommand{\mycR}{\mathcal{R}}
+\newcommand{\mycI}{\mathcal{I}}
+\newcommand{\mycH}{\mathcal{H}}
+\newcommand{\Frechet}{Fr\'{e}chet~}
+\newcommand{\Lame}{Lam\'{e}~}
+\newcommand{\Berenger}{B\'{e}renger~}
+\newcommand{\etal}{\textit{et al.}}
+\newcommand{\sgn}{\text{sgn}}
+% \newcommand{\npart}{\newpage\setcounter{footnote}{0}\setcounter{section}{0}}
+\newcommand{\npart}{\newpage\setcounter{footnote}{0}}
+
+\begin{document}
+
+\maketitle
+\renewcommand{\pmk}{Contents}
+\tableofcontents
+\newpage
+
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\part{Full Waveform Inversion}
+
+\renewcommand{\pmk}{Pratt\_1997\_GJI\_Newton methods}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Gauss-Newton and full Newton methods in frequency-space seismic waveform inversion}
+\renewcommand{\pay}{R. G. Pratt, C. Shin and G. J. Hicks, 1997}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2016/9/3 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Wave inversion 1st attempt: Lines and Kelly, 1983 (partial derivatives of the seismogram, wedge-shaped model).
+  \item An important step: Lailly, 1983; Tarantola, 1984 (steepest descent direction for the inverse problem, backpropagate the data residuals and correlate).
+  \item Numerical results of backpropagating methods: Kolb, Collino and Lailly, 1986; Gauthier, Virieux and Tarantola, 1986.
+  \item Extend to elastic and complex problems: Mora, 1987a.
+  \item Apply to the frequency domain with FDFD: Pratt and Worthington, 1990; Pratt, 1990.
+  \item \sline
+  \item Apply to ray theoretical solutions: Beydoun \etal, 1989; Lambare \etal, 1992.
+  \item Ray-based techniques to real reflection data: Beydoun \etal, 1989; Beydoun \etal, 1990.
+  \item Outside the ray paradigm to reflection data: Crase \etal, 1990.
+  \item Tomography from real cross-borehole data: Zhou \etal, 1995 in time-domain; Song, Williamson and Pratt, 1995 \& Pratt \etal, 1995 in frequency-domain.
+  \item \sline
+  \item Gauss-Newton method with FDFE: Shin, 1988.
+  \item Full Newton method for small problem: Santosa, 1987.
+  \item \sline
+  \item Multiple-souce numerical modeling by FDM: Marfurt, 1984.
+  \item Further developments in FDM: Jo, Shin and Suh, 1996; Stekl and Pratt, 1997.
+  \item The combined FDM/FDI: Tarantola, 1987 (replace functional analysis with matrix algebra).
+  \item \sline
+  \item Matrix algebra of FDM/FDI formalism: Lailly, 1983.
+\end{enumerate}\par
+\subsection{Forward}
+Wave equations:
+\[ \mbf M\ddot{\tilde{\mbf u}}(t)+\mbf K\tilde{\mbf u}(t)=\tilde{\mbf f}(t) \text{\hspace{5mm}or\hspace{5mm}if viscous,~} \mbf M\ddot{\tilde{\mbf u}}(t)+\mbf C\dot{\tilde{\mbf u}}+\mbf K\tilde{\mbf u}(t)=\tilde{\mbf f}(t) \]
+where $\mbf M$: mass matrix; $\mbf C$: damping matrix; $\mbf K$: stiffness matrix; $\tilde{\mbf f}$: source terms.\par
+Take FT:
+\[ \mbf K\mbf u(\omega)+i\omega\mbf C\mbf u(\omega)-\omega^2\mbf M\mbf u(\omega)=\mbf f(\omega) \]
+i.e.
+\[ \mbf S\mbf u=\mbf f \text{\hspace{5mm}or\hspace{5mm}} \mbf u=\mbf S^{-1}\mbf f \text{,\hspace{5mm}with~} \mbf S=\mbf K-\omega^2\mbf M+i\omega\mbf C \]
+when $f_i=\delta_{ij}$ Kronecker delta, $\mbf S^{-1}=[\mbf g^{(1)},\mbf g^{(2)},\ldots,\mbf g^{(l)}]$, where $\mbf g^{(j)}$ approximate the discretized Green's function for an impulse at the $j$th node, and $l$ is nodal point number.\par
+\subsection{Inversion}
+Residual error: $\delta d_i=u_i-d_i,(i=1,2,\ldots,n)$, where $n$ is the number of receivers.\par
+Minimize the misfit function:
+\[ \mbf E(\mbf p)=\frac{1}{2}\delta\mbf d^t\delta\mbf d^*\myno{=\frac{|\delta\mbf d|^2}{2}} \]
+where $\mbf p$ is model parameters, and the superscript t and * represent matrix transpose and complex conjugate, respectively.\par
+\subsubsection{Gradient method}
+\[ \mbf p^{(k+1)}=\mbf p^{(k)}-\alpha^{(k)}\nabla_p\mbf E^{(k)} \]
+\[ \nabla_p\mbf E=\frac{\partial\mbf E}{\partial\mbf p}=\myRe\{\mbf J^t\delta\mbf d^*\} \]
+where $\mbf J$ is the \Frechet derivative matrix and $J_{ij}=\nicefrac{\partial u_i}{\partial p_j},i=(1,2,\ldots,n),j=(1,2,\ldots,m)$, $m$ is the number of model parameters.\par
+For linear forward problems:
+\[ \alpha^{(k)}=\frac{|\nabla_p\mbf E|^2}{|\mbf J\nabla_p E|^2}. \]
+While for nonlinear forward problems, find $\alpha^{(k)}$ using line-search method.\par
+Augment $\mbf J_{m\times n}$ to $\hat{\mbf J}_{m\times l}$ and $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$, rewrite:
+\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^* \} \]\par
+Assuming source is independent of parameter, because of $\mbf S\mbf u=\mbf f$:
+\[ \mbf S\frac{\partial\mbf u}{\partial p_i}=-\frac{\partial\mbf S}{\partial p_i}\mbf u \hspace{5mm}\Rightarrow\hspace{5mm} \frac{\partial\mbf u}{\partial p_i}=\mbf S^{-1}\mbf f^{(i)} \text{,\hspace{5mm}with~} \mbf f^{(i)}=-\frac{\partial\mbf S}{\partial p_i}\mbf u\]
+where $\mbf f^{(i)}$ is \myem{the virtual source term}.\par
+\subsubsection{Gradient direction}
+\[ \hat{\mbf J}=\Big[\frac{\partial\mbf u}{\partial p_1},\frac{\partial\mbf u}{\partial p_2},\ldots,\frac{\partial\mbf u}{\partial p_m}\Big]=\mbf S^{-1}[\mbf f^{(1)},\mbf f^{(2)},\ldots,\mbf f^{(m)}] \text{\hspace{5mm}or\hspace{5mm}} \hat{\mbf J}=\mbf S^{-1}\mbf F \]\par
+Gradient:
+\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t\mbf v\}. \]
+Because $\mbf S^{-1}$ is symmetric for seismic source-receiver reciprocal problems,
+\[ \mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*=\mbf S^{-1}\delta\hat{\mbf d}^* \]\par
+Another development:
+\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\hat{\mbf J}^{t*}\delta\hat{\mbf d}\} \]
+\[ \mbf w=\mbf v^*=[\mbf S^{-1}]^{t*}\delta\hat{\mbf d}=[\mbf S^{-1}]^*\delta\hat{\mbf d} \]
+where $\mbf v$ and $\mbf w$ are \myem{the backpropagated fields}.\par
+For the $i$th component:
+\[ (\nabla_p\mbf E)_i=\myRe\{\mbf f^{(i)t}\mbf v\}=\myRe\{\mbf u^t\Big[\frac{\partial\mbf S^t}{\partial p_i}\Big]\mbf v\} \]\par
+\subsubsection{Newton method}
+Taylor expansion:
+\[ \mbf E(\mbf p+\delta\mbf p)=\mbf E(\mbf p)+\delta\mbf p^t\nabla_p\mbf E(\mbf p)+\frac{1}{2}\delta\mbf p^t\mbf H\delta\mbf p+O(|\delta\mbf p|^3)  \]
+where $\mbf H$ is the $m\times m$ Hessian second-derivative matrix and
+\[ H_{ij}=\frac{\partial^2\mbf E(\mbf p)}{\partial p_i\partial p_j},i=(1,2,\ldots,m),j=(1,2,\ldots,m) \]\par
+Minimizing with $\delta\mbf p$, take the first-derivative, the solution is
+\[ \mbf H\delta\mbf p=-\nabla_p\mbf E \text{\hspace{5mm}or\hspace{5mm}} \delta\mbf p=-\mbf H^{-1}\nabla_p\mbf E \]\par
+Newton method for iterative solution:
+\[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H^{-1}\nabla_p\mbf E \]
+\[ H_{ij}=\frac{\partial^2\mbf E}{\partial p_i\partial p_j}=\myRe\{\mbf J^t\mbf J^*\}+\myRe\Big\{\Big[\Big(\frac{\partial}{\partial p_1}\mbf J^t\Big)\delta\mbf d^*,\Big(\frac{\partial}{\partial p_2}\mbf J^t\Big)\delta\mbf d^*,\ldots,\Big(\frac{\partial}{\partial p_m}\mbf J^t\Big)\delta\mbf d^*\Big]\Big\}=\mbf H_a+\mbf R \]
+where
+\[ \mbf H_a=\myRe\{\mbf J^t\mbf J^*\} \]
+\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial p_t}\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]\par
+\subsubsection{Gauss-Newton method}
+If we neglect the 2nd term $\mbf R$, Gauss-Newton formula:
+\[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H_a^{-1}\nabla_p\mbf E \text{\hspace{5mm}and\hspace{5mm}} \delta\mbf p=-\mbf H_a^{-1}\nabla_p\mbf E \]\par
+Apply a damping term of regularization:
+\[ \delta\mbf p=-(\mbf H_a+\lambda\mbf I)^{-1}\nabla_p\mbf E \text{\hspace{5mm}\myno{(LM method)}}\]\par
+The parameter estimates
+\[ \delta\hat{\mbf p}=-\mbf H^\dagger\nabla_p\mbf E=\gamma\delta\mbf p,\gamma=-\mbf H^\dagger\myRe\{\mbf J^t\mbf J^*\} \]
+where $\gamma$ is the resolution matrix.\par
+Another interpretation for $\delta\mbf p$:
+\[ \delta\mbf p=-(\mbf K^t\mbf K+\lambda\mbf I)^{-1}\mbf K^t\delta\mbf d^\prime=-\mbf K^t(\mbf K\mbf K^t+\lambda\mbf I)^{-1}\delta\mbf d^\prime \]
+where
+\begin{equation*}
+\mbf K=\left[ \begin{array}{c}
+\myRe\{\mbf J\} \\
+\myIm\{\mbf J\}
+\end{array}\right],
+\delta\mbf d^\prime=\left[ \begin{array}{c}
+\myRe\{\delta\mbf d\} \\
+\myIm\{\delta\mbf d\}
+\end{array}\right]
+\end{equation*}\par
+\subsubsection{Full Newton method}
+Use the exact Hessian matrix:
+\[ \delta\mbf p=-(\mbf H_a+\mbf R)^{-1}\nabla_p\mbf E \]
+where
+\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial\mbf p^t}\mbf J^t\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]
+\[ R_{ij}=\myRe\Big\{\Big[\frac{\partial^2\mbf u^t}{\partial p_i\partial p_j}\Big]\delta\hat{\mbf d}^*\Big\},i=(1,2,\ldots,m),j=(1,2,\ldots,m) \]
+with the augment of $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$.\par
+\subsubsection{Exact Hessian}
+From
+\[ \mbf S\frac{\partial\mbf u}{\partial p_i}=-\frac{\partial\mbf S}{\partial p_i}\mbf u \]
+take the derivative of $p_j$ to both sides:
+\[ \mbf S\frac{\partial^2\mbf u}{\partial p_j\partial p_i}+\Big(\frac{\partial\mbf S}{\partial p_j}\Big)\Big(\frac{\partial\mbf u}{\partial p_i}\Big)=-\Big(\frac{\partial\mbf S}{\partial p_i}\Big)\Big(\frac{\partial\mbf u}{\partial p_j}-\frac{\partial^2\mbf S}{\partial p_j\partial p_i}\mbf u \]
+i.e.
+\[ \mbf S\frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf f^{(ij)} \text{\hspace{5mm}or\hspace{5mm}} \frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf S^{-1}\mbf f^{(ij)} \]
+where
+\[ \mbf f^{(ij)}=\Big(\frac{\partial\mbf S}{\partial p_i}\Big)\Big(\frac{\partial\mbf u}{\partial p_j}\Big)+\Big(\frac{\partial\mbf S}{\partial p_j}\Big)\Big(\frac{\partial\mbf u}{\partial p_i}\Big)+\frac{\partial^2\mbf S}{\partial p_j\partial p_i}\mbf u \]
+is \myem{the 2nd-order virtual source term}.\par
+Because of
+\[ \Big[\frac{\partial^2\mbf u}{\partial p_i\partial p_j}\Big]^t=-[\mbf f^{(ij)}]^t[\mbf S^{-1}]^t \]
+obtain:
+\[ R_{ij}=-\myRe\{[\mbf f^{(ij)}]^t\mbf v\},\mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\myno{=\mbf S^{-1}\delta\hat{\mbf d}^*} \]\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Pratt\_1999\_Geophy\_Frequency domain inversion}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Seismic waveform inversion in the frequency domain, Part 1: Theory and verification in a physical scale model}
+\renewcommand{\pay}{R. Gerhard Pratt, 1999}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2016/9/14 Wen.}
+\section{\pinfo}
+\subsection{Introduction and basic principles}
+Same as the former one (Pratt\_1997\_GJI\_Newton methods), i.e. the gradient method.\par
+\subsection{Source signature estimation}
+Assume source signature is scaled source terms in the modeling,
+\[ \mbf S\mbf u=s\mbf f\]
+where $\mbf s$ is an unknown complex-value scalar.\par
+Using the misfit function:
+\[ \mbf E=\nicefrac{1}{2}\delta\mbf d^t\delta\mbf d^* \]\par
+The minimum misfit is found when
+\[ s=\frac{\mbf u^t\mbf d^*}{\mbf u^t\mbf u^*} \]\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Sirgue\_2004\_Geophy\_Temporal frequencies selecting}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Efficient waveform inversion and imaging: A strategy for selecting temporal frequencies}
+\renewcommand{\pay}{Laurent Sirgue and R. Gerhard Pratt, 2004}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2016/9/23 Fri.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Wave inversion implementation: Tarantola, 1986 \& Mora, 1987 \& Burks \etal, 1995 \& Shipp and Singh, 2002 in time domain; Pratt and Worthington, 1990 \& Liao and McMechan, 1996 in frequency domain.
+  \item \sline
+  \item Time windowing the residuals: Shipp and Singh, 2002 in time domain; Mallick and Frazer, 1987 in frequency domain.
+  \item Low-pass filter the data: Bunks \etal,1995.
+  \item \sline
+  \item Single frequency yields finite information of the model: Wu and Toks\"{o}z, 1987.
+  \item \sline
+  \item Limited number of frequencies would suffice: Freudenreich and Singh, 2000.
+  \item \sline
+  \item Image stretch (NMO stretch) of prestack depth migration: Gardner \etal, 1974.
+  \item Stretch effect compensate lack of low frequencies and improve the spectral content of stacked data: Haldorsen and Farmer, 1989.
+  \item Prestack depth imaging for reflection data: Tarantola, 1986.
+  \item Frequency domain prestack depth migration: Schleicher \etal, 1993.
+  \item \sline
+  \item Compute step length of iterative gradient method using linear estimate: Tarantola, 1984a; Mora, 1987.
+  \item Conjugate gradient method: Concus \etal, 1976.
+  \item Compute gradient without explicitly partial derivatives of the data: Lailly, 1983; Tarantola, 1987; Pratt and Worthington, 1990; Pratt \etal, 1998.
+  \item Wavepath as the adjoint of the \Frechet partial derivative: Woodward, 1992.
+  \item Diffraction tomography: Devaney, 1981; Wu and Toks\"{o}z, 1987.
+  \item Linearized inversion in the $(\omega,k)$ domain: Clayton and Stolt, 1981; Ikelle \etal, 1986.
+\end{enumerate}\par
+\subsection{Waveform inversion}
+Constant-density acoustic-wave equation:
+\[ \Big(\nabla^2+\frac{\omega^2}{c^2(\mbf x)}\Big)\Psi(\mbf x,\mbf s,\omega)=-\delta(\mbf x-\mbf s) \]
+and the model parameter
+\[ m(\mbf x)=\frac{1}{c^2(\mbf x)} \]
+where $\Psi(\mbf x,\mbf s,\omega)$ is the pressure field at the spatial location $\mbf x$ with the source location $\mbf s$.\par
+If $\omega$ is implicit, the complex-valued data residuals with source-receiver coordinates $\mbf s$ and $\mbf r$:
+\[ \Delta\Psi(\mbf r,\mbf s)=\Psi_{calc}(\mbf r,\mbf s)-\Psi_{obs}(\mbf r,\mbf s) \]\par
+Minimize the misfit function:
+\[ E=\frac{1}{2}\sum_s\sum_r\delta\Psi^*(\mbf r,\mbf s)\delta\Psi(\mbf r,\mbf s) \]
+where $*$ denotes complex conjugation. And the descent direction:
+\[ g(\mbf x)=-\nabla_m E=-\frac{\partial E}{\partial m(\mbf x)} \]
+The model updated by:
+\[ m(\mbf x)^{l+1}=m(\mbf x)^l+\gamma^lg(\mbf x)^l \]\par
+Compute gradient by zero-lag correlation of the forward propagated wavefield and the back-propagated wavefield (Pratt \etal, 1996, eq.12):
+\[ g(\mbf x)=-\omega^2\sum_s\sum_r\myRe\{P_f^*(\mbf x,\mbf s)P_b(\mbf x,\mbf r,\mbf s)\} \]
+\[ P_f(\mbf x,\mbf s)=G_0(\mbf x,\mbf s) \text{\hspace{5mm}and\hspace{5mm}} P_b(\mbf x,\mbf r,\mbf s)=G_0^*(\mbf x,\mbf r)\Delta\Psi(\mbf r,\mbf s) \]
+where $P_f(\mbf x,\mbf s)$ and $P_b(\mbf x,\mbf r,\mbf s)$ are the forward propagated wavefield of an unit impulsive point source and the back-propagated wavefield of the data residuals, respectively; $G_0(\mbf x,\mbf s)$ and $G_0(\mbf x,\mbf r)$ are the Green's functions for exciting at the source and receiver locations, respectively.\par
+The full expression:
+\[ g(\mbf x)=-\omega^2\sum_s\sum_r\myRe\{G_0^*(\mbf x,\mbf s)G_0^*(\mbf x,\mbf r)\Delta\Psi(\mbf r,\mbf s)\} \]\par
+Assume ignoring amplitude effects, the homogeneous reference medium with velocity $c_0$ and the far field, approximate by plane waves:
+\[ G_0(\mbf x,\mbf s)\approx\exp(ik_0\hat{\mbf s}\cdot\mbf x) \text{\hspace{5mm}and\hspace{5mm}} G_0(\mbf x,\mbf r)\approx\exp(ik_0\hat{\mbf r}\cdot\mbf x) \]
+where $k_0=\nicefrac{\omega}{c_0}$ is the wavenumber, and $\hat{\mbf s}$ and $\hat{\mbf r}$ are unit vectors from source (incident propagation) and receiver (inverse scattering) to scatter, respectively. So that
+\begin{align*}
+g(\mbf x) & =-\omega^2\sum_s\sum_r\myRe\{\exp(-ik_0\hat{\mbf s}\cdot\mbf x)\times\exp(-ik_0\hat{\mbf r}\cdot\mbf x)\Delta\Psi(\mbf r,\mbf s)\} \\
+          & =-\omega^2\sum_s\sum_r\myRe\{\exp(-ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x)\Delta\Psi(\mbf r,\mbf s)\}
+\end{align*}
+Note that this is an inverse Fourier summation.\par
+\subsection{Gradient analysis}
+Through the Born approximation (Miller \etal, 1987, eq.8):
+\[ \Delta\Psi(\mbf r,\mbf s)\approx-\omega^2\int d\mbf xG_0(\mbf r,\mbf x)G_0(\mbf x,\mbf s)\delta m(\mbf x) \]
+where $\delta m(\mbf x)$ is the true parameter perturbation. Because of the plane-wave approximations, obtain:
+\[ \Delta\Psi(\mbf r,\mbf s)\approx-\omega^2\int d\mbf x\delta m(\mbf x)\exp(+ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x) \]
+And rewrite as
+\[ \Delta\Psi(\mbf r,\mbf s)=-\omega^2\tilde{M}(k_0(\hat{\mbf s}+\hat{\mbf r})) \]
+where $\tilde{M}(\mbf k)$ is the Fourier transform of $\delta m(\mbf x)$.\par
+Thus,
+\[ g(\mbf x)=\omega^4\sum_s\sum_r\myRe\{\exp(-ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x)\tilde{M}(k_0(\hat{\mbf s}+\hat{\mbf r}))\} \]
+This is an inverse Fourier summation where the weights in the summation are given by the Fourier components of the model. And
+\[ g(\mbf x)\rightarrow\omega^4\delta m(\mbf x) \]
+where the gradient will recover a scaled image of the original model.\par
+\subsection{The 1D case}
+For a 1D earth (velocity varies only as a function of depth), the incident and scattering angles are symmetric,
+\[ k_0\hat{\mbf s}=(k_0\sin\theta,k_0\cos\theta) \text{\hspace{5mm}and\hspace{5mm}} k_0\hat{\mbf r}=(k_0\sin(-\theta),k_0\cos(-\theta))=(-k_0\sin\theta,k_0\cos\theta) \]
+where the angles $\theta$ and $-\theta$ are for the source and receiver wave, and
+\[ \cos\theta=\frac{z}{\sqrt{h^2+z^2}} \text{\hspace{5mm}and\hspace{5mm}} \sin\theta=\frac{h}{\sqrt{h^2+z^2}} \]
+in which $h$ is the half offset and $z$ is the depth of the scattering layer. So the wavenumber illumination:
+\[ k_0(\hat{\mbf s}+\hat{\mbf r})=(k_x,k_z)=(0,2k_0\alpha) \text{\hspace{5mm}with\hspace{5mm}} \alpha=\cos\theta=\frac{1}{\sqrt{1+R^2}} \]
+where $R=\nicefrac{h}{z}$.\par
+\subsection{Strategy for choosing frequencies}
+For an offset range $[0,x_{max}]$ of a 1D thin layer, the vertical wavenumber coverage
+\[ k_z\in[k_{zmin},k_{zmax}]=[2k_0\alpha_{min},2k_0] \text{\hspace{5mm}with\hspace{5mm}} \alpha_{min}=\frac{1}{\sqrt{1+R_{max}^2}}\myno{,\alpha_{max}=1} \]
+where $R_{max}=\nicefrac{h_{max}}{z}$ and $h_{max}$ is the maximum half offset. Due to $k_0=\nicefrac{\omega}{c_0}$, in terms of frequency,
+\[ k_{zmin}=4\pi f\alpha_{min}/c_0 \text{\hspace{5mm}and\hspace{5mm}} k_{zmax}=4\pi f/c_0 \]
+Define \myem{the wavenumber coverage} and \myem{the wavenumber bandwidth}
+\[ \Delta k_z\triangleq|k_{zmax}-k_{zmin}|=4\pi(1-\alpha_{min})f/c_0 \]
+\[ \frac{k_{zmax}}{k_{zmin}}=\frac{1}{\alpha_{min}}=\sqrt{1+R^2} \]\par
+The strategy for choosing frequencies:
+\[ k_{zmin}(f_{n+1})=k_{zmax}(f_n) \]
+Because of the former $k=\nicefrac{4\pi f\alpha}{c_0}$, obtain the relation
+\[ f_{n+1}=\frac{f_n}{\alpha_{min}} \]
+and the frequency increment
+\[ \Delta f_{n+1}=f_{n+1}-f_n=\Big(\frac{1-\alpha_{min}}{\alpha_{min}}\Big)f_n=(1-\alpha_{min})f_{n+1} \]\par
+\subsection{The equivalence between gradient images and migration}
+Migration maps the data to ``isochrones'' in the model space, whereas the gradient maps the data residuals to the wavepath. Transmitted events map within the first Fresnel zones of the wavepath, while reflected events map to the higher order Fresnel zones.\par
+In the first iteration of a waveform inversion scheme, the starting model is normally a smoothed model, which will generate accurate transmitted arrivals but no reflected energy. The first iteration data residuals will be dominated by reflections, the first iteration image is kinematically equivalent to a migration of the data.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Plessix\_2010\_SEG\_Application to land data set}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Application of acoustic full waveform inversion to a low-frequency large-offset land data set}
+\renewcommand{\pay}{Ren\'{e}-Edouard Plessix, Guido Baeten and Jan Willem de Maag \etal, 2010}
+\renewcommand{\pjo}{SEG 2010 Annual Meeting}
+\renewcommand{\pda}{2016/10/3 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Proposing of full waveform inversion: Tarantola, 1987.
+  \item 3D real marine examples: Plessix, 2009; Sirgue \etal, 2009; Vigh \etal, 2009.
+  \item \sline
+  \item Low frequencies and large offsets mitigate the sensitivity to the initial mdoel: Bunks \etal, 1995; Pratt, 1999.
+  \item FWI can update the long spatial wavelengths of velocity: Gauthier \etal, 1986; Pratt, 1999.
+  \item Apply to land data sets: Ravaut \etal, 2004; Brenders and Pratt, 2004. (Attenuate the elastic effects by focusing on the first breaks with windowing technique)
+  \item \sline
+  \item Solve the wave equation in the frequency domain: Plessix, 1997.
+  \item The width of the valleys of the least-squares misfit is inversely proportional to frequency: Bunks \etal, 1995.
+  \item Overlap the frequencies between scales to better retain the velocity updates of the low frequency scales: Brossier \etal, 2009.
+\end{enumerate}\par
+\subsection{Full waveform inversion}
+The misfit function
+\[ J_f(m)=\frac{1}{2}||W(c-d)||^2 \]
+with a frequency $f$, the velocity field $m$, the modeled data $c$, the observed data $d$ and a data weighting matrix $W$ which is a diagonal matrix where the diagonal elements are $h^\beta$ with the offset $h$ and a coefficient $\beta$ generally between $0$ and $2$.\par
+Minimize with the quasi-Newton algorithm
+\[ m_{k+1}=m_k-\alpha_kB_k\nabla_mJ_f(m_k) \]
+with the step length $\alpha_k$ and the approximated inverse $B_k$ of the Hessian.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Fichtner\_2010\_EPSL\_Full waveform tomography}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Full waveform tomography for radially anisotropic structure: New insights into present and past states of the Australasian upper mantle}
+\renewcommand{\pay}{Andreas Fichtner, Brian L. N. Kennett and Heiner Igel \etal, 2010}
+\renewcommand{\pjo}{Earth and Planetary Science Letters}
+\renewcommand{\pda}{2016/10/13 Thu.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Simulating of seismic waves with heterogeneous Earth models: Faccioli \etal, 1997; Komatitsch and Tromp, 2002; Dumbser and K\"{a}ser, 2006.
+  \item \sline
+  \item Full waveform tomography: Konishi \etal, 2009; Tape \etal, 2009; Fichtner \etal, 2009a \& 2009b.
+  \item \sline
+  \item Spectral-element method in an Earth model with 3D variations: Fichtner \etal, 2009a.
+  \item The discrete equations are solved in parallel: Oeser \etal, 2006.
+  \item \myem{Crust2.0} model: Bassin \etal, 2000 (please hit \href{http://igppweb.ucsd.edu/~gabi/crust2.html}{here} to download the model data).
+  \item Measure time-frequency phase misfits to extract waveform information: Fichtner \etal, 2008.
+  \item The $\eta$ parameter: Takeuchi and Saito, 1972 (NO Source).
+  \item Set the variations of $v_{ph}$ and $v_{pv}$ to 0.5 times the variations of $v_{sh}$ and $v_{sv}$: Nettles and Dziewonski, 2008.
+  \item Previous tomography results of the Australasian upper mantle: Debayle and Kennett, 2000a; Fishwick \etal, 2005.
+  \item Minimise the cumulative phase misfit using a preconditioned conjugate-gradient method: Fichtner \etal, 2009b.
+  \item \myem{The adjoint method}: Tarantola, 1988; Tromp \etal, 2005; Fichtner \etal, 2006; Sieminski \etal, 2007a \& 2007b.
+  \item Refracted body wave studies on Australasian region: Kaiho and Kennett, 2000.
+  \item Elastic 1D reference model PREM: Dziewonski and Anderson, 1981.
+  \item 3D model of shear wave attenuation on Australasian region: Abdulah, 2007.
+  \item Previous surface wave studies on Australia: Zielhuis and van der Hilst, 1996; Simons \etal, 1999 \& 2002; Debayle and Kennett, 2000a; Yoshizawa and Kennett, 2004; Fishwick \etal, 2005. 
+  \item Time-frequency phase and amplitude misfits are strongly related: Tian \etal, 2009.
+  \item Tomographic study of the radial anisotropy in the Australian region: Debayle and Kennett, 2000a \& 2000b.
+  \item Global studies of radial anisotropy: Montagner, 2002; Panning and Romanowicz, 2006; Nettles and Dziewonski, 2008.
+  \item \myem{AK135} model: Kennett \etal, 1995.
+  \item A Centralian Superbasin existed between 1000 and 750 Ma: Myers \etal, 1996.
+  \item SKS splitting studies below Australia: Clitheroe and van der Hilst, 1998.
+  \item Azimuthal anisotropy studies around $150km$ depth below Australia: Debayle and Kennett, 2000a \& 2000b; Simons \etal, 2002.
+  \item \myem{The Lehmann discontinuity}: Lehmann, 1961; Karato, 1992.
+  \item Dislocation creep continues to be dominant to depth of $330km$: Mainprince \etal, 2005; Raterron \etal, 2009.
+\end{enumerate}\par
+\subsection{Seismic anisotropy}
+\textbf{Mineralogical seismic anisotropy} (MSA) is the result of the coherent lattice-preferred orientation of anisotropic minerals over length scales that exceed the resolution length. \textbf{Structural seismic anisotropy} (SSA) is induced by heterogeneities with length scales that can not be resolved. MSA and SSA can not be distinguished seismologically, but the influence of SSA on the tomographic images can be reduced by increasing the tomographic resolution.\par
+The geodynamic interpretation of seismic anisotropy is based on its relation to flow in the Earth. Horizontal (vertical) flow causes preferentially Horizontal (vertical) alignment of small-scale heterogeneities and thus leads to positive (negative) radial SSA, i.e. $v_{sh}>v_{sv}$ ($v_{sh}<v_{sv}$). The development of MSA in the presence of flow depends mostly on the relation between shear strain and the lattice-preferred orientation formation of olivine.\par
+\subsection{Filtering of tomographic images}
+The spatial filtering of regional tomographic images involves: the representation of the images in terms of spherical splines; the application of a spherical convolution.\par
+\subsubsection{Spherical spline expansion}
+A physical quantity $m_d$ is defined at discrete points $\mbf\xi_1,\mbf\xi_2,\ldots,\mbf\xi_N$ that lie within a section $\Omega_s$ of the unit sphere $\Omega$. The discretely defined quantity $m$ can be interpolated using a spherical spline of the form
+\[ m(\mbf x)=\sum_{k=1}^N\mu_kK_h(\mbf x,\mbf\xi_k), \hspace{5mm} \mbf x,\mbf\xi_1,\mbf\xi_2,\ldots,\mbf\xi_N\in\Omega_s\subset\Omega  \]
+where $K_h$ is a spline basis function and when using an Abel-Poisson kernel:
+\[ K_h(\mbf x,\mbf\xi_k)=\frac{1}{4\pi}\frac{1-h^2}{[1+h^2-2h(\mbf x\cdot\mbf\xi_k)]^{\nicefrac{3}{2}}} \]
+And $h$ is chosen depending on the typical distance between the collocation points $\mbf\xi_k$. $\mu_k$ is found through the solution of the linear system of equations:
+\[ m_d(\mbf\xi_i)=m(\mbf\xi_i)=\sum_{k=1}^N\mu_kK_h(\mbf\xi_i,\mbf\xi_k),i=1,2,\ldots,N \]\par
+\subsubsection{Filtering through spherical convolution}
+Filter a tomographic image by convolving its spherical spline representation, $m(\mbf x)$ with a filter function $\phi\in L^2[-1,1]$:
+\[ (m*\phi)(\mbf x)=\int_\Omega m(\mbf\xi)\phi(\mbf\xi\cdot\mbf x)d^3\mbf\xi \]
+The above equation is called the spherical convolution of $m$ with $\phi$. When expressed in terms of the Legendre coefficients $\phi_n$ of $\phi$ and the spherical harmonic coeffients $m_{nj}$ of $\mbf m$:
+\[ (m*\phi)(\mbf x)=\sum_{n=0}^\infty\sum_{j=1}^{2n+1}\phi_nm_{nj}Y_{nj}(\mbf x) \]
+where $Y_{nj}$ are the spherical harmonic functions of degree $n$ and order $j$. A filter function $\phi$ with continuously decreasing Legendre coefficients acts as a low-pass filter.\par
+The Abel-Poisson scaling functions:
+\[ \phi^{(a)}(t)=\frac{1}{4\pi}\frac{1-p^2}{(1+p^2-2pt)^{\nicefrac{3}{2}}},p=e^{-2^{-a}}\myno{,a\in N^+} \]
+where small values of $a$ give low-pass filters and vice versa. The Legendre coefficients $\phi_n^{(a)}$ of $\phi^{(a)}$ are $e^{-n2^{-a}}$. Combining spherical splines and Abel-Poisson scaling functions, obtain:
+\[ (m*\phi)(\mbf x)=\sum_{k=1}^N\mu_kK_{h'}(\mbf x,\mbf\xi_k), \hspace{5mm} h'=he^{-2^{-a}} \]
+Thus, the filtering is achieved by simply replacing the parameter $h$ in the original sperical spline with the modified parameter $h'=he^{-2{-a}}$.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Tromp\_2005\_GJI\_Adjoint methods}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Seismic tomography, adjoint methods, time reversal and banana-doughnut kernels}
+\renewcommand{\pay}{Jeroen Tromp, Carl Tape and Qinya Liu, 2005}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2016/10/17 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Solve iteratively the seismic inverse problem by numerically calculating the \Frechet derivatives of a waveform misfit function \& introduce the concept of an adjoint field: Tarantola, 1984 (for the acoustic wave equation) \& 1987 \& 1988 (for the (an-)elastic wave equation).
+  \item Develop and implement the acoustic theory on seismic inversion: Tarantola, 1984.
+  \item Illustrate numerically the acoustic theory of seismic waveform inversion: Gauthier \etal, 1986.
+  \item Extend the acoustic theory to the (an-)elastic wave equation: Tarantola, 1987 \& 1988.
+  \item Apply the (an-)elastic theory to real data: Crase \etal, 1990.
+  \item Other applications of the solving iteratively theory: Mora, 1987 \& 1988; Pratt, 1999; Akcelik \etal, 2002 \& 2003.
+  \item \sline
+  \item Introduce an `adjoint' calculation as a means of determining the gradient of a misfit function: Talagrand and Courtier, 1987.
+  \item \sline
+  \item Found the concept of `time-reversal mirrors' (an acoustic signal is recorded, time-reversed and retransmitted) \& time-reversal imaging: Fink \etal, 1989; Fink, 1992 \& 1997.
+  \item \sline
+  \item Take use of finite-frequency kernels for traveltime or amplitude inversions: Marquering \etal, 1999; Zhao \etal, 2000; Dahlen \etal, 2000; Hung \etal, 2000; Dahlen and Baig, 2002.
+  \item Implement finiet-frequency kernels for compressional-wave tomography: Montelli \etal, 2004.
+  \item \sline
+  \item The least-squares waveform misfit function: Nolet, 1987.
+  \item Determine \Frechet derivatives based upon the Born approximation: Hudson, 1977; Wu and Aki, 1985.
+  \item A standard conjugate-gradient algorithm: Fletcher and Reeves, 1964; Mora, 1987 \& 1988.
+  \item Reconstruct the regular field $\mbf s$ using the final displacement field $\mbf s(\mbf x,T)$ as a starting point for integration backward in time: Gauthier \etal, 1986
+  \item The spectral-element method of seismic wave propagation in anelastic materials: Komatitsch and Tromp, 1999 \& 2002a.
+  \item The finite-frequency traveltime tomography: Zhao \etal, 2000; Dahlen \etal, 2000; Hung \etal, 2000.
+  \item The Generalized Seismological Data Functionals (GSDF): Gee and Jordan, 1992 (introduce); Chen \etal, 2004 (extend).
+  \item \myem{Spectral-element method}: Komatitsch and Tromp, 1999.
+  \item The finite-frequency traveltime kernels using ray-based methods: Hung \etal, 2000.
+  \item Welch tapering window: Press \etal, 1994.
+\end{enumerate}\par
+\subsection{Waveform tomography}
+To minimize the differences between waveform data $\mbf d(\mbf x_r,t)$ recorded at $N$ stations $\mbf x_r,r=1,2,\ldots,N$, and the corresponding synthetics $\mbf s(\mbf x_r,t,\mbf m)$ for the current $M$-dimensional model vector $\mbf m$, introduce the least-squares waveform misfit function:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\int_0^T||\mbf s(\mbf x_r,t,\mbf m)-\mbf d(\mbf x_r,t)||^2dt \]
+where $\mbf d$ and $\mbf s$ can be windowed and filtered on the time interval $[0,T]$. An iterative inversion requires the calculation of the \Frechet derivatives:
+\[ \delta\chi=\sum_{r=1}^N\int_0^T[\mbf s(\mbf x_r,t,\mbf m)-\mbf d(\mbf x_r,t)]\cdot\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+where $\delta\mbf s$ denotes the perturbation in the displacement field $\mbf s$ due to a model perturbation $\delta\mbf m$.\par
+In seismic tomography, \Frechet derivatives may be Determined based upon the \myem{Born approximation}. Suppose having a generic background model $\{\rho,c_{jklm}\}$ with perturbations $\{\delta\rho,\delta c_{jklm}\}$, the associated perturbed displacement (the following equation can be referred to eq.2.43 on P.28 of the doctoral thesis of Yan Jiang):
+\[ \delta s_i(\mbf x,t)=-\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t')+\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt' \]
+where $V$ is the model volume. Obtain:
+\begin{align*}
+  \delta\chi= & -\sum_{r=1}^T\int_0^T[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & \delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the field:
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_{t'}^TG_{ik}(\mbf x_r,\mbf x';t-t')[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]dt \]
+Using the reciprocity $G_{ik}(\mbf x_r,\mbf x';t-t')=G_{ki}(\mbf x',\mbf x_r;t-t')$,
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_{t'}^TG_{ki}(\mbf x',\mbf x_r;t-t')[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]dt \]
+Making the substitution $t\rightarrow T-t$,
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_0^{T-t'}G_{ki}(\mbf x',\mbf x_r;T-t-t')[s_i(\mbf x_r,T-t)-d_i(\mbf x_r,T-t)]dt \]
+Next define the \mynem{waveform adjoint source}:
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N[s_i(\mbf x_r,T-t)-d_i(\mbf x_r,T-t)]\delta(\mbf x-\mbf x_r) \]
+With the above definition,
+\[ \Phi_k(\mbf x',t')=\int_0^{T-t'}\myde{\int_V}G_{ki}(\mbf x',\mbf x;T-t-t')f_i^\dagger(\mbf x,t)\myde{d^3\mbf x}dt \]
+Take the relationship $\Phi_k(\mbf x',T-t')=s_k^\dagger(\mbf x',t')$,
+\[ s_k^\dagger(\mbf x',t')=\int_0^{t'}\myde{\int_V}G_{ki}(\mbf x',\mbf x;t'-t)f_i^\dagger(\mbf x,t)\myde{d^3\mbf x}dt \]
+where $\mbf s^\dagger$ is the introduced \mynem{waveform adjoint field} generated by the waveform adjoint source.\par
+With the introduction of the adjoint field,
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_{c_{jklm}}(\mbf x)\delta\ln c_{jklm}(\mbf x)]d^3\mbf x \]
+where $\delta\ln\rho=\nicefrac{\delta\rho}{\rho}$ and $\delta\ln c_{jklm}=\nicefrac{\delta c_{jklm}}{c_{jklm}}$ denote relative model perturbations, and the 3-D \mynem{waveform misfit kernels} for density and the elastic parameters are respectively:
+\[ K_\rho(\mbf x)=-\int_0^T\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)dt \]
+\[ K_{c_{jklm}}(\mbf x)=-\int_0^T\epsilon_{jk}^\dagger(\mbf x,T-t)c_{jklm}(\mbf x)\epsilon_{lm}(\mbf x,t)dt \]
+where \myno{$\mbf\epsilon^\dagger=\nicefrac{1}{2}[\nabla\mbf s^\dagger+(\nabla\mbf s^\dagger)^T]$,} $\epsilon_{lm}$ and $\epsilon_{jk}^\dagger$ denote the strain and the waveform adjoint strain tensors, respectively.\par
+For an isotropic matreical, $c_{jklm}=(\kappa-\nicefrac{2\mu}{3})\delta_{jk}\delta_{lm}+\mu(\delta_{jl}\delta_{km}+\delta_{jm}\delta_{kl})$, thus
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_\mu(\mbf x)\delta\ln\mu(\mbf x)+K_\kappa(\mbf x)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{isotropic misfit kernels} $K_\mu$ and $K_\kappa$ for the bulk and shear moduli $\kappa$ and $\mu$ are respectively:
+\[ K_\mu(\mbf x)=-\int_0^T2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t)dt \]
+\[ K_\kappa(\mbf x)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\mbf s^\dagger(\mbf x,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\mbf D$ and $\mbf D^\dagger$ denote the traceless strain deviator and its waveform adjoint, respectively.\par
+Alternatively,
+\[ \delta\chi=\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \]
+\[ K_\rho^\prime=K_\rho+K_\kappa+K_\mu, \hspace{5mm} K_\beta=2\Big(K_\mu-\frac{4\mu}{3\kappa}K_\kappa\Big), \hspace{5mm} K_\alpha=2\Big(\frac{\kappa+(\nicefrac{4}{3})\mu}{\kappa}\Big)K_\kappa \]\par
+\subsubsection{Topography on internal discontinuities}
+Let $\delta h$ denote topographic perturbations in the direction of the unitoutward normal $\hat{\mbf n}$ on solid-solid discontinuities $\Sigma_{SS}$ or fluid-solid discontinuities $\Sigma_{FS}$., the perturbed displacement field $\delta\mbf s$ due to topographic perturbations $\delta h$ (Dahlen, 2004):
+\begin{align*}
+  \delta s_i(\mbf x,t)= & \int_0^t\int_\Sigma[\rho(\mbf x')G_{ij}(\mbf x,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t')+\partial_k^\prime G_{ij}(\mbf x,\mbf x';t-t')c_{jklm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+    & -\hat{n}_k(\mbf x')\partial_n^\prime G_{ij}(\mbf x,\mbf x';t-t')c_{jklm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+	& -\hat{n}_k(\mbf x')c_{jklm}(\mbf x')\partial_l^\prime G_{im}(\mbf x,\mbf x';t-t')\partial_n^\prime s_j(\mbf x',t')]_-^+\delta h(\mbf x')d^2\mbf x'dt' \\
+	& +\int_0^t\int_{\Sigma_{FS}}[G_{ik}(\mbf x,\mbf x';t-t')\hat{n}_j(\mbf x')\hat{n}_p(\mbf x')c_{jplm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+	& +s_k(\mbf x',t')\hat{n}_j(\mbf x')\hat{n}_p(\mbf x')c_{jplm}(\mbf x')\partial_l^\prime G_{im}(\mbf x,\mbf x';t-t')]_-^+\nabla_k^{\Sigma^\prime}\delta h(\mbf x')d^2\mbf x'dt'
+\end{align*}
+where $\Sigma=\Sigma_{SS}+\Sigma_{FS}$ denote all discontinuities, the surface gradient $\nabla^\Sigma=(\mbf I-\hat{\mbf n}\hat{\mbf n})\cdot\nabla$ and the normal derivative $\partial_n=\hat{\mbf n}\cdot\nabla$. Therefore, the gradient of the misfit function due to topographic perturbations $\delta h$:
+\[ \delta\chi=\int_\Sigma K_h(\mbf x)\delta h(\mbf x)d^2\mbf x+\int_{\Sigma_{FS}}\mbf K_h(\mbf x)\cdot\nabla^\Sigma\delta h(\mbf x)d^2\mbf x \]
+where
+\begin{align*}
+  K_h(\mbf x)= & \int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\mbf\epsilon^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t) \\
+    & -\hat{\mbf n}(\mbf x)\partial_n\mbf s^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)-\hat{\mbf n}(\mbf x)\partial_n\mbf s(\mbf x,t):\mbf c(\mbf x):\mbf\epsilon^\dagger(\mbf x,T-t)]_-^+dt
+\end{align*}
+\[ \mbf K_h(\mbf x)=\int_0^T[\mbf s^\dagger(\mbf x,T-t)\hat{\mbf n}(\mbf x)\hat{\mbf n}(\mbf x):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)+\mbf s(\mbf x,t)\hat{\mbf n}(\mbf x)\hat{\mbf n}(\mbf x):\mbf c(\mbf x):\mbf\epsilon^\dagger(\mbf x,T-t)]_-^+dt \]
+In an isotropic earth model,
+\begin{align*}
+  K_h(\mbf x)= & \int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\kappa(\mbf x)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)\nabla\cdot\mbf s(\mbf x,t)+2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t) \\
+    & -\kappa(\mbf x)\hat{\mbf n}(\mbf x)\cdot\partial_n\mbf s^\dagger(\mbf x,T-t)\nabla\cdot\mbf s(\mbf x,t)-2\mu(\mbf x)\hat{\mbf n}(\mbf x)\partial_n\mbf s^\dagger(\mbf x,T-t):\mbf D(\mbf x,t) \\
+	& -\kappa(\mbf x)\hat{\mbf n}(\mbf x)\cdot\partial_n\mbf s(\mbf x,t)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)-2\mu(\mbf x)\hat{\mbf n}(\mbf x)\partial_n\mbf s(\mbf x,t):\mbf D^\dagger(\mbf x,T-t)]_-^+dt
+\end{align*}
+\begin{align*}
+  \mbf K_h(\mbf x)= & \int_0^T[\mbf s^\dagger(\mbf x,T-t)[\kappa(\mbf x)\nabla\cdot\mbf s(\mbf x,t)+2\mu(\mbf x)\hat{\mbf n}(\mbf x)\cdot\mbf D(\mbf x,t)\cdot\hat{\mbf n}(\mbf x)] \\
+    & +\mbf s(\mbf x,t)[\kappa(\mbf x)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)+2\mu(\mbf x)\hat{\mbf n}(\mbf x)\cdot\mbf D^\dagger(\mbf x,T-t)\cdot\hat{\mbf n}(\mbf x)]]_-^+dt
+\end{align*}
+Besides, on the Earth's free surface the traction vanishes,
+\[ K_h(\mbf x)=-\int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\mbf\epsilon^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)]dt \]
+In the isotropic case,
+\[ K_h(\mbf x)=-\int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\kappa(\mbf x)\nabla\cdot\mbf s(\mbf x,t)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)+2\mu(\mbf x)\mbf D(\mbf x,t):\mbf D^\dagger(\mbf x,T-t)]dt \]\par
+\subsection{Adjoint equations}
+The equation of motion in an anelastic earth model:
+\[ \rho\partial_t^2\mbf s=\nabla\cdot\mbf T+\mbf f \]
+where $\mbf T$ is the symmetric stress tensor in an anelastic matreical. For the unrelaxed elastic tensor $\mbf c^U$, the displacement gradient $\nabla\mbf s$ and $L$ symmetric memory variable tensors $\mbf R^l,l=1,2,\ldots,L$,
+\[ \mbf T=\mbf c^U:\nabla\mbf s-\sum_{l=1}^L\mbf R^l \]
+where $\mbf R^l$ represent standard linear solids. For each standard linear solid,
+\[ \partial_t\mbf R^l=-\frac{\mbf R^l}{\tau^{\sigma l}}+\frac{\delta\mbf c^l:\nabla\mbf s}{\tau^{\sigma l}} \]
+The above equations need to be subject to the boundary conditions, that on the stress-free surface $\hat{\mbf n}\cdot\mbf T=0$ and at solid-solid boundaries both $\mbf s$ and $\hat{\mbf n}\cdot\mbf T$ are continuous whereas at fluid-solid boundaries both $\hat{\mbf n}\cdot\mbf s$ and $\hat{\mbf n}\cdot\mbf T$ are continuous. In terms of the relaxed modulus $c_{ijkl}^R$,
+\[ c_{ijkl}^U=c_{ijkl}^R\bigg(1-\sum_{l=1}^L\Big(1-\frac{\tau_{ijkl}^{\epsilon l}}{\tau^{\sigma l}}\Big)\bigg) \]
+where $\tau_{ijkl}^{\epsilon l}$ and $\tau^{\sigma l}$ are the strain and stress relaxation times, respectively. The modulus defect $\delta\mbf c^l$:
+\[ \delta c_{ijkl}^l=-c_{ijkl}^R\Big(1-\frac{\tau_{ijkl}^{\epsilon l}}{\tau_{\sigma l}}\Big) \]\par
+Replace the source $\mbf f$ with the waveform adjoint source $\mbf f^\dagger$, obtain the \myem{adjoint equations}:
+\[ \rho\partial_t^2\mbf s^\dagger=\nabla\cdot\mbf T^\dagger+\mbf f^\dagger \]
+\[ \mbf T^\dagger=\mbf c^U:\nabla\mbf s^\dagger-\sum_{l=1}^L\mbf R^{l\dagger} \]
+\[ \partial_t\mbf R^{l\dagger}=-\frac{\mbf R^{l\dagger}}{\tau^{\sigma l}}+\frac{\delta\mbf c^l:\nabla\mbf s^\dagger}{\tau^{\sigma l}} \]\par
+For completeness, the adjoint momentum equation for a rotating, self-gravitating Earth model is:
+\[ \rho(\partial_t^2\mbf s^\dagger-2\Omega\times\partial_t\mbf s^\dagger)=\nabla\cdot\mbf T^\dagger+\nabla(\rho\mbf s^\dagger\cdot\mbf g)-\rho\nabla\phi^\dagger-\nabla\cdot(\rho\mbf s^\dagger)\mbf g+\mbf f^\dagger \]
+where $\Omega$ and $\mbf g$ denote the angular velocity and the equilibrium gravitational acceleration of the earth model, respectively.\par
+\subsection{Traveltime tomography}
+Introduce the traveltime misfit function
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N[T_r(m)-T_r^{obs}]^2 \]
+where $T_r(m)$ and $T_r^{obs}$ denote the predicted and observed traveltime at station $r$, respectively. The gradient of the misfit function is:
+\[ \delta\chi=\sum_{r=1}^N[T_r(m)-T_r^{obs}]\delta T_r \]\par
+\subsubsection{Banana-doughnut kernels}
+The \Frechet derivative of the traveltime in terms of the cross-correlation of an observed and synthetic waveform (refer to eq.2.46 on P.31 of the doctoral thesis of Yan Jiang):
+\[ \delta T_r=\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t)\delta s_i(\mbf x_r,t)dt \]
+\[ N_r=\int_0^Tw_r(t)s_i(\mbf x_r,t)\partial_t^2s_i(\mbf x_r,t)dt \]
+where $w_r$ denotes the cross-correlation window and $\delta s_i$ the displacement perturbation. After substitution of $\delta\mbf s$ based on the Born approximation,
+\begin{align*}
+  \delta T_r= & -\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t)\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & +\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the \mynem{traveltime adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{traveltime adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t') & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t)dt \\
+    & =\frac{1}{N_r}\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')w_r(T-t)\partial_ts_i(\mbf x_r,T-t)dt
+\end{align*}
+With this definition the isotropic traveltime \Frechet derivative is:
+\[ \delta T_r=\int_V[\bar K_\rho(\mbf x,\mbf x_r)\delta\ln\rho(\mbf x)+\bar K_\mu(\mbf x,\mbf x_r)\delta\ln\mu(\mbf x)+\bar K_\kappa(\mbf x,\mbf x_r)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{banana-doughnut kernels} $\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
+\[ \bar K_\rho(\mbf x,\mbf x_r)=-\int_0^T\rho(\mbf x)[\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)]dt \]
+\[ \bar K_\mu(\mbf x,\mbf x_r)=-\int_0^T2\mu(\mbf x)\bar{\mbf D}^\dagger(\mbf x,\mbf x_r,T-t):\mbf D(\mbf x,t)dt \]
+\[ \bar K_\kappa(\mbf x,\mbf x_r)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\bar{\mbf D}^\dagger$ denotes the traveltime adjoint strain deviator associated with $\bar{\mbf s}^\dagger$. Alternatively,
+\[ \delta T_r=\int_V[\bar K_\rho^\prime(\mbf x,\mbf x_r)\delta\ln\rho(\mbf x)+\bar K_\beta(\mbf x,\mbf x_r)\delta\ln\beta(\mbf x)+\bar K_\alpha(\mbf x,\mbf x_r)\delta\ln\alpha(\mbf x)]d^3\mbf x \]
+\[ \bar K_\rho^\prime=\bar K_\rho+\bar K_\kappa+\bar K_\mu, \hspace{5mm} \bar K_\beta=2\Big(\bar K_\mu-\frac{4\mu}{3\kappa}\bar K_\kappa\Big), \hspace{5mm} \bar K_\alpha=2\Big(1+\frac{4\mu}{3\kappa}\Big)\bar K_\kappa \]\par
+\subsubsection{Misfit kernels}
+The \Frechet derivative of the traveltime misfit function is:
+\begin{align*}
+  \delta\chi & =\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\delta T_r \\
+    & =\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x
+\end{align*}
+where the \mynem{traveltime misfit kernels} $K_\rho^\prime$, $K_\beta$ and $K_\alpha$ are:
+\[ K_\rho^\prime(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\rho^\prime(\mbf x,\mbf x_r) \]
+\[ K_\beta(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\beta(\mbf x,\mbf x_r) \]
+\[ K_\alpha(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\alpha(\mbf x,\mbf x_r) \]\par
+Define the \mynem{combined traveltime adjoint field} $\mbf s^\dagger$ and the \mynem{combined traveltime adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Differential traveltime tomography}
+Suppose observed Differential traveltimes $\Delta T_r^{obs}$ and predicted Differential traveltimes $\Delta T_r(m)=T_r^A(m)-T_r^B(m)$ between two phases A and B for the station $r$ ($r=1,2,\ldots,N$). Minimize the \mynem{differential traveltime misfit function} and its gradient are:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N[\Delta T_r(m)-\Delta T_r^{obs}]^2 \]
+\[ \delta\chi=\sum_{r=1}^N[\Delta T_r(m)-\Delta T_r^{obs}]\delta\Delta T_r \]
+where $\delta\Delta T_r=\delta T_r^A-\delta T_r^B$.\par
+Define the \mynem{combined differential traveltime adjoint field} $\Delta\mbf s^\dagger$ and the \mynem{combined differential traveltime adjoint source} $\mbf f^\dagger$:
+\[ \Delta\mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\big(\Delta T_r-\Delta T_r^{obs}\big)[\bar{\mbf s}^{A\dagger}(\mbf x,\mbf x_r,t)-\bar{\mbf s}^{B\dagger}(\mbf x,\mbf x_r,t)] \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\big(\Delta T_r-\Delta T_r^{obs}\big)\Big[\frac{1}{N_r^A}w_r^A(T-t)\partial_ts_i^A(\mbf x_r,T-t)-\frac{1}{N_r^B}w_r^B(T-t)\partial_ts_i^B(\mbf x_r,T-t)\Big]\delta(\mbf x-\mbf x_r) \]\par
+\subsection{Amplitude tomography}
+Let $A_r^{obs}$ and $A_r(m)$ denote the observed and predicted amplitude of a particular body-wave arrival at the station $r$, introduce the \mynem{amplitude misfit function}:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\Big[\frac{A_r^{obs}}{A_r(m)}-1\Big]^2 \]
+and its gradient is:
+\[ \delta\chi=\sum_{r=1}^N\Big[\frac{A_r^{obs}}{A_r(m)}-1\Big]\delta\ln A_r \]\par
+The \myno{amplitude \Frechet derivative} is (Dahlen and Baig, 2002):
+\[ \delta\ln A_r=\frac{1}{M_r}\int_0^Tw_r(t)s_i(\mbf x_r,t)\delta s_i(\mbf x_r,t)dt \]
+\[ M_r=\int_0^Tw_r(t)s_i^2(\mbf x_r,t)dt \]
+where $w_r$ denotes the cross-correlation window and $\delta s_i$ the displacement perturbation.\par
+Define the \mynem{amplitude adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{amplitude adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t') & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t) dt \\
+    & =\frac{1}{M_r}\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')w_r(T-t)s_i(\mbf x_r,T-t)dt
+\end{align*}
+And in terms of the \mynem{amplitude kernels} $\bar K_\rho^\prime$, $\bar K_\beta$ and $\bar K_\alpha$,
+\[ \delta\ln A_r=\int_V[\bar K_\rho^\prime(\mbf x,\mbf x_r)\delta\ln\rho^\prime(\mbf x)+\bar K_\beta(\mbf x,\mbf x_r)\delta\ln\beta(\mbf x)+\bar K_\alpha(\mbf x,\mbf x_r)\delta\ln\alpha(\mbf x)]d^3\mbf x \]\par
+Define the \mynem{combined amplitude adjoint field} $\mbf s^\dagger$ and the \mynem{combined amplitude adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+And
+\[ \delta\chi=\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \]\par
+\subsubsection{Attenuation}
+For an absorption-band solid, the shear modulus $\mu$ is (Liu \etal, 1976):
+\[ \mu(\omega)=\mu(\omega_0)\Big[1+\frac{2}{\pi}Q_\mu^{-1}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)Q_\mu^{-1}\Big] \]
+where $\omega_0$ denotes the reference angular frequency. The change in the shear modulus $\delta\mu$ due to perturbations in shear attenuation $\delta Q_\mu^{-1}$ is:
+\[ \delta\mu(\omega)=\mu(\omega_0)\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]\delta Q_\mu^{-1} \]\par
+Taking use of the Born approximation, define the wavefield:
+\[ \psi_i(\mbf x,t)=\frac{1}{2\pi}\int_{-\infty}^\infty\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]s_i(\mbf x,\omega)e^{i\omega t}d\omega \]
+and introduce the \mynem{Q adjoint source}:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{M_r}w_r(T-t\psi_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+thus the amplitude anomaly is:
+\[ \delta\ln A_r=\int_V\bar K_\mu(\mbf x,\mbf x_r)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]\par
+Introduce the \mynem{combined Q adjoint source}:
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\frac{1}{M_r}w_r(T-t)\psi_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+thus the gradient of the \myno{attenuation} misfit function is:
+\[ \delta\chi=\int_VK_\mu(\mbf x)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]\par
+\subsection{Generalizations}
+Let $\tau_r(\omega_\lambda)$ denote the frequency-dependent either traveltime anomaly $\tau_p$ or amplitude anomaly $\tau_q$ at receiver $r$ ($r=1,2,\ldots,N$) determined at $L$ discrete angular frequencies $\omega_\lambda$ ($\lambda=1,2,\ldots,L$) for the current model $m$, define the \mynem{GSDF misfit function}:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\sum_{\lambda=1}^L[\tau_r(\omega_\lambda)]^2 \]
+and its gradient is:
+\[ \delta\chi=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\delta\tau_r(\omega_\lambda) \]
+\subsubsection{Banana-doughnut kernels}
+The time-dependent function $\Psi_i(\mbf x_r,t,\omega_\lambda)$ relates the GSDF parameter perturbations $\delta\tau_r(\omega_\lambda)$ to the seismogram perturbations $\delta s_i$:
+\[ \delta\tau_r(\omega_\lambda)\int_0^T\Psi_i(\mbf x_r,t,\omega_\lambda)\delta s_i(\mbf x_r,t)dt \]
+After substitution of $\delta\mbf s$ based on the Born approximation,
+\begin{align*}
+  \delta\tau_r(\omega_\lambda)= & -\int_0^T\Psi_i(\mbf x_r,t,\omega_\lambda)\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & +\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the \mynem{GSDF adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{GSDF adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\Psi_i(\mbf x_r,T-t,\omega_\lambda)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t',\omega_\lambda) & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t)dt \\
+    & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')\Psi_i(\mbf x_r,T-t,\omega_\lambda)dt
+\end{align*}
+thus
+\[ \delta\tau_r(\omega_\lambda)=\int_V[\bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\rho(\mbf x)+\bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\mu(\mbf x)+\bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{GSDF kernels} $\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
+\[ \bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T\rho(\mbf x)[\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda)\cdot\partial_t^2\mbf s(\mbf x,t)]dt \]
+\[ \bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T2\mu(\mbf x)\bar{\mbf D}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda):\mbf D(\mbf x,t)dt \]
+\[ \bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\bar{\mbf D}^\dagger$ denotes the GSDF adjoint strain deviator associated with the GSDF adjoint field.\par
+\subsubsection{Misfit kernels}
+Introduce the \mynem{combined GSDF adjoint field} $\mbf s^\dagger$ and the \mynem{combined GSDF adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t,\omega_\lambda) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\Psi_i(\mbf x_r,T-t,\omega_\lambda)\delta(\mbf x-\mbf x_r) \]
+and the gradient is:
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_\mu(\mbf x)\delta\ln\mu(\mbf x)+K_\kappa(\mbf x)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{combined GSDF kernels} $K_\rho$, $K_\mu$ and $K_\kappa$ are:
+\[ K_\rho(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda) \]
+\[ K_\mu(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda) \]
+\[ K_\kappa(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda) \]\par
+\subsection{Source inversions}
+The response $\mbf s(\mbf x,t)$ due to a finite source represented by a moment-density distribution $\mbf m(\mbf x,t)$ on a fault plane $\Sigma$ is (Dahlen and Tromp, 1998):
+\[ s_i(\mbf x,t)=\int_0^t\int_\Sigma\partial_j^\prime G_{ik}(\mbf x,\mbf x';t-t')m_{jk}(\mbf x',t')d^2\mbf x'dt' \]
+thus the change $\delta\mbf s$ due to the perturbation $\delta\mbf m$ is:
+\[ \delta s_i(\mbf x,t)=\int_0^t\int_\Sigma\partial_j^\prime G_{ik}(\mbf x,\mbf x';t-t')\delta m_{jk}(\mbf x',t')d^2\mbf x'dt' \]
+So the previous \Frechet derivative of the waveform misfit function is recast into:
+\[ \delta\chi=\int_0^T\int_\Sigma\mbf\epsilon^\dagger(\mbf x,T-t):\delta\mbf m(\mbf x,t)d^2\mbf xdt \]
+For a point source located at $\mbf x_s$ with the centroid-moment tensor $\mbf M(t)$,
+\[ \delta\chi=\int_0^T\mbf\epsilon^\dagger(\mbf x_s,T-t):\delta\mbf M(\mbf x_s,t)dt \]\par
+\subsection{Joint inversions}
+For example, the waveform misfit function may be jointly minimized with structural, topographic and source parameters. In that case, its gradient involves perturbations $\delta\mbf s$ due to structural, topographic and source parameters:
+\begin{align*}
+  \delta\chi= & \int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \\
+    & +\int_\Sigma K_h(\mbf x)\delta h(\mbf x)d^2\mbf x+\int_{\Sigma_{FS}}\mbf K_h(\mbf x)\cdot\nabla^\Sigma\delta h(\mbf x)d^2\mbf x \\
+	& +\int_0^T\int_\Sigma\mbf\epsilon^\dagger(\mbf x,T-t):\delta\mbf m(\mbf x,t)d^2\mbf xdt
+\end{align*}\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Tape\_2009\_S\_Adjoint at SCC}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Adjoint tomography of the southern California crust}
+\renewcommand{\pay}{Carl Tape, Qinya Liu, and Alessia Maggi \etal, 2009}
+\renewcommand{\pjo}{Science}
+\renewcommand{\pda}{2016/11/27 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Seismic tomography adopts PREM model to produce images of Earth's interior: [1] Woodhouse and Dziewonski, 1984 \& [2] Romanowicz, 2003 in the mantle; [3] Grand \etal, 1997 in subducting slabs; [4] Montelli \etal, 2004 in mantle plumes.
+	\item Start the minimization procedure with more realistic 3D initial models: [6] Komatitsch \etal, 2002; [7] Akcelik \etal, 2003; [8] Chen \etal, 2007; [9] Fichtner \etal, 2008.
+	\item Use adjoint method within the minimization problem: [10] Tarantola, 1984; [11] Talagrand \etal, 1987; [12] Tromp \etal, 2005.
+	\item Adjoint tomography: [13] Tape \etal, 2007.
+	\item \sline
+	\item 3D seismological model of the southern California crust: [14] S\"{u}ss and Shaw, 2003; [15] Komatitsch \etal, 2004.
+	\item SEM wave propagation code: [15] Komatitsch \etal, 2004; [17] Liu and Tromp, 2006 (modify to facilitate an inverse problem).
+	\item \sline
+	\item Empirical relations between elastic wavespeeds and density in Crust: [20] Brocher, 2005.
+	\item \sline
+    \item \myem{FLEXWIN} windowing code - automated time-window selection algorithm for seismic tomography: [21] Maggi \etal, 2009 (please hit \href{http://geodynamics.org/cig/software/flexwin/}{here} to download the package).
+	\item \sline
+    \item Multi-taper method to make travel-time measurement: [S8] Zhou \etal, 2004.
+    \item Subspace methods for multiple parameter classes: [S11] Kennett \etal, 1988; [S12] Sambridge \etal, 1991.
+    \item Locate southern California seismicity from 1981 to 2005: [S16] Lin \etal, 2007.
+    \item Double-difference earthquake location algorithm: [S20] Waldhauser and Ellsworth, 2000.
+    \item Use information from controlled sources (quarry blasts and shots) to estimate uncertainties of absolute locations and absolute origin times: [S16] Lin \etal, 2007; [S21] Lin \etal, 2007.
+    \item Absolute locations for quarry seismicity: [S22] Lin \etal, 2006.
+    \item Cut-and-paste method to source estimation: [S13] Zhu and Helmberger, 1996; [S27] Zhao and Helmberger, 1994.
+    \item Use amplitude ratios between P and S waves to constrain the focal mechanisms: [S25] Hardebeck and Shearer, 2003.
+    \item Moment tensor inversions with SEM: [S31] Liu \etal, 2004.
+\end{enumerate}\par
+\subsection{Adjoint tomography}
+Different results from different data sets: seismic reflection and industry well-log data to constrain the geometry and structure of major basins, receiver function data to estimate the depth to the Mohorovicic discontinuity, and local earthquake data to obtain the 3D background wave-speed structure.\par
+Combine shear wave speed $V_S$ and bulk sound speed $V_B$ to compute compressional wave speed: $V_P^2=(\nicefrac{4}{3})V_S^2+V_B^2$.\par
+An earthquake not used in the tomographic inversion or any future earthquake may be used to independently assess the misfit reduction of the inversion which use these data deriven from other earthquakes.\par
+The approach is that of a minimization problem: (1) specification of an initial model that describes a set of earthquake source parameters and 3D variations in density, shear wave speed and bulk sound speed; (2) specification of a misfit function; (3) computation of the value of the misfit function for the initial model; (4) computation of the gradient and/or Hessian of the misfit function for the initial model; and (5) iterative minimization of the misfit function.\par
+\subsubsection{Misfit function}
+A given time window, or ``measurement window'', is selected if there is a user-specified, quantifiable level of agreement between the observed and simulated seismograms.\par
+For a single time window on a single seismogram, the travel-time misfit measure is:
+\[ F_i^T(\mbf m)=\int_{-\infty}^\infty \frac{h_i(\omega)}{H_i}\Big[\frac{\Delta T_i(\omega,\mbf m)}{\sigma_i}\Big]^2d\omega \]
+where $\mbf m$ is a model vector, $\Delta T_i(\omega,\mbf m)=T_i^{obs}(\omega)-T_i^{syn}(\omega,\mbf m)$ is the frequency-dependent travel-time measurement associated with the $i$th window, $\sigma_i$ is the estimated uncertainty associated with the travel-time measurement ($\sigma_i\geqslant\sigma_0$ the ``water-level'' minimum), and $h_i(\omega)$ is a frequency-domain window with associated normalization constant $H_i=\int_{-\infty}^\infty h_i(\omega)d\omega$ (the multi-taper method). If independent of frequency, $F_i^T(\mbf m)=[\nicefrac{\Delta T_i(\mbf m)}{\sigma_i}]^2$. For a single earthquake, the misfit function is:
+\[ F_s^T(\mbf m)=\frac{1}{2}\frac{1}{N_s}\sum_{i=1}^{N_s}F_i^T(\mbf m) \]
+where $N_s$ denotes the total number of measurement windows for earthquake $s$. Overall misfit function is:
+\[ F^(\mbf m)=\frac{1}{S}\sum_{s=1}^SF_s^T(\mbf m) \]
+where $S$ is the number of earthquakes.\par
+\subsection{Misfit analysis}
+Use the travel-time misfit measure within the tomographic inversion and the waveform misfit measure to assess the misfit reduction.\par
+For a single time window on a single seismogram, the waveform misfit measure is:
+\[ F_i^W(\mbf m)=\frac{\int_{-\infty}^\infty w_i(t)[d(t)-s(t,\mbf m)]^2dt}{\Big\{\int_{-\infty}^\infty w_i(t)[d(t)]^2dt\int_{-\infty}^\infty w_i(t)[s(t,\mbf m)]^2dt\Big\}^{\nicefrac{1}{2}}} \]
+where $d(t)$ denotes the recorded time series, $s(t,\mbf m)$ the simulated time series, $w_i(t)$ the $i$th time-domain window.\par
+\subsection{Earthquake source parameters}
+Four criteria, in order of importance, influenced selection of earthquakes for the tomographic inversion: (1) availability of good quality seismic waveforms for the period range of interest (must have at least 10 good stations); (2) availability of a relocated hypocenter (with origin time); (3) occurrence in a region with few other earthquake; (4) availability of a ``reasonable'' initial focal mechanism.\par
+The dense coverage of stations in the vicinity of the earthquakes is important for epicenter estimation, as well as for depth and origin time.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Liu\_2006\_BSSA\_Finite-frequency kernels}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Finite-frequency kernels based on adjoint methods}
+\renewcommand{\pay}{Qinya Liu and Jeroen Tromp, 2006}
+\renewcommand{\pjo}{Bulletin of the Seismological Society of America}
+\renewcommand{\pda}{2016/12/23 Fri.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Calculate sensitivity or \Frechet kernels: Marquering \etal, 1999 (surface-wave Green's functions); Zhao \etal, 2000 (normal modes); Dahlen \etal, 2000 \& Hung \etal, 2000 \& Zhou \etal, 2004 (asymptotic ray-based methods).
+  \item Implement 3D travel-time (``banana-doughnut'') kernels for compressional-wave tomography: Montelli \etal, 2004.
+  \item \sline
+  \item Obtain 3D finite-frequency sensitivity kernels for 3D reference models by calculating and storing 3D Green's functions: Zhao \etal, 2005.
+  \item Obtain the gradient of a misfit function based on just a regular and an ``adjoint'' simulation for each earthquake: Tromp \etal, 2005.
+  \item \sline
+  \item Use spectral element method (SEM) on global or regional scales: Komatitsch and Tromp, 1999 \& 2002a \& 200b; Chaljub \etal, 2003; Komatitsch \etal, 2004.
+  \item Implement the SEM on parallel computers: Komatitsch \etal, 2003.
+  \item Calculate synthetic seismograms based on SEM: Komatitsch \etal, 2004.
+  \item Paraxial absorbing equation: Clayton and Engquist, 1977; Quarteroni \etal, 1998.
+  \item Perfectly matched layer (PML) methodology: \Berenger, 1994; Collino and Tsogka, 2001; Komatitsch and Tromp, 2003; Festa and Vilotte, 2005.
+  \item The width of the 1st Fresnel zone is $\sqrt{\lambda L}$: Dahlen \etal, 2000.
+  \item Los Angeles basin model: Hauksson, 2000 (background model); S\"{u}ss and Shaw, 2003 (detailed).
+  \item 3D source inversion technique: Liu \etal, 2004.
+  \item Salton Trough model: Hauksson, 2000 (background model); Lovely \etal, 2006.
+  \item $P_{nl}$ wave train: Helmberger and Engen, 1980 (combination of the $P_n$ and $PL$ phases).
+  \item Conjugate gradient approaches for 2D adjoint method: Tape \etal, 2006.
+\end{enumerate}\par
+The main benefit of the adjoint approach is that the \Frechet derivatives of the misfit function may be obtained based on two 3D simulations for each earthquake. A disadvantage is the fact that the Hessian is unavailable, which leads to the use of iterative methods in the inversion problem.\par
+\subsection{Lagrange multiplier method}
+To minimize the least-squares waveform misfit function:
+\[ \chi=\frac{1}{2}\sum_r\int_0^T||\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)||^2dt \]
+where $[0,T]$ denotes the time series of interest, $\mbf s(\mbf x_r,t)$ the synthetic and $\mbf d(\mbf x_r,t)$ the observed displacement at receiver $\mbf x_r$ on time $t$. In practice, both $\mbf d$ and $\mbf s$ will be windowed, filtered, and possibly weighted.\par
+An Earth model with volume $\Omega$ and outer free surface $\partial\Omega$. The synthetic $\mbf s(\mbf x,t)$ is determinde by:
+\[ \rho\partial_t^2\mbf s-\nabla\cdot\mbf T=\mbf f \]
+\[ \mbf T=\mbf c:\nabla\mbf s \]
+where $\rho$ density and $\mbf c$ elastic tensor. The boundary condition and the initial conditions:
+\[ \hat{\mbf n}\cdot\mbf T=0 \text{,\hspace{5mm} on } \partial\Omega \]
+\[ \mbf s(\mbf x,0)=0 \text{,\hspace{5mm}} \partial_t\mbf s(\mbf x,0)=0 \]
+where $\hat{\mbf n}$ the unit outward normal. A simple point source at $\mbf x_s$ in terms of the moment tensor $\mbf M$ and source time function $S(t)$ as:
+\[ \mbf f=-\mbf M\cdot\nabla\delta(\mbf x-\mbf x_s)S(t) \]\par
+Minimizing the misfit function when $\mbf s$ satisfies wave equation implies
+\[ \chi=\frac{1}{2}\sum_r\int_0^T[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]^2dt-\int_0^T\int_\Omega\lambda\cdot(\rho\partial_t^2\mbf s-\nabla\cdot\mbf T-\mbf f)d^3\mbf xdt \]
+where the vector \myem{Lagrange multiplier} $\lambda(\mbf x,t)$ remains to be determined. Using Hooke's law, upon integrating by parts \myno{(more detials refer to eq.9 of the original noted paper)}, because of the free surface boundary condition and the initial conditions,
+\begin{align*}
+  \delta\chi= & \int_0^T\int_\Omega\sum_r[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]\delta(\mbf x-\mbf x_r)\cdot\delta\mbf s(\mbf x,t)d^3\mbf xdt \\
+  & -\int_0^T\int_\Omega(\delta\rho\lambda\cdot\partial_t^2\mbf s+\nabla\lambda:\delta\mbf c:\nabla\mbf s-\lambda\cdot\delta\mbf f)d^3\mbf xdt-\int_0^T\int_\Omega[\rho\partial_t^2\lambda-\nabla\cdot(\mbf c:\nabla\lambda)]\cdot\delta\mbf sd^3\mbf xdt \\
+  & -\int_\Omega[\rho(\lambda\cdot\partial_t\delta\mbf s-\partial_t\lambda\cdot\delta\mbf s)]_Td^3\mbf x-\int_0^T\int_{\partial\Omega}\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt
+\end{align*}
+where $[f]_T$ means $f(T)$.\par
+If no model parameter perturbations $\delta\rho$, $\delta\mbf c$ and $\delta\mbf f$, $\delta\chi$ vanish. In terms of $\delta\mbf s$, $\lambda$ statisfies
+\[ \rho\partial_t^2\lambda-\nabla\cdot(\mbf c:\nabla\lambda)=\sum_r[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]\delta(\mbf x-\mbf x_r) \]
+with the free surface boundary condition and the end conditions:
+\[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=0 \text{,\hspace{5mm} on } \partial\Omega \]
+\[ \lambda(\mbf x,T)=0 \text{,\hspace{5mm}} \partial_t\lambda(\mbf x,T)=0 \]
+Generally, $\lambda$ is provided by the above equations, the variation reduces to
+\[ \delta\chi=-\int_0^T\int_\Omega(\delta\rho\lambda\cdot\partial_t^2\mbf s+\nabla\lambda:\delta\mbf c:\nabla\mbf s-\lambda\cdot\delta\mbf f)d^3\mbf xdt \]\par
+Define the adjoint wave field $\mbf s^\dagger$ in terms of $\lambda$ by
+\[ \mbf s^\dagger(\mbf x,t)\equiv\lambda(\mbf x,T-t) \]
+Thus $\mbf s^\dagger$ satisfies
+\[ \rho\partial_t^2\mbf s^\dagger-\nabla\cdot\mbf T^\dagger=\sum_r[\mbf s(\mbf x_r,T-t)-\mbf d(\mbf x_r,T-t)]\delta(\mbf x-\mbf x_r) \]
+with the free surface boundary condition and the initial conditions:
+\[ \hat{\mbf n}\cdot\mbf T^\dagger=0 \text{,\hspace{5mm} on } \partial\Omega \]
+\[ \mbf s^\dagger(\mbf x,0)=0 \text{,\hspace{5mm}} \partial_t\mbf s^\dagger(\mbf x,0)=0 \]
+where define the adjoint stress $\mbf T^\dagger=\mbf c:\nabla\mbf s^\dagger$.\par
+\myno{If no source perturbation $\delta\mbf f$ (some changes refer to the original noted paper),} the gradient of misfit function may be rewritten:
+\[ \delta\chi=\int_\Omega(\delta\rho K_\rho+\delta\mbf c::\mbf K_c)d^3\mbf x \]
+where $\delta\mbf c::\mbf K_c=\delta c_{ijkl}K_{c_{ijkl}}$ and difine the kernels
+\[ K_\rho(\mbf x)=-\int_0^T\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)dt \]
+\[ \mbf K_c(\mbf x)=-\int_0^T\nabla\mbf s^\dagger(\mbf x,T-t)\nabla\mbf s(\mbf x,t)dt \]\par
+In an isotropic Earth model $c_{jklm}=(\kappa-\nicefrac{2}{3})\delta_{jk}\delta_{lm}+\mu(\delta_{jl}\delta_{km}+\delta_{jm}\delta_{kl})$, where $\mu$ shear moduli and $\kappa$ bulk moduli. Thus
+\[ \delta\mbf c::\mbf K_c=\delta\ln\mu K_\mu+\delta\ln\kappa K_\kappa \]
+where $\delta\ln\mu=\nicefrac{\delta\mu}{\mu}$, $\delta\ln\kappa=\nicefrac{\delta\kappa}{\kappa}$ and the isotropic kernels
+\[ K_\mu(\mbf x)=-\int_0^T2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t)dt \]
+\[ K_\kappa(\mbf x)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\mbf s^\dagger(\mbf x,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where the traceless strain deviator and its adjoint
+\[ \mbf D=\frac{1}{2}[\nabla\mbf s+(\nabla\mbf s)^T]-\frac{1}{3}(\nabla\cdot\mbf s)\mbf I \]
+\[ \mbf D^\dagger=\frac{1}{2}[\nabla\mbf s^\dagger+(\nabla\mbf s^\dagger)^T]-\frac{1}{3}(\nabla\cdot\mbf s^\dagger)\mbf I \]
+where the superscript $T$ denotes the transpose.\par
+If in terms of $\rho$, shear wave speed $\beta$ and compressional wave speed $\alpha$,
+\[ K_\rho'=K_\rho+K_\kappa+K_\mu \]
+\[ K_\beta=2\Big(K_\mu-\frac{4\mu}{3\kappa}K_\kappa\Big) \]
+\[ K_\alpha=2\bigg(\frac{\kappa+\frac{4}{3}\mu}{\kappa}\bigg)K_\kappa \]\par
+\subsection{Absorbing boundaries}
+A regional Earth model has a boundary $\partial\Omega=\Sigma+\Gamma$, where $\Sigma$ the free surface and $\Gamma$ the artificial boundary. On $\Gamma$, absorbed energy based on the paraxial equation (Quarteroni \etal, 1998):
+\[ \hat{\mbf n}\cdot\mbf T=\rho[\alpha(\hat{\mbf n}\hat{\mbf n})+\beta(\mbf I-\hat{\mbf n}\hat{\mbf n})]\cdot\partial_t\mbf s\equiv\mbf B\cdot\partial_t\mbf s \text{,\hspace{5mm} on } \Gamma \]\par
+In the original variation, substituting free surface boundary condition and the above absorbing boundary condition, upon integrating by parts,
+\begin{gather*}
+  \int_0^T\int_{\partial\Omega}\lambda\cdot[\hat{\mbf n}\cdot(\delta\mbf c:\nabla\mbf s+\mbf c:\nabla\delta\mbf s)]-\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt=-\int_0^T\int_\Sigma\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt \\
+  \hspace{50mm} +\int_\Gamma[\lambda\cdot\mbf B\cdot\delta\mbf s]_Td^2\mbf x-\int_0^T\int_\Gamma[\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)+\mbf B\cdot\partial_t\lambda]\cdot\delta\mbf sd^2\mbf xdt
+\end{gather*}
+Thus, to vanish the Lagrange multiplier field, the free surface condition, the end condition and the absorbing boundary condition:
+\[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=0 \text{,\hspace{5mm} on } \Sigma \]
+\[ \lambda(\mbf x,T)=0 \text{,\hspace{5mm} on } \Gamma \]
+\[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=-\mbf B\cdot\partial_t\lambda \text{,\hspace{5mm} on } \Gamma \]
+For the adjoint wave equation, the free surface boundary condition and the absorbing boundary condition:
+\[ \hat{\mbf n}\cdot\mbf T^\dagger=0 \text{,\hspace{5mm} on } \Sigma \]
+\[ \hat{\mbf n}\cdot\mbf T^\dagger=\mbf B\cdot\partial_t\mbf s^\dagger \text{,\hspace{5mm} on } \Gamma \]
+which are same as for the regular wave equation.\par
+\subsection{Numerical implementation}
+If no attenuation, to reconstruct the forward wave field, backward in time from the displacement and velocity wave field at the end of the simulation. The backward wave equation is:
+\[ \rho\partial_t^2\mbf s=\nabla\cdot(\mbf c:\nabla\mbf s)+\mbf f \]
+\[ \mbf s(\mbf x,T) \text{ and } \partial_t\mbf s(\mbf x,T) \text{ given} \]
+\[ \hat{\mbf n}\cdot(\mbf c:\nabla\mbf s)=0 \text{, on } \partial\Omega \]
+Technically, the only difference between solving the backward and forward wave equation is the change in the sign of the timestep parameter $\Delta t$.\par
+For regional simulations, by saving the wave field on the absorbing boundaries at every timestep and the entire wave field at the end, reconstruct the forward wave field in reverse time by solving the backward wave equation, reinjecting the absorbed wave field as going along.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Tape\_2007\_GJI\_Adjoint tomography 2D}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Finite-frequency tomography using adjoint methods -- Methodology and examples using membrane surface waves}
+\renewcommand{\pay}{Carl Tape, Qinya Liu and Jeroen Tromp, 2007}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2017/1/30 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm*}]
+  \item 3D \Frechet sensitivity kernels based on 1D reference model: Marquering \etal, 1999; Zhao \etal, 2000; Dahlen \etal, 2000.
+  \item Seismic wave forward problem in complex media (SEM): Komatitsch and Vilotte, 1998; Komatitsch \etal, 2002; Capdeville \etal, 2003.
+  \item \sline
+  \item SEM 3D seismic wave propagation at regional and global scales: Komatitsch and Tromp, 1999; Komatitsch \etal, 2004; Komatitsch and Tromp, 2002a \& 2002b.
+  \item \sline
+  \item Adjoint methods: Tarantola, 1984; Talagrand and Courtier, 1987.
+  \item \sline
+  \item Adjoint methods in exploration geophysics (2D): Tarantola, 1984; Gauthier \etal, 1986; Mora, 1987; Pratt \etal, 1998; Pratt, 1999.
+  \item 3D ray tracing though 3D models to iteratively improve a global P-wave model: Bijwaard and Spakman, 2000.
+  \item Fully finite difference method to compute traveltime misfit function gradients for 3D models of Los Angeles: Zhao \etal, 2005.
+  \item A technique of stacking synthetic records that limits the number of forward simulations to one per event (per model iteration): Capdeville \etal, 2005.
+  \item Tomographic inversion using finite-element method and adjoint approach within a conjugate gradient framework: Akcelik \etal, 2003.
+  \item \sline
+  \item Time-reversal imaging: Fink \etal, 1989; Fink, 1992 \& 1997.
+  \item \sline
+  \item Classical tomography (compute model sensitivities for each measurement by constructing the gradient and Hessian of the misfit function): Woodhouse and Dziewonski, 1984; Ritsema \etal, 1999.
+  \item \sline
+  \item \myem{Membrane wave}: Tanimoto, 1990; Peter \etal, 2006.
+  \item Spherical spline basis functions to expand the fractional wave speed perturbations: Wang and Dahlen, 1995; Wang \etal, 1998.
+  \item Crustal structure and seismicity distribution in southern California: Hauksson, 2000.
+  \item Moho depth in southern California: Zhu and Kanamori, 2000.
+  \item Calculate cheaply and rapidly banana-doughnut kernels for 1-D earth models: Dahlen \etal, 2000.
+  \item Compute global finite-frequency kernels using normal modes for spherically symmetric models: Zhao and Jordan, 2006.
+  \item Data weighting in waveform inversion: Takeuchi and Kobayashi, 2004.
+  \item Add an explicit damping term to the misfit function to smooth the inversion: Akcelik \etal, 2002 \& 2003.
+  \item \myem{Conjugate gradient method}: Fletcher and Reeves, 1964.
+  \item \myem{Multiscale inversion method}: Bunks \etal, 1995.
+\end{enumerate}\par
+Seismic tomography based upon a 3-D reference model, 3-D numerical simulations depends largely on: (1) The accuracy and efficiency of the technique used to generate 3-D synthetic seismograms; (2) The efficiency of the inversion algorithm.\par
+\subsection{Inverse problem}
+Make a quadratic Taylor expansion of the misfit function $\chi(\mbf m+\delta\mbf m)$,
+\[ \chi(\mbf m+\delta\mbf m)\approx\chi(\mbf m)+\mbf g(\mbf m)^T\delta\mbf m+\frac{1}{2}\delta\mbf m^T\mbf H(\mbf m)\delta\mbf m \]
+where $\mbf m$ a particular model, $\delta\mbf m$ model corrections, and the gradient vector and the Hessian matrix are, respectively:
+\[ \mbf g(\mbf m)=\frac{\partial\chi}{\partial\mbf m}\Big|_{\mbf m} \text{,\hspace{5mm}} \mbf H(\mbf m)=\frac{\partial^2\chi}{\partial\mbf m\partial\mbf m}\Big|_{\mbf m} \]\par
+The gradient with respect to $\delta\mbf m$ is
+\[ \mbf g(\mbf m+\delta\mbf m)\approx\mbf g(\mbf m)+\mbf H(\mbf m)\delta\mbf m \]
+which can be set equal to zero to obtain the local minimum of misfit,
+\[ \mbf H(\mbf m)\delta\mbf m=-\mbf g(\mbf m) \]
+\[ \myno{\delta\mbf m=-\frac{\mbf g(\mbf m)}{\mbf H(\mbf m)}} \]\par
+If the gradient and (approximate) Hessian are both available, then the inverse approach is \myem{Newton method}; if only the gradient is available, then it is \myem{gradient method}.\par
+\subsection{Classical tomography}
+\subsubsection{Theory}
+The traveltime misfit function may be
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{i=1}^N[T_i^{obs}-T_i(\mbf m)]^2 \]
+where $T_i^{obs}$ and $T_i(\mbf m)$ the observed and predicted (based upon $\mbf m$) traveltime for the $i$th source-receiver combination, and $N$ the number of traveltime measurements. The variation is
+\[ \delta\chi=-\sum_{i=1}^N\Delta T_i\delta T_i \]
+where $\delta T_i$ the theoretical traveltime perturbation, and the traveltime anomaly:
+\[ \Delta T_i=T_i^{obs}-T_i(\mbf m) \]
+where $\Delta$ and $\delta$ denote a differential measurement and a mathematical perturbation, respectively.\par
+In ray-based tomography, the predicted traveltime anomaly $\delta T_i$ along the $i$th ray path may be
+\[ \delta T_i=-\int_{ray_i}c^{-1}\delta\ln cds \]
+where \myem{fractional wave speed perturbations} $\delta\ln c=\nicefrac{\delta c}{c}$, and $ds$ a segment of the $i$th ray. Taking into account finite-frequency effects, the traveltime anomaly for the $i$th source-receiver combination may be
+\[ \delta T_i=\int_VK_i\delta\ln cd^3\mbf x \]
+where $K_i(\mbf x)$ \mynem{`banana-doughnut', sensitivity, finite-frequency or Born kernels}.\par
+For finite-frequency tomography,
+\[ \delta\chi=\int_VK\delta\ln cd^3\mbf x \]
+where the traveltime \myem{misfit kernel}
+\[ K(\mbf x)=-\sum_{i=1}^N\Delta T_iK_i(\mbf x) \]
+Note that misfit kernels $K(\mbf x)$ depend upon the data, whereas the banana-doughnut kernels $K_i(\mbf x)$ are data-independent.\par
+Choose a finite set of basis functions $B_k(\mbf x),k=1,2,\ldots,M$ and expand fractional phase-speed perturbations,
+\[ \delta\ln c(\mbf x)=\sum_{k=1}^M\delta m_kB_k(\mbf x) \]
+where $\delta m_k$ the perturbed model coefficients, determined in terms of $\mbf g$ and $\mbf H$ by the preceding relation.\par
+Thus,
+\[ \delta T_i=\sum_{k=1}^M\delta m_kG_{ik} \]
+where
+\begin{equation*}
+  G_{ik}\equiv\frac{\partial T_i}{\partial m_k}\Big|_{\mbf m}=\left\{
+  \begin{aligned}
+    & -\int_{ray_i}c^{-1}B_kds, & & \text{for ray theory} \\
+    & \int_VK_iB_kd^3\mbf x, & & \text{for finite-frequency tomography} \\
+  \end{aligned} \right.
+\end{equation*}\par
+Besides, for finite-frequency tomography,
+\[ \delta\chi=\sum_{k=1}^M\delta m_k\int_VKB_kd^3\mbf x \]
+and
+\[ \delta\chi\myno{=\frac{\partial\chi}{\partial m}\cdot\delta\mbf m}=\mbf g\cdot\delta\mbf m=\sum_{k=1}^Mg_k\delta m_k \]
+deduce that
+\[ g_k=\myde{\frac{\partial\chi}{\partial m_k}=}\int_VKB_kd^3\mbf x \]
+obtain
+\begin{align*}
+  g_k & =-\sum_{i=1}^N\int_VK_iB_kd^3\mbf x\Delta T_i \\
+  & =-\sum_{i=1}^NG_{ik}\Delta T_i \\
+\end{align*}
+In matrix notation,
+\[ \mbf g=-\mbf G^T\mbf d \]
+\[ \mbf d=(\Delta T_1,\Delta T_2,\ldots,\Delta T_N)^T \]
+As for ray-based tomography, same as finite-frequency tomography.\par
+\myno{Because of
+\[ \frac{\partial\Delta T_i}{\partial m_{k'}}=-\frac{\partial T_i}{\partial m_{k'}}=-G_{ik'} \]}
+thus the Hessian $\mbf H$
+\[ H_{kk'}=\frac{\partial^2\chi}{\partial m_k\partial m_{k'}}\Big|_{\mbf m}=\frac{\partial g_k}{\partial m_{k'}}\Big|_{\mbf m}=\sum_{i=1}^N\Big(G_{ik}G_{ik'}\mynno{-}\Delta T_i\frac{\partial^2T_i}{\partial m_k\partial m_{k'}}\Big|_{\mbf m}\Big) \]
+and the approximate Hessian $\tilde{\mbf H}$
+\[ \tilde H_{kk'}\equiv\sum_{i=1}^NG_{ik}G_{ik'} \]
+In matrix notation,
+\[ \tilde{\mbf H}\equiv\mbf G^T\mbf G \]
+If using the approximate Hessian instead of the exact one, then the inverse approach is a \myem{Gauss-Newton method}.\par
+Therefore, the model correction $\delta\mbf m$ is determined by
+\[ \mbf G^T\mbf G\delta\mbf m=\mbf G^T\mbf d \]
+In general, $\tilde{\mbf H}$ is not full rank. Introduce a damping matrix $\mbf D$ (typically the norm, gradient, or second derivative of wave speed perturbations) and a damping parameter $\gamma$ (generally determined by trading-off misfit of the solution against complexity of the model),
+\[ \tilde{\mbf H}_\gamma=\mbf G^T\mbf G+\gamma^2\mbf D \]
+\[ \delta\mbf m=(\mbf G^T\mbf G+\gamma^2\mbf D)^{-1}\mbf G^T\mbf d \]
+More details about how to add a regularization term to the misfit function refer to Appendix A of the original papaer. For non-linear inverse problems, an iterative Gauss-Newton method to minimize the misfit function.\par
+\subsubsection{Experimental set-up}
+2-D elastic wave equation for Membrane wave (traveling in the $x-y$ plane with a vertical $z$ component of motion):
+\[ \rho\partial^2_ts=\partial_x(\mu\partial_xs)+\partial_y(\mu\partial_ys)+f \]
+where $s(x,y,t)$ the vertical component of displacement, $\rho(x,y)$ the density, $\mu(x,y)$ the shear modulus and the source
+\[ f(x,y,t)=h(t)\delta(x-x_s)\delta(y-y_s) \]
+where $h(t)$ the source-time function and $(x_s,y_s)$ the source location. A Gaussian form of the source-time function:
+\[ h(t)=-\frac{2\alpha^3}{\sqrt\pi}(t-t_s)e^{-\alpha^2(t-t_s)^2} \]
+The relationship $\mu=\rho c^2$ and $c$ is the membrane-wave phase-speed.\par
+\subsection{The gradient}
+For the 2-D case, the gradient of the misfit function is
+\[ g_k=\int_\Omega KB_kd^2\mbf x \]
+where $K$ the misfit kernel.\par
+\subsubsection{Event kernels}
+The source for the adjoint wavefield for a particular event is (Tromp \etal, 2005, eq.57)
+\[ f^\dagger(x,y,t)=-\sum_{r=1}^{N_r}\Delta T_r\frac{1}{M_r}w_r(T-t)\partial_ts(x_r,y_r,T-t)\times\delta(x-x_r)\delta(y-y_r) \]
+where $r$ the receiver index, $N_r$ the number of receivers, $\Delta T_r$ the cross-correlation traveltime measurement over a time window $w_r(t)$, $s(x,y,t)$ the forward wavefield, $(x_r,y_r)$ the location of the receiver, $T$ the length of the time-series, and $M_r$ the normalization factor.\par
+The adjoint source comprises time-reversed velocity seismograms, input at the location of the receivers and weighted by the traveltime measurement associated with each receiver.\par
+For a given earthquake (event), the membrane event kernel:
+\[ K(x,y)=-2\mu(x,y)\int_0^T[\partial_xs^\dagger(x,y,T-t)\partial_xs(x,y,t)+\partial_ys^\dagger(x,y,T-t)\partial_ys(x,y,t)]dt \]
+where $s^\dagger$ the adjoint wavefield given by the above adjoint source.\par
+For a single receiver and a uniform model perturbation, the event kernel resembles a banana-doughnut kernel. The event kernel shows the region of the current model that gives rise to the discrepancy between the data and the synthetics.\par
+To obtain a negative variation of the misfit function $\delta\chi$ to minimize the misfit, invoke a fast and positive structural perturbation where the kernel is negative, and/or a slow and negative structural perturbation where the kernel is positive.\par
+\subsubsection{Misfit kernels}
+Define the misfit kernel as a sum of event kernels for a particular model.\par
+To remove spurious amplitudes in the vicinity of the sources and receivers, smooth the misfit kernel by convolving (in 2-D) the original misfit kernel with a Gaussian form:
+\[ G(x,y)=\frac{4}{\pi\Gamma^2}e^{-\nicefrac{4(x^2+y^2)}{\Gamma^2}} \]
+where $\Gamma$ the scalelength of smoothing. The choice of $\Gamma$ involves a degree of subjectivity, and it is feasible to take the value somewhat less than the wavelengths of the seismic waves.\par
+The smoothing operation will tend to remove some subresolution features from the kernel.\par
+\subsubsection{Basis function}
+The basis functions embedded in the numerical method, using Lagrange polynomials for the SEM, refer to the Section 5.3 of the original paper.\par
+\subsection{Optimization}
+\subsubsection{Conjugate gradient algorithm}
+Given an initial model $\mbf m^0$, calculate $\chi(\mbf m^0), \mbf g^0=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^0)$, and set the initial search direction $\mbf p^0=-\mbf g^0$. If $||\mbf p^0||<\epsilon$, then $\mbf m^0$ is the desired model; otherwise:
+\begin{enumerate}[(i)]
+  \item Perform a line search to obtain the scalar $v_k$ that minimizes the function $\tilde\chi^k(v)$, where $\tilde\chi^k(v)=\chi(\mbf m^k+v\mbf p^k)$ and $\tilde g^k(v)=\nicefrac{\partial\tilde\chi^k}{\partial v}=\mbf g(\mbf m^k+v\mbf p^k)\cdot\mbf p^k$:
+  \begin{enumerate}[$\bullet$]
+    \item Choose a test parameter $v_t^k=-\nicefrac{2\tilde\chi^k(0)}{\tilde g^k(0)}$;
+    \item Calculate the test model $\mbf m_t^k=\mbf m^k+v_t^k\mbf p^k$, $\chi(\mbf m_t^k)$, $\mbf g(\mbf m_t^k)$, $\tilde\chi^k(v_t^k)$ and $\tilde g^k(v_t^k)$;
+    \item Interpolate the function $\tilde\chi^k(v)$ by a quadratic or cubic polynomial \myno{(resolve a quadratic or cubic polynomial $\tilde\chi^k(v)$ according to the two misfits $\tilde\chi^k(0)$, $\tilde\chi^k(v_t^k)$, the gradient(s) $\tilde g^k(0)$, not or and $\tilde g^k(v_t^k)$)} and obtain the $v^k$ that gives the minimum of this polynomial \myno{(more details refer to Appendix B2 of the original paper)}.
+  \end{enumerate}
+  \item Update the model: $\mbf m^{k+1}=\mbf m^k+v^k\mbf p^k$, then calculate $\mbf g^{k+1}=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^{k+1})$.
+  \item Update the conjugate gradient search direction: $\mbf p^{k+1}=-\mbf g^{k+1}+\beta^{k+1}\mbf p^k$, where $\beta^{k+1}=\mbf g^{k+1}\cdot\nicefrac{(\mbf g^{k+1}-\mbf g^k)}{(\mbf g^k\cdot\mbf g^k)}$.
+  \item If $||\mbf p^{k+1}||<\epsilon$, then $\mbf m^{k+1}$ is the desired model; otherwise replace $k$ with $k+1$ and restart from (i).
+\end{enumerate}\par
+A detailed cycle of the conjugate gradient algorithm for the adjoint tomography refer to the Fig.11 of the original paper.\par
+Entrapment into local minima is common in the conjugate gradient method, and it may be avoided by using multiscale methods (Bunks \etal, 1995), and alternatively by starting at longer periods and gradually moving to shorter periods.\par
+\subsection{Source, structure and joint inversions}
+\subsubsection{Source inversion}
+A perturbation of the point source may be:
+\[ \delta f(x,y,t)=-\dot h(t)\delta t_s\delta(x-x_s)\delta(y-y_s)+h(t)(\delta x_s\partial_{x_s}+\delta y_s\partial_{y_s})[\delta(x-x_s)\delta(y-y_s)] \]
+where $\delta t_s$ a perturbation in the origin time, $(\delta x_s,\delta y_s)$ a perturbation in the source location.\par
+Change in misfit due to a change in the point source is
+\[ \delta\chi=\int_0^T\int_\Omega\delta f(x,y,t)s^\dagger(x,y,T-t)dxdydt \]
+where $s^\dagger$ the adjoint wavefield, whose sources are injected at the receivers, just same as in the case of the previous structure inversions. Thus,
+\[ \delta\chi=-\delta t_s\int_0^T\dot h(t)s^\dagger(x_s,y_s,T-t)dt+(\delta x_s\partial_{x_s}+\delta y_s\partial_{y_s})\int_0^Th(t)s^\dagger(x_s,y_s,T-t)dt \]
+\[ \delta\chi=\mbf g\cdot\delta\mbf m \]
+where
+\[ \delta\mbf m\myno{=\Big[\frac{\delta x_s}{\lambda},\frac{\delta y_s}{\lambda},\frac{\delta t_s}{\tau}\Big]^T}=\Big[\frac{x_s^k-x_s^0}{\lambda},\frac{y_s^k-y_s^0}{\lambda},\frac{t_s^k-t_s^0}{\tau}\Big]^\myno{T} \]
+\[ \mbf g=\Big[\lambda\int_0^Th(t)\partial_{x_s}s^\dagger(x_s,y_s,T-t)dt,\lambda\int_0^Th(t)\partial_{y_s}s^\dagger(x_s,y_s,T-t)dt,-\tau\int_0^T\dot h(t)s^\dagger(x_s,y_s,T-t)dt\Big] \]
+where $\tau$ the reference period, $\lambda=c\tau$ the reference wavelength and $c$ the reference phase speed.\par
+\subsubsection{Joint inversions}
+The model vector for the joint inversion is $\delta\mbf m=[\delta\mbf m_{str};\delta\mbf m_{src}]$ with dimension $N_{structure}+3N_{event}$. The gradient is
+\[ \mbf g^k=[F\mbf g_{str}^k;\mbf g_{src}^k] \]
+\[ F=\frac{||\mbf g_{src}^0||_2}{||\mbf g_{str}^0||_2} \]
+where $||\cdot||_2$ the L2-norm of the enclosed vector.\par
+\subsection{Discussion}
+\subsubsection{Three kernel types}
+Banana-doughnut kernels: a phase-specific (e.g. P) kernel for an individual source-receiver combination, not incorporate the measurement; Event kernels: a sum of individual banana-doughnut kernels, weighted by its corresponding measurement; Misfit kernel: the sum of event kernels, a graphical representation of the gradient of the misfit function.\par
+Use the banana-doughnut kernels in classical tomography and the misfit kernels in adjoint tomography.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Bozdag\_2011\_GJI\_Misfit functions for FWI}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Misfit functions for full waveform inversion based on instantaneous phase and envelope measurements}
+\renewcommand{\pay}{Ebru Bozdag, Jeannot Trampert and Jeroen Tromp, 2011}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2017/4/3 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Full waveform inversions in local and regional studies: Chen \etal, 2007b; Fichtner \etal., 2009; Tape \etal, 2009.
+  \item A global tomography approach in a synthetic experiment based on a source stacking technique: Capdeville \etal, 2005.
+  \item \sline
+  \item Ray-based tomography: Zhou, 1996 \& Boschi and Dziewonski, 2000 (using body-wave phases); Trampert and Woodhouse, 1995 \& Ekstrom \etal, 1997 (using surface waves).
+  \item Integration of different data sets to increase resolution in ray-based tomography: Su \etal, 1994; Masters \etal, 1996; Ritsema \etal, 1999; Megnin and Romanowicz, 2000; Gu \etal, 2001.
+  \item Finite-frequency tomography to improve resolution: Montelli \etal, 2004; Sigloch \etal, 2008; Boschi \etal, 2007.
+  \item Construct global models based on energy wave packets using asymptotic finite-frequency kernels: Li and Romanowicz, 1996; Megnin and Romanowicz, 2000; Gung and Romanowicz, 2004.
+  \item \sline
+  \item Solve the wave euqation numerically in realistic 3-D earth models: Komatitsch and Vilotte, 1998; Komatitsch and Tromp, 1999; Capdeville \etal, 2003.
+  \item Compute Green's functions in 3-D models to compute \Frechet derivatives: Zhao \etal, 2005.
+  \item Adjoint techniques: Tarantola, 1984 \& 1988; Fink, 1997; Talagrand and Courtier, 1987; Crase \etal, 1990; Pratt, 1999; Akcelik \etal, 2003.
+  \item Combine 3-D simulations with adjoint techniques to compute \Frechet derivatives: Tromp \etal, 2005.
+  \item Compare the scattering integral method (computing and storing 3-D Green's functions) with adjoint methods: Chen \etal, 2007a.
+  \item \sline
+  \item Common misfit functions based on: Luo and Schuster, 1991 \& Marquering \etal, 1999 \& Dahlen \etal, 2000 \& Zhao \etal, 2000 (cross-correlation traveltime measurements); Dahlen and Baig, 2002 \& Ritsema \etal, 2002 (relative amplitude variations); Tarantola, 1984 \& Tarantola, 1988 \& Nolet, 1987 (waveform differences).
+  \item Adjoint sensitivity kernels based on cross-correlation traveltime measurements: Liu and Tromp, 2006 \& 2008.
+  \item \myem{Automated phase-picking algorithms}: Maggi \etal, 2009.
+  \item Multitaper measurements: Zhou \etal, 2004.
+  \item Regional example of seismic tomography based on frequency-dependent traveltime measurements and multitaper measurements using CG method with adjoint kernels: Tape \etal, 2009.
+  \item Generalized seismological data functionals (GSDF) for frequency-dependent measurements: Gee and Jordan, 1992.
+  \item Time-frequency analysis separating phase and amplitude information: Fichtner \etal, 2008.
+  \item \sline
+  \item Instantaneous phases to increase resolution in exploration seismics: Taner \etal, 1979; Perz \etal, 2004; Barnes, 2007.
+  \item \sline
+  \item Spectral-element method (SEM): Komatitsch and Tromp 2002a \& 2002b.
+  \item PREM: Dziewonski and Anderson, 1981.
+  \item 3-D mantle model \mynno{S20RTS}: Ritsema \etal, 1999.
+  \item 3-D crustal model Crust2.0: Bassin \etal, 2000.
+  \item 3-D Q model: Dalton \etal, 2008.
+\end{enumerate}\par
+\myno{BACKGROUND:} In classical seismic tomography, the usable amount of data is often restricted because of approximations to the wave equation. 3-D numerical simulations of wave propagation provide new opportunities for increasing the amount of usable data in seismograms by choosing appropriate misfit functions.\par
+\myno{DEFINITIOIN:} ``Full waveform inversion'' is a technique which combines 3-D numerical wave simulations as a forward theory with \Frechet kernels computed in 3-D background models, to fit complete three-component seismograms.\par
+\myno{WHY:} The waveform misfit is easily applied to whole seismograms, but it favours high-amplitude phases in a wave train containing multiple phases with different amplitudes. Thus, to extract optimal information, phases should be selected as in traveltime measurements, or seismograms should be cut into wave packages with appropriate weightings (e.g. Li and Romanowicz, 1996).\par
+Waveform differences can be highly non-linear with respect to the model.\par
+\subsection{Misfit functions and adjoint sources}
+\subsubsection{Adjoint kernels}
+\myno{WORKFLOW:} In seismic waveform tomography, we extract information from a set of observed seismograms on model parameters describing Earth's interior. Model parameters are updated by minimizing a chosen misfit function between observed and synthetic data. In adjoint tomography, the gradient of the misfit function can be computed through the interaction of a forward wavefield with its adjoint wavefield, which is generated by the back-propagation of measurements made on data. The non-linear inverse problem is then solved iteratively based on a gradient method.
+Define a generic wavefor misfit function:
+\[ \chi(\mbf m)=\sum_{r=1}^N\int_0^Tg(\mbf x_r,t,\mbf m)dt \]
+where $N$ the number of receivers, $g(\mbf x_r,t,\mbf m)$ any kind of misfit at receiver position $\mbf x_r$ with model parameters $\mbf m$. Its gradient is
+\[ \delta\chi=\sum_{r=1}^N\int_0^T\partial_{\mbf s}g(\mbf x_r,t,\mbf m)\cdot\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+where $\delta\mbf s(\mbf x_r,t,\mbf m)$ displacement perturbations due to model perturbations $\delta\mbf m$. Using the Born approximation and the reciprocity of the Green's function, define the adjoint wavefield $\mbf s^\dagger$ and the adjoint source $\mbf f^\dagger$:
+\[ s_k^\dagger(\mbf x',t')=\int_0^{t'}\int_VG_{ki}(\mbf x',\mbf x_r;t'-t)f_i^\dagger(\mbf x,t)d^3\mbf xdt \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\partial_{s_i}g(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+The sensitivity kernels are the \Frechet derivatives with respect to the corresponding model parameter.\par
+Adjoint kernels depend on the adjoint wavefield, which is generated by the adjoint source. And the adjoint source depends on the pre-defined misfit function for specific observables.\par
+\subsubsection{Hilbert transform}
+An analytic signal $\tilde f(t)$ is constructed from a real signal $f(t)$ and its Hilbert transform $\mycH\{f(t)\}$:
+\[ \tilde f(t)=f(t) \mynno{-} i\mycH\{f(t)\} \]
+\[ \mycH\{f(t)\}= \mynno{-} \frac{1}{\pi}P\int_{-\infty}^{+\infty}\frac{f(\tau)}{t-\tau}d\tau \]
+where $P$ the Cauchy principal value. The analytic signal can be written as
+\[ \tilde f(t)=E(t)e^{i\phi(t)} \]
+where the instantaneous phase $\phi(t)$ and the instantaneous amplitude $E(t)$ are respectively:
+\[ \phi(t)=\arctan\frac{\mycI\{\tilde f(t)\}}{\mycR\{\tilde f(t)\}} \]
+\[ E(t)=\sqrt{\mycR\{\tilde f(t)\}^2+\mycI\{\tilde f(t)\}^2} \]\par
+\subsubsection{Instantaneous phase misfits}
+Define the squared instantaneous phase misfit:
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T[\phi_r^{obs}(t)-\phi_r(t,\mbf m)]^2dt \]
+where $\phi_r$ the instantaneous phase of a specific component recorded at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T(\phi_r^{obs}-\phi_r)\delta\phi_rdt \]
+Assume that $\tilde s_r$ is the analytic signal corresponding to the synthetic seismogram $s_r$, define $\phi_r$ as
+\[ \phi_r=\arctan\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)} \]
+so the perturbation
+\begin{align*}
+  \delta\phi_r & =\nicefrac{\delta\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]}{\big\{1+\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]^2\big\}} \\
+    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{s_r^2+(\mycH s_r)^2} \myno{\text{\hspace{2mm}(some problem on derivation)}} \\
+    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{E_r^2} \\
+\end{align*}
+and the gradient
+\begin{align*}
+  \delta\chi & =-\sum_{r=1}^N\int_0^T(\phi_r^{obs}-\phi_r)\Big[\frac{(\mycH s_r)\delta s_r}{E_r^2}-\frac{s_r\delta(\mycH s_r)}{E_r^2}\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[(\phi_r^{obs}-\phi_r)\frac{(\mycH s_r)}{E_r^2}\delta s_r+\mycH\Big\{(\phi_r^{obs}-\phi_r)\frac{s_r}{E_r^2}\Big\}\delta s_r\Big]dt \\
+\end{align*}
+Then the adjoint source
+\begin{align*}
+  f_i^\dagger(\mbf x,t)= & -\sum_{r=1}^N\Big[[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
+    & +\mycH\Big\{[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+\end{align*}
+where $w_r$ the weighting function, generically defined as $\nicefrac{1}{E_i^2}$.\par
+\subsubsection{Envelope misfits}
+Define the squared logarithmic envelope misfit:
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T\Big[\ln\frac{E_r^{obs}(t)}{E_r(t,\mbf m)}\Big]^2dt \]
+where $E_r$ the envelope of a specific component recorded at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{1}{E_r}\delta E_rdt \]
+Similarly, define $E_r$ as
+\[ E_r=\sqrt{\mycR(\tilde s_r)^2+\mycI(\tilde s_r)^2} \]
+so the perturbation
+\[ \delta E_r=\frac{s_r\delta s_r+(\mycH s_r)\delta(\mycH s_r)}{\sqrt{s_r^2+(\mycH s_r)^2}} \]
+and the gradient
+\begin{align*}
+  \delta\chi & =-\sum_{r=1}^N\int_0^T\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\Big[\frac{s_r\delta s_r}{E_r^2}+\frac{(\mycH s_r)\delta(\mycH s_r)}{E_r^2}\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{s_r}{E_r^2}\delta s_r-\mycH\Big\{\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{(\mycH s_r)}{E_r^2}\Big\}\delta s_r\Big]dt \\
+\end{align*}
+Then the adjoint source
+\begin{align*}
+  f_i^\dagger(\mbf x,t)= & -\sum_{r=1}^N\Big[\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
+    & =-\mycH\Big\{\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+\end{align*}
+where $w_r$ the weighting function.\par
+\subsubsection{Waveform misfits}
+The classical misfit function is defined as
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T||\mbf d(\mbf x_r,t)-\mbf s(\mbf x_r,t,\mbf m)||^2dt \]
+where $\mbf d$ and $\mbf s$ the observed and synthetic waveforms, respectively. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T[\mbf d(\mbf x_r,t)-\mbf s(\mbf x_r,t,\mbf m)]\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+And the adjoint source is
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N\frac{1}{M_r}[d_i(\mbf x_r,T-t)-s_i(\mbf x_r,T-t,\mbf m)]w_r(T-t)\delta(\mbf x-\mbf x_r) \]
+where $w_r$ the time window function, and the normalization term $M_r=\int_0^Tw_r(t)d_i^2(x_r,t)dt$.\par
+\subsubsection{Traveltime misfits}
+The squared traveltime misfit is
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]^2 \]
+where $T_r$ the traveltime of a selected phase at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]\delta T_r \]
+If traveltime differences are measured by cross-correlation, the perturbation
+\[ \delta T_r=\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t,\mbf m)\delta s_i(\mbf x_r,t,\mbf m)dt \]
+\[ N_r=\int_0^Nw_r(t)s_i(\mbf x_r,t,\mbf m)\partial_t^2s_i(\mbf x_r,t,\mbf m)dt \]
+where $w_r$ the time window function which isolates a specific phase, and the adjoint source
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Amplitude misfits}
+The amplitude misfit is
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\Big[\ln\frac{A_r^{obs}}{A_r(\mbf m)}\Big]^2 \]
+where the amplitude $A_r=\sqrt{\nicefrac{1}{(t_2-t_1)}\int_{t_1}^{t_2}s_r^2(t)dt}$ (Dahlen and Baig, 2002) at station $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\ln\Big[\frac{A_r^{obs}}{A_r(\mbf m)}\Big]\delta\ln A_r \]
+\[ \delta\ln A_r=\frac{1}{M_r}\int_0^Tw_r(t)s_i(\mbf x_r,t,\mbf m)\delta s_i(\mbf x_r,t,\mbf m)dt \]
+where $w_r$ the time window function, and the normalization factor $M_r=\int_0^Tw_r(t)s_i^2(\mbf x_r,t,\mbf m)dt$. And the adjoint source
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N\ln\Big[\frac{A_r^{obs}}{A_r(\mbf m)}\Big]\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Attenuation kernels}
+Amplitudes or envelopes of seismograms are also very sensitive to variations in anelastic structure.\par
+Express the gradient of the misfit function
+\[ \delta\chi=\int_vK_\mu^Q(\mbf x)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]
+where $Q_\kappa^{-1}$ is ignored. The frequency-dependent shear modulus is (Liu \etal, 1976)
+\[ \mu(\omega)=\mu(\omega_0)\Big[1+\frac{2}{\pi}Q_\mu^{-1}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)Q_\mu^{-1}\Big] \]
+where $\omega_0$ a reference angular frequency, and the change (Tromp \etal, 2005)
+\[ \delta\mu(\omega)=\mu(\omega_0)\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]\delta Q_\mu^{-1} \]
+According to the Fourier transformed Born approximation, the anelastic adjoint wavefield is
+\[ \tilde f_i^\dagger(\mbf x,t)=\frac{1}{2\pi}\int_{-\infty}^\infty\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]f_i^\dagger(\mbf x,\omega)e^{i\omega t}d\omega \]
+where $f_i^\dagger(\mbf x,\omega)$ the Fourier transform of the regular elastic adjoint source.\par
+\subsection{Discussion}
+Waveform measurement (WF) favours the highest amplitude parts of seismograms.\par
+The drawback of traveltime (TT) and amplitude (AMP) measurements is that they need waveforms to be similar in shape and require isolating seismic phases from seismograms (need to pick every available phase); The major disadvantage of WF comes from mixing phase and amplitude information in a single observable and is highly non-linear with respect to Earth's structure.\par
+The advantages of instantaneous phase (IP) and envelope (ENV) measurements are less data processing and easier implementation.\par
+To avoid cycle skip problems in phase speed measurements, use long-period waveforms first, gradually increase the frequency content of data in subsequent iterations in the inversion.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Peter\_2011\_GJI\_Adjoint on hexahedral meshes}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Forward and adjoint simulations of seismic wave propagation on fully unstructured hexahedral meshes}
+\renewcommand{\pay}{Daniel Peter, Dimitri Komatitsch, Yang Luo, \etal, 2011}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2017/4/14 Fri.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Develope SEM in computational fluid dynamics: Patera, 1984; Maday and Patera, 1989.
+  \item Early seismic wave propagation applications of the SEM: Cohen \etal, 1993 \& Komatitsch, 1997 \& Faccioli \etal, 1997 \& Casadei and Gadellini, 1997 \& Komatitsch and Vilotte, 1998 \& Komatitsch and Tromp, 1999 (Legendre basis functions and a perfectly diagonal mass matrix); Seriani and Priolo, 1994 \& Priolo \etal, 1994 \& Seriani \etal, 1995 (Chebyshev basis functions and a non-diagonal mass matrix).
+  \item \sline
+  \item Discontinuous SEM or discontinuous Galerkin technique: Bernardi \etal, 1994; Chaljub, 2000; Kopriva \etal, 2002; Chaljub \etal, 2003; Legay \etal, 2005; Kopriva, 2006; Wilcox \etal, 2010; Acosta Minolia and Kopriva, 2011; and so on ...
+  \item \sline
+  \item Conforming non-structured mesh doubling bricks accommodate mesh size variations: Komatitsch and Tromp, 2002a \& 2004; Lee \etal, 2008, 2009a \& 2009b.
+  \item Applications of SEM: Canuto \etal, 1988; Maday and Patera, 1989; Seriani and Priolo, 1994; Deville \etal, 2002; Cohen, 2002; De Basade and Sen, 2007; Seriani and Oliveira, 2008.
+  \item Reviews of the SEM in seismology: Komatitsch \etal, 2005; Chaljub \etal, 2007; Tromp \etal, 2008; Fichtner, 2010.
+  \item \sline
+  \item
+\end{enumerate}\par
+
+\vspace{5mm}
+
+
+
+
+
+
+
+
+\renewcommand{\pmk}{Moghaddam\_2013\_Geophy\_Stochastic gradient method}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{A new optimizatioin approach for source-encoding full-waveform inversion}
+\renewcommand{\pay}{Peyman P. Moghaddam, Henk Keers, Felix J. Herrmann, \etal, 2013}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2017/6/11 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item FWI on a large scale: Virieux and Operto, 2009; Kapoor \etal, 2010; Vigh \etal, 2010.
+  \item Conventional FWI: Tarantola, 1984 \& 1986; Mora, 1987; Crase \etal, 1990; ...
+  \item Source encoding technique: Krebs \etal 2009; Li and Herrmann, 2010; Moghaddam and Herrmann, 2010; van Leeuwen \etal, 2011; Haber \etal, 2012; Li \etal, 2012.
+  \item \sline
+  \item Stochastic optimization method: Goldberg, 1989; Spall, 1992.
+  \item \sline
+  \item Marmousi model: Bourgeois \etal, 1991.
+  \item \sline
+  \item \mynem{The adjoint-state method} to avoid the computation of sensitivity matrix: Lions and Magenes, 1972; Lailly, 1983; Tarantola, 1984; Giles \etal, 2003; Plessix, 2006; Virieux and Operto, 2009.
+  \item The limited-memory Broyden-Fletcher-Goldfarb-Shanno (\myem{LBFGS}) method: Byrd \etal, 1995; Mulder and Plessix, 2004; Nocedal and Wright, 2006; Plessix, 2004.
+  \item Preconditioned conjugate gradient method: Ravaut \etal, 2004.
+  \item Gauss-Newton method: Virieux and Operto, 2009.
+  \item The online LBFGS (oLBFGS): Schraudolph \etal, 2007; Yu \etal, 2010.
+  \item Stochastic gradient descent: Schraudolph \etal, 2007; Sunehag \etal, 2009.
+\end{enumerate}\par
+The misfit function and its gradient for source-encoding waveform inversion is an unbiased random estimation of the misfit function used in conventional waveform inversion.\par
+Main drawbacks of FWI: the requirement to have an accurate initial model; and expensive computational cost.\par
+Source encoding uses a linear combinations of all shots, with random weights assigned to each shot.\par
+\subsection{Stochastic optimization}
+\paragraph{Stochastic gradient descent}
+Stochastic gradient descent is:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\nabla J(\sigma_k,\mbf w_k) \]
+where $k$ the iteration number, $\eta_k$ the step length, $J$ the misfit function, $\sigma_k$ the model at iteration $k$ and $\mbf w_k$ the current randomized weight.\par
+\paragraph{Stochastic LBFGS}
+Each step of the LBFGS algorithm takes:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\mbf H_k\nabla J(\sigma_k,\mbf w_k) \]
+where the inverse Hessian matrix $\mbf H_k$ updated in each iteration by (refer to the last second formula of \href{https://en.wikipedia.org/wiki/Broyden-Fletcher-Goldfarb-Shanno_algorithm}{Wikipedia page}):
+\[ \mbf H_{k+1}=\mbf V_k^T\mbf H_k\mbf V_k+\rho_k\mbf s_k\mbf s_k^T \]
+with $\rho_k=\nicefrac{1}{\mbf y_k^T\mbf s_k}$, $\mbf V_k=\mbf I-\rho_k\mbf y_k\mbf s_k^T$ and $\mbf s_k=\sigma_{k+1}-\sigma_k$, $\mbf y_k=\nabla J(\sigma_{k+1},\mbf w_k)-\nabla J(\sigma_k,\mbf w_k)$. Note that for construction of $\mbf y_k$, take the same random weighting $\mbf w_k$ for the current gradient at $k+1$ and the previous one at $k$.\par
+The LBFGS routine is carried out in two steps. First, the latest $m$ iterations are calculated. Second, the routine updates the LBFGS direction as the following:
+\begin{enumerate}[\hspace{15mm}1:~]
+%\begin{enumitem}%[\hspace{15mm}1:~]
+  \item $\mbf q\leftarrow\nabla J(\mbf m_k,\mbf w_k)$
+  \item $\mbf H_k^0\leftarrow\nicefrac{(\mbf y_k^T\mbf s_k)}{(\mbf y_k^T\mbf y_k)}$
+  \item FOR $i=k$ to $k-m+1$
+  \item \quad\quad $\alpha_i\leftarrow\rho_i\mbf s_i^T\mbf q$
+  \item \quad\quad $\mbf q\leftarrow\mbf q-\alpha_i\mbf y_i$
+  \item END FOR
+  \item $\mbf r\leftarrow\mbf H_k^0\mbf q$
+  \item FOR $i=k-m+1$ to $k$
+  \item \quad\quad $\beta\leftarrow\rho_i\mbf y_i^T\mbf r$
+  \item \quad\quad $\mbf r\leftarrow\mbf r+\mbf s_i(\alpha_i-\beta)$
+  \item END FOR
+  \item Stop with $\mbf r=\mbf H_{k+1}\nabla J(\mbf m_{k+1},\mbf w_{k+1})$
+\end{enumerate}%\par
+%\end{enumitem}%\par
+\paragraph{Stochastic oLBFGS}
+For better convergence, the oLBFGS method uses $\mbf y_k=\nabla J(\mbf m_{k+1},\mbf w_k)-\nabla J(\mbf m_k,\mbf w_k)+\lambda\mbf s_k$. And the step $\mbf r\leftarrow\mbf H_k^0\mbf q$ in the above procedures is replaced by:
+\[ \mbf r=\frac{\mbf q}{\min(k,m)}\sum_{i=1}^{\min(k,m)}\frac{\mbf s_{k-i}^T\mbf y_{k-i}}{\mbf y_{k-i}^T\mbf y_{k-i}} \]
+where we can set $\lambda=0.1\cdot\nicefrac{||J(\mbf m_0,\mbf w_0)||_2^2}{||\mbf m_0||_2^2}$.\par
+\paragraph{Integrated stochastic gradient descent}
+To accelerate the convergence, in the integrated stochastic gradient descent (iSGD) method, the iteration step takes:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\overline{\nabla J(\sigma_k)} \]
+\[ \overline{\nabla J(\sigma_k)}=\frac{\sum_{i=k-m}^ke^{\alpha(i-k)}\nabla J(\sigma_i,\mbf w_i)}{\sum_{i=k-m}^ke^{\alpha(i-k)}} \]
+where we can set $m=10$.\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{Louboutin\_2017\_EAGEConfer\_Gradient sampling algorithm}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Extending the Search Space of Time-domain Adjoint-state FWI with Randomized Implicit Time Shifts}
+\renewcommand{\pay}{M. Louboutin, F. J. Herrmann, 2017}
+\renewcommand{\pjo}{79th EAGE Conference \& Exhibition}
+\renewcommand{\pda}{2018/12/5 Wen.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Wavefield reconstruction inversion (\myem{WRI}) where both the velocity model and wavefields are unknown: van Leeuwen \etal, 2014; van Leeuwen and Herrmann, 2015.
+\end{enumerate}\par
+\subsection{Gradient sampling for FWI}
+\subsubsection{Gradient sampling algorithm}
+By working with local neighborhoods instead with a single model, the algorithm is able to reap global information on the objective from local gradient at small cost.\par
+Minimize the objective function $\Phi(\mbf x)$ with respect to $\mbf x\in R^N$ by
+\begin{enumerate}[\hspace{10mm}$\bullet$]
+  \item sampling $N+1$ vectors $\mbf x_{ki}$ in a ball $B_{\epsilon_k}(\mbf x_k)$ defined as all $\mbf x_{ki}$ such that $||\mbf x_k-\mbf x_{ki}||_2^2<\epsilon_k$, where $\epsilon_k$ is the maximum distance between the current estimate and a sampled vector;
+  \item calculating gradients for each sample, i.e., $\mbf g_{ki}=\nabla\Phi(\mbf x_{ki})$;
+  \item computing descent directions as a weighted sum over all sampled gradients, i.e., $\mbf g_k\approx\sum\limits_{i=0}^p\omega_i\mbf g_{ki}$, such that $\sum\limits_{i=0}^p\omega_i=1$ and $\omega_i>0,\forall i$;
+  \item updating the model according to $\mbf x_{k+1}=\mbf x_k-\alpha\mbf H^{-1}\mbf g_k$, where $\alpha$ is a step length obtained from a line search and $\mbf H^{-1}$ is an approximation of the inverse Hessian.
+\end{enumerate}\par
+Two major drawbacks are prohibitive computational costs for gradient samples and the quadratic subproblem for weights $\omega_i$, and we circumvolve these issues by implicit approximation of sampling of models in the ball $B_{\epsilon_k}(\mbf x_k)$ and predetermined random weights that satisfy the constraints (positive and sum to one), respectively.
+\subsubsection{Implicit time shift}
+The gradients of the FWI objective $\Phi_s(\mbf m)$ for an acoustic medium:
+\[ \nabla\Phi_s(\mbf m)=-\sum_{t\in I}\big[\text{diag}(\mbf u[t])(\mbf D^T\mbf v[t])\big] \]
+where $\mbf m$: the square slowness; $\mbf u$: the forward wavefield; $\mbf v$: the adjoint wavefield; $\mbf D$: the time derivative discretization matrix; $I$: the time index set $[1,2,\ldots,n_t]$.\par
+For a slightly perturbed velocity model $\tilde{\mbf m}$ nearby $\mbf m$,
+\[ \mbf u(\tilde{\mbf m})[t]\approx\mbf u(\mbf m)[t+\tau],\mbf v(\tilde{\mbf m})[t]\approx\mbf v(\mbf m)[t-\tau] \]
+so that the approximated gradient:
+\[ \nabla\Phi_s(\tilde{\mbf m})=-\sum_{t\in I}\big[\text{diag}(\mbf u[t+\tau])(\mbf D^T\mbf v[t-\tau])\big] \]
+And by limiting the maximum time shift to $\tau_{max}=\frac{1}{f_0}$, where $f_0$ is the peak frequency of the source wavelet, guaranty wavefields not to be shifted by more that half a wavelength.\par
+Another way to avoid storage and explicit calculations of gradients is:
+\[ \overline{\nabla\Phi_s(\mbf m)}=-\sum_{t\in\overline I}\big[\text{diag}(\overline{\mbf u}[t])(\overline{\mbf D^T\mbf v}[t])\big],\overline{\mbf u}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf u[t], \overline{\mbf D^T\mbf v}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf D^T\mbf v[t] \]
+where $\overline I=[t_1,t_2,\ldots,t_n]$ are the jitered time sampled from $[1,2,\ldots,n_t]$, and random weights $\sum\alpha_t=1$.\par
+
+
+
+
+
+
+% where? I am here !!!!
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\npart
+\part{Wave Field Forward}
+
+\renewcommand{\pmk}{ZhangW\_2006\_GJI\_Traction image method}
+\renewcommand{\prf}{WaveForward/\pmk.pdf}
+\renewcommand{\pti}{Traction image method for irregular free surface boundaries in finite difference seismic wave simulation}
+\renewcommand{\pay}{Wei Zhang, Xiaofei Chen, 2006}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2016/10/29 Sat.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Use finite difference method (FDM) in rupture dynamics of earthquake source: Madariaga, 1976; Andrews, 1976a \& 1976b; Olsen \etal, 1997; Madariaga \etal, 1998; Cruz-Atienza and Virieux, 2004.
+  \item Use FDM in seismic wave propagation in complex heterogeneous media: Boore, 1972; Kelly \etal, 1976; Bayliss \etal, 1986; Virieux, 1984 \& 1986; Levander, 1988; Graves, 1996; Dai \etal, 1995; Zahradnik, 1995.
+  \item Free surface conditions: Jih \etal, 1988; Oprsal and Zahradnik, 1999; Ohminato and Chouet, 1997; Robertsson, 1996; Hestholm and Ruud, 1994 \& 1998.
+  \item \sline
+  \item Free surface conditions for a planar surface: Gottschammer and Olsen, 2001; Kristek \etal, 2002.
+  \item Vacuum method: Boore, 972; Graves, 1996.
+  \item Characteristic variables method: Bayliss \etal, 1986.
+  \item Adjusted FD approximations (AFDA) technique: Kristek \etal, 2002.
+  \item Stress image method: Levander, 1988; Graves, 1996.
+  \item \sline
+  \item Extend the stress image method with staircase approximation to the general topographic problem in the second-order accurate staggered finite difference scheme: Ohminato and Chouet, 1997.
+  \item Implement the stress image method with staircase approximation to the irregular surface in the fourth-order staggered scheme: Robertsson, 1996; Pitarka and Irikura, 1996.
+  \item \sline
+  \item Vertical grid mapping to match the computational grids with the surface topography in staggered finite difference schemes: Hestholm and Ruud, 1994 \& 1998.
+  \item \sline
+  \item Boundary-conforming grid in seismic wave simulation with pseudospectral method: Fornberg, 1988.
+  \item Numerical grid generation: Thompson \etal, 1985.
+  \item The original MacCormack scheme with 2nd-order accurate in both time and space: MacCormack, 1969.
+  \item Extend MacCormack scheme to 2nd-order accurate in time and 4th-order accurate in space (2-4 MacCormack scheme): Gottlieb and Turkel, 1976.
+  \item Introduce 2-4 MacCormack scheme into seismic wave modelling: Bayliss \etal, 1986 (implement with an operator splitting).
+  \item Use 2-4 MacCormack splitting scheme in seismic wave problems: Xie and Yao, 1988; Tsingas \etal, 1990; Vafidis \etal, 1992; Dai \etal, 1995.
+  \item High-accuracy MacCormack schemes with the DRP/opt MacCormack scheme: Hixon, 1997.
+  \item DRP (dispersion relation preserving) methodology: Tam and Webb, 1993.
+  \item 4-6 LDDRK (low dispersion and dissipation Runge-Kutta) scheme: Hu \etal, 1996.
+  \item 4/4 compact MacCormack scheme: Hixon and Turkel, 2000.
+  \item Treat the discontinuous interior interfaces by effective parameters (arithmetic average or harmonic average): Moczo \etal, 2002.
+  \item The approximated delta function by Herrmann pseudo-delta functions: Herrmann, 1979; Wang \etal, 2001.
+  \item The split-field perfectly matched layer (PML) approach: \Berenger, 1994; Marcinkovich and Olsen, 2003.
+\end{enumerate}\par
+\subsection{DRP/opt MacCormack scheme}
+In the DRP scheme, the forward and backward partial difference operators are:
+\[ \hat W_i^F=\frac{1}{\Delta x}\sum_{j=-1}^3a_jW_{i+j} \]
+\[ \hat W_i^B=\frac{1}{\Delta x}\sum_{j=-1}^3-a_jW_{i-j} \]
+where the expansion coefficients are: $a_{-1}=-0.30874,a_0=-0.6326,a_1=1.2330,a_2=-0.3334,a_3=0.04168$ and these coefficients are obtained by minimizing the dissipation error at eight points or more per wavelength.\par
+\subsection{Compact MacCormack scheme}
+The 4/4 compact MacCormack scheme is:
+\[ \hat W_{j-1}^B+2\hat W_j^B=\frac{1}{2\Delta x}(W_{j+1}+4W_j-5W_{j-1}) \]
+\[ 2\hat W_j^F+\hat W_{j+1}^F=\frac{1}{2\Delta x}(5W_{j+1}-4W_j-W_{j-1}) \]
+where $\hat W_j^F$ and $\hat W_j^B$ denote the forward and backward difference operators.\par
+\subsection{Interior interface conditions}
+Treat the discontinuous interior interfaces by effective parameters, the density by arithmetic average:
+\[ \rho_{ij}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\rho dxdy \]
+and the \Lame parameters by harmonic average:
+\[ \frac{1}{\mu_{ij}}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\frac{1}{\mu}dxdy \]
+\[ \frac{1}{\lambda_{ij}}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\frac{1}{\lambda}dxdy \]\par
+\vspace{5mm}
+
+\renewcommand{\pmk}{ZhangW\_2010\_Geophy\_ADE CFS-PML}
+\renewcommand{\prf}{WaveForward/\pmk.pdf}
+\renewcommand{\pti}{Unsplit complex frequency-shifted PML implementation using auxiliary differential equations for seismic wave modeling}
+\renewcommand{\pay}{Wei Zhang, Yang Shen, 2010}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2016/11/6 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Absorbing boundary conditions (ABC), a proper boundary condition where waves only propagate outward: Clayton and Engquist, 1977; Liao \etal, 1984; Bayliss \etal, 1986; Higdon, 1986 \& 1990; Randall, 1988.
+  \item Absorbing boundary layers (ABL), finite layers to gradually damp wave amplitude: Cerjan \etal, 1985 \& Sochacki \etal, 1987 using the Dirichlet boundary condition.
+  \item Strengths and weaknesses of ABC and ABL: Festa and Vilotte, 2005; Komatitsch and Martin, 2007.
+  \item PML in elastic wave modeling: Chew and Liu, 1996; Hastings \etal, 1996; Collino and Tsogka, 2001; Marcinkovich and Olsen, 2003; Wang and Tang, 2003.
+  \item \sline
+  \item Interpret PML: Sacks \etal, 1995 \& Gedney, 1996 as an artificial anisotropic medium; Chew and Weedon, 1994 \& Teixeira and Chew, 2000 as complex coordinate streching.
+  \item Unsplit-field PML implementations: Wang and Tang, 2003 \& Komatitsch and Martin, 2007 involving convolution terms; Zeng and Liu, 2004 \& Drossaert and Giannopoulos, 2007a involving integral terms; Ramadan, 2003 involving auxiliary differential equations (ADE).
+  \item Modified modal solution to derive PML equations: Hagstrom, 2003 (proposal); Appel\"{o} and Kreiss, 2006 (implementation in 2D elastic wave modeling).
+  \item \sline
+  \item Complex-frequency-shifted PML (CFS-PML): Kuzuoglu and Mittra, 1996.
+  \item \sline
+  \item Unsplit-field CFS convolutional-PML (C-PML) involving a convolution term: Roden and Gedney, 2000.
+  \item Recursive convolution algorithm: Luebbers and Hunsberger, 1992 (proposal); Komatitsch and Martin, 2007 \& Drossaert and Giannopoulos, 2007b (implementation in elastic wave modeling).
+  \item CFS-PML implementation involving integral terms: Drossaert and Giannopoulos, 2007a.
+  \item Recursive integration in C-PML: Giannopoulos, 2008 (1st-order accuracy).
+  \item Trapezoidal rule in recursive integration PML (RIPML): Drossaert and Giannopoulos, 2007a (2nd-order accuracy).
+  \item \sline
+  \item Unsplit-field implementation of the standard PML using auxiliary differential equations (ADE CFS-PML): Ramadan, 2003 (electromagnetic simulation).
+  \item Extend ADE CFS-PML to CFS-PML with 2D alternating-direction-implicit finite difference time domain method: Wang and Liang, 2006.
+  \item \sline 
+  \item Adjusted finite difference approximations (AFDA) technique: Kristek \etal, 2002 (using a compact finite difference operator and biased finite difference operators).
+\end{enumerate}\par
+\subsection{Finite difference numerical scheme}
+For an isotropic elastic medium:
+\[ \mbf v_{,t}=\frac{1}{\rho}\nabla\cdot\mbf\sigma \]
+\[ \mbf\sigma_{,t}=\mbf c:[\nabla\mbf v+(\nabla\mbf v)^T] \]
+and for the $v_x$ component:
+\[ \rho v_{x,t}=\sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z} \]\par
+The second-order leapfrog scheme is
+\[ \mbf\sigma^{n+\nicefrac{1}{2}}=\mbf\sigma^{n-\nicefrac{1}{2}}+\Delta t\tilde{L}(\mbf v^n) \]
+\[ \mbf v^{n+1}=\mbf v^n+\Delta t\tilde{L}(\mbf\sigma^{n+\nicefrac{1}{2}}) \]\par
+\subsection{CFS-PML using ADE}
+Complex stretched coordinate $\tilde x$:
+\[ \tilde x=\int_0^xs_x(\eta)d\eta \myno{ \hspace{5mm}\Rightarrow\hspace{5mm} \frac{\partial\tilde x}{\partial x}=s_x(x) \hspace{5mm}\Rightarrow\hspace{5mm} } \frac{\partial}{\partial\tilde x}=\frac{1}{s_x}\frac{\partial}{\partial x} \]
+where $s_x$ is the \myem{complex stretching function}. As an example in the frequency domain,
+\[ i\omega\rho\hat v_x=\frac{1}{s_x}\frac{\partial\hat\sigma_{xx}}{\partial x}+\frac{\partial\hat\sigma_{xy}}{\partial y}+\frac{\partial\hat\sigma_{xz}}{\partial z} \]
+Moreover,
+\[ s_x(x)=1+\frac{d_x(x)}{i\omega} \hspace{5mm}\text{for the standard PML} \]
+\[ s_x(x)=\beta_x(x)+\frac{d_x(x)}{\alpha_x(x)+i\omega} \hspace{5mm}\text{for the CFS-PML} \]
+where $d_x\geqslant 0$ is the attenuation factor that reduces exponentially the amplitude, $\alpha_x\geqslant 0$ is the frequency-shifted factor that makes the attenuation frequency-dependent, and $\beta_x\geqslant 1$ is the scaling factor for absorption of evanescent waves and near-grazing incident waves.\par
+The basic idea of ADE implementation of CFS-PML is
+\[ \frac{1}{s_x}=\frac{1}{\beta_x+\frac{d_x}{\alpha_x+i\omega}} \myno{=\frac{\alpha_x+i\omega}{\beta_x(\alpha_x+i\omega)+d_x}} =\frac{1}{\beta_x}-\frac{1}{\beta_x}\frac{d_x}{(\alpha_x+i\omega)\beta_x+d_x} \]
+Thus,
+\[ \frac{1}{s_x}\frac{\partial\hat\sigma_{xx}}{\partial x}=\frac{1}{\beta_x}\hat\sigma_{xx,x}-\frac{1}{\beta_x}\hat T_{xx}^x \]
+\[ \myno{ \hat T_{xx}^x=\frac{d_x}{(\alpha_x+i\omega)\beta_x+d_x}\hat\sigma_{xx,x} } \]
+\[ i\omega\hat T_{xx}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)\hat T_{xx}^x=\frac{d_x}{\beta_x}\hat\sigma_{xx,x} \]
+where $T_{xx}^x$ is the \myem{auxiliary memory variable}. For the $v_x$ component in the frequency domain,
+\[ i\omega\rho\hat v_x=\frac{1}{\beta_x}\hat\sigma_{xx,x}-\frac{1}{\beta_x}\hat T_{xx}^x+\hat\sigma_{xy,y}+\hat\sigma_{xz,z} \]
+FT to the time domain, the ADE CFS-PML equation of $v_x$ is:
+\[ \rho v_{x,t}=\sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xx,x}-\frac{1}{\beta_x}T_{xx}^x \]
+\[ T_{xx,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xx}^x=\frac{d_x}{\beta_x}\sigma_{xx,x} \]
+In the staggered second-order leapfrog scheme, discretize the above equation,
+\[ \frac{T_{xx}^{x|n+1}-T_{xx}^{x|n}}{\Delta t}+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)\frac{T_{xx}^{x|n+1}+T_{xx}^{x|n}}{2}=\frac{d_x}{\beta_x}\delta_{xx,x}^{n+\nicefrac{1}{2}} \]
+Then update $T_{xx}^x$ and $v_x$ through
+\[ T_{xx}^{x|n+1}=\frac{2-\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}T_{xx}^{x|n}+\frac{\Big(\frac{2\Delta td_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}\sigma_{xx,x}^{n+\nicefrac{1}{2}} \]
+\[ \myno{ T_{xx}^{x|n+\nicefrac{1}{2}}=\frac{T_{xx}^{x|n+1}+T_{xx}^{x|n}}{2}=\frac{2}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}T_{xx}^{x|n}+\frac{\Big(\frac{\Delta td_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}\sigma_{xx,x}^{n+\nicefrac{1}{2}} } \]
+\[ v_x^{n+1}=v_x^n+\frac{\Delta t}{\rho}(\sigma_{xx,x}^{n+\nicefrac{1}{2}}+\sigma_{xy,y}^{n+\nicefrac{1}{2}}+\sigma_{xz,z}^{n+\nicefrac{1}{2}})+\frac{\Delta t}{\rho}\Big(\frac{1}{\beta_x}-1\Big)\sigma_{xx,x}^{n+\nicefrac{1}{2}}-\frac{\Delta t}{\rho\beta_x}T_{xx}^{x|n+\nicefrac{1}{2}} \]\par
+\subsection{Free-surface boundary conditions}
+At the flat surface, the free-surface boundary condition requires
+\[ \sigma_{zz}=0 \text{,\hspace{5mm}} \sigma_{yz}=0 \text{,\hspace{5mm}} \sigma_{xz}=0 \]
+\[ v_{z,z}=-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y} \]
+Taking into the stress-strain relation, update $\sigma_{xx}$ and $\sigma_{yy}$ at the free surface through
+\[ \sigma_{xx,t}=(\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda\Big[-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y}\Big] \]
+\[ \sigma_{yy,t}=\lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda\Big[-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y}\Big] \]
+Under the intersection of the free surface and the PML, \myno{(different form with eq.A-13 and A-14 in the original paper)}
+\begin{align*}
+%   \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda v_{z,z}+(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+(\lambda+2\mu)\frac{1}{\beta_x}V_x^x+\lambda\frac{1}{\beta_y}V_y^y \\
+%     & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\frac{1}{\beta_x}V_x^x+\frac{1}{\beta_y}V_y^y\bigg\} \\
+%   \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\frac{1}{\beta_x}V_x^x+(\lambda+2\mu)\frac{1}{\beta_y}V_y^y \\
+%     & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\frac{1}{\beta_x}V_x^x+\frac{1}{\beta_y}V_y^y\bigg\} \\
+  \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y} \myde{+\lambda v_{z,z}} +(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y} \mynno{-} (\lambda+2\mu)\frac{1}{\beta_x}V_x^x \mynno{-} \lambda\frac{1}{\beta_y}V_y^y \\
+    & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{ \myde{\Big[} \frac{1}{\beta_x} \myde{-1\Big]} v_{x,x}+ \myde{\Big[} \frac{1}{\beta_y} \myde{-1\Big]} v_{y,y} \mynno{-} \frac{1}{\beta_x}V_x^x \mynno{-} \frac{1}{\beta_y}V_y^y\bigg\} \\
+  \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y} \myde{+\lambda v_{z,z}} +\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y} \mynno{-} \lambda\frac{1}{\beta_x}V_x^x \mynno{-} (\lambda+2\mu)\frac{1}{\beta_y}V_y^y \\
+    & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{ \myde{\Big[} \frac{1}{\beta_x} \myde{-1\Big]} v_{x,x}+ \myde{\Big[} \frac{1}{\beta_y} \myde{-1\Big]} v_{y,y} \mynno{-} \frac{1}{\beta_x}V_x^x \mynno{-} \frac{1}{\beta_y}V_y^y\bigg\} \\
+\end{align*}
+\subsection{Optimal parameters}
+The $d$ usually is zero at the PML-interior interface and maximum at the exterior boundary, $\beta$ is one at the PML-interior interface and maximum at the exterior boundary, and $\alpha$ is maximum at the PML-interior interface and gradually reduces to zero at the exterior boundary.\par
+The commonly used optimal parameters is $p$-order polynomial scaling functions:
+\[ \alpha_x=\alpha_0\Big[1-\Big(\frac{x}{L}\Big)^{p_\alpha}\Big] \]
+\[ d_x=d_0\Big(\frac{x}{L}\Big)^{p_d} \]
+\[ \beta_x=1+(\beta_0-1)\Big(\frac{x}{L}\Big)^{p_\beta} \]
+where $x$ is the distance to the PML-interior interface and $L$ is the width of the PML layer. The parameters $p_\alpha$, $p_d$ and $p_\beta$ typically range from $2\sim4$, and $2$ is commonly used, e.g. $p_d=2$, $p_\beta=2$, and $p_\alpha=1$ (the linear variation of $\alpha$ for $p_\alpha=1$ gets a more pronounced decay of energy).\par
+The $\alpha_0$ is recommended to be $\pi f_c$ (Festa and Vilotte, 2005), where $f_c$ is the dominant frequency of the source time function.\par
+The $d_0$ is (Collino and Tsogka, 2001):
+\[ d_0=-\frac{(p_d+1)c_p}{2L}\ln R \]
+where $c_p$ is the compressional wave speed and $R$ is the theoretical reflection coefficient for a normal-incident plane P-wave with a Dirichlet condition ($\mbf v=0$ and $\sigma=0$) at the exterior boundary of the PML layer. $R$ for an $N$ cell size PML layer is:
+\[ \log_{10}(R)=-\frac{\log_{10}(N)-1}{\log_{10}(2)}-3 \]
+For oblique incident waves, a larger $d_0$ is needed to obtain optimal damping.\par
+The optimal $\beta_0$ is
+\[ \beta_0=\frac{C}{0.5\cdot \mathrm{PPW}_0\cdot\Delta hf_c} \]
+where $C$ is wave velocity, PPW$_0$ is the minimal PPW requirement of the numerical scheme, $\Delta h$ is grid spacing, and $f_c$ is source dominant frequency.\par
+\subsection{Complete ADE CFS-PML equations}
+\mynem{The complete ADE CFS-PML equations} for the velocity-stress equations are:
+\begin{equation*}
+ \left\{
+  \begin{aligned}
+    \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda v_{z,z}+(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -(\lambda+2\mu)\frac{1}{\beta_x}V_x^x-\lambda\frac{1}{\beta_y}V_y^y-\lambda\frac{1}{\beta_x}V_z^z \\
+    \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -\lambda\frac{1}{\beta_x}V_x^x-(\lambda+2\mu)\frac{1}{\beta_y}V_y^y-\lambda\frac{1}{\beta_z}V_z^z \\
+    \sigma_{zz,t}= & \lambda v_{x,x}+\lambda v_{y,y}+(\lambda+2\mu)v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+(\lambda+2\mu)\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -\lambda\frac{1}{\beta_x}V_x^x-\lambda\frac{1}{\beta_y}V_y^y-(\lambda+2\mu)\frac{1}{\beta_z}V_z^z \\
+    \sigma_{xy,t}= & \mu(v_{x,y}+v_{y,x})+\mu\Big(\Big[\frac{1}{\beta_y}-1\Big]v_{x,y}+\Big[\frac{1}{\beta_x}-1\Big]v_{y,x}\Big)-\mu\Big(\frac{1}{\beta_y}V_x^y+\frac{1}{\beta_x}V_y^x\Big) \\
+    \sigma_{xz,t}= & \mu(v_{x,z}+v_{z,x})+\mu\Big(\Big[\frac{1}{\beta_z}-1\Big]v_{x,z}+\Big[\frac{1}{\beta_x}-1\Big]v_{z,x}\Big)-\mu\Big(\frac{1}{\beta_z}V_x^z+\frac{1}{\beta_x}V_z^x\Big) \\
+    \sigma_{yz,t}= & \mu(v_{y,z}+v_{z,y})+\mu\Big(\Big[\frac{1}{\beta_z}-1\Big]v_{y,z}+\Big[\frac{1}{\beta_y}-1\Big]v_{z,y}\Big)-\mu\Big(\frac{1}{\beta_z}V_y^z+\frac{1}{\beta_y}V_z^y\Big) \\
+    \rho v_{x,t}= & \sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xx,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{xy,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{xz,z} \\
+      & -\frac{1}{\beta_x}T_{xx}^x-\frac{1}{\beta_y}T_{xy}^y-\frac{1}{\beta_z}T_{xz}^z \\
+    \rho v_{y,t}= & \sigma_{xy,x}+\sigma_{yy,y}+\sigma_{yz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xy,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{yy,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{yz,z} \\
+      & -\frac{1}{\beta_x}T_{xy}^x-\frac{1}{\beta_y}T_{yy}^y-\frac{1}{\beta_z}T_{yz}^z \\
+    \rho v_{z,t}= & \sigma_{xz,x}+\sigma_{yz,y}+\sigma_{zz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xz,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{yz,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{zz,z} \\
+      & -\frac{1}{\beta_x}T_{xz}^x-\frac{1}{\beta_y}T_{yz}^y-\frac{1}{\beta_z}T_{zz}^z \\
+  \end{aligned}
+ \right.
+\end{equation*}
+where the auxiliary differential equations for the memory variables damping along $x$, $y$ and $z$ are:
+\begin{gather*}
+  x\left\{
+  \begin{aligned}
+    V_{x,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_x^x=\frac{d_x}{\beta_x}v_{x,x}, && V_{y,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_y^x=\frac{d_x}{\beta_x}v_{y,x}, && V_{z,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_z^x=\frac{d_x}{\beta_x}v_{z,x} \\
+	T_{xx,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xx}^x=\frac{d_x}{\beta_x}\sigma_{xx,x}, && T_{xy,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xy}^x=\frac{d_x}{\beta_x}\sigma_{xy,x}, && T_{xz,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xz}^x=\frac{d_x}{\beta_x}\sigma_{xz,x}
+  \end{aligned}
+  \right. \\
+  y\left\{
+  \begin{aligned}
+    V_{x,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_x^y=\frac{d_y}{\beta_y}v_{x,y}, && V_{y,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_y^y=\frac{d_y}{\beta_y}v_{y,y}, && V_{z,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_z^y=\frac{d_y}{\beta_y}v_{z,y} \\
+	T_{xy,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{xy}^y=\frac{d_y}{\beta_y}\sigma_{xy,y}, && T_{yy,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{yy}^y=\frac{d_y}{\beta_y}\sigma_{yy,x}, && T_{yz,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{yz}^y=\frac{d_y}{\beta_y}\sigma_{yz,y}
+  \end{aligned}
+  \right. \\
+  z\left\{
+  \begin{aligned}
+    V_{x,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_x^z=\frac{d_z}{\beta_z}v_{x,z}, && V_{y,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_y^z=\frac{d_z}{\beta_z}v_{y,z}, && V_{z,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_z^z=\frac{d_z}{\beta_z}v_{z,z} \\
+	T_{xz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{xz}^z=\frac{d_z}{\beta_z}\sigma_{xz,z}, && T_{yz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{yz}^z=\frac{d_z}{\beta_z}\sigma_{yz,z}, && T_{zz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{zz}^z=\frac{d_z}{\beta_z}\sigma_{zz,z}
+  \end{aligned}
+  \right.
+\end{gather*}
+\vspace{5mm}
+
+
+
+
+
+
+\end{document}
+
+% vim:sw=2:wrap

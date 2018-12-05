@@ -1,0 +1,9 @@
+Backup.tar.gz
+*.aux
+*.blg
+*.bbl
+*.log
+*.out
+*.synctex.gz
+*.tex.bak
+*.toc
