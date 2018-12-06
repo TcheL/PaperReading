@@ -29,7 +29,7 @@ Source encoding uses a linear combinations of all shots, with random weights ass
 \paragraph{Stochastic gradient descent}
 Stochastic gradient descent is:
 \[ \sigma_{k+1}=\sigma_k-\eta_k\nabla J(\sigma_k,\mbf w_k) \]
-where $k$ the iteration number, $\eta_k$ the step length, $J$ the misfit function, $\sigma_k$ the model at iteration $k$ and $\mbf w_k$ the current randomized weight.\par
+where $k$ the iteration number, $\eta_k$ the step length, $J$ the misfit function, $\sigma_k$ the model at iteration $k$ and \mynem{$\mbf w_k$ the current randomized weight}.\par
 \paragraph{Stochastic LBFGS}
 Each step of the LBFGS algorithm takes:
 \[ \sigma_{k+1}=\sigma_k-\eta_k\mbf H_k\nabla J(\sigma_k,\mbf w_k) \]

@@ -1,0 +1,95 @@
+\renewcommand{\pmk}{Schraudolph\_2007\_AIStat\_Stochastic quasi-Newton method}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{A Stochastic Quasi-Newton Method for Online Convex Optimization}
+\renewcommand{\pay}{Nicol N. Schraudolph, Jin Yu, Simon G\"{u}nter, 2007}
+\renewcommand{\pjo}{11th International Conference on Artificial Intelligence
+and Statistics}
+\renewcommand{\pda}{2018/12/6 Thu.}
+
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Accelerate stochastic gradient descent through online adaptation of a gain vector:
+  Schraudolph, 1999 \& 2002.
+  \item \sline
+  \item Online implementations of conjugate gradient methods: M\o{}ller, 1993;
+  Schraudolph and Graepel, 2003.
+  \item \sline
+  \item Global extened Kalman filtering: Puskorius and Feldkamp, 1991.
+  \item \mynem{Natural gradient descent}: Amari \etal, 2000.
+\end{enumerate}
+
+Core tools of conventional gradient-based optimization, such as line searches,
+are not amenable to stochastic approximation.
+
+\subsection{Preliminaries}
+The objective function $f:\mybR^n\rightarrow\mybR$:
+\[ f(\mgbf\theta)=\frac{1}{2}(\mgbf\theta-\mgbf{\theta}^*)^T\mbf J\mbf J^T(\mgbf\theta-\mgbf{\theta}^*), \]
+where $\mgbf{\theta}^*\in\mybR^n$: the optimal parameter;
+$\mbf J\in\mybR^{n\times n}$: the Jacobian matrix.
+Here the Hessian $\mbf H=\mbf J\mbf J^T$ and
+the gradient $\nabla f(\mgbf\theta)=\mbf H(\mgbf\theta-\mgbf{\theta}^*)$.
+
+A stochastic optimization problem is defined by the data-dependent objective
+\[ f(\mgbf\theta,\mbf X)=\frac{1}{2b}(\mgbf\theta-\mgbf{\theta}^*)^T\mbf J\mbf X\mbf X^T\mbf J^T(\mgbf\theta-\mgbf{\theta}^*), \]
+where $\mbf X=[\mbf x_1,\mbf x_2,\ldots,\mbf x_b]_{n\times b}$ is
+a batch of $b$ random input vectors,
+each drawn i.i.d. (independent identically distribution): $\mbf x_i\sim N(0,b)$,
+so that $\mybE[\mbf X\mbf X^T]=b\mbf I$ and
+\[ \mybE_{\mbf X}[f(\mgbf\theta,\mbf X)]=\frac{1}{2b}(\mgbf\theta-\mgbf{\theta}^*)^T\mbf J\mybE[\mbf X\mbf X^T]\mbf J^T(\mgbf\theta-\mgbf{\theta}^*)=f(\mgbf\theta), \]
+and giving rise to the noisy estimates
+$\mbf H=b^{-1}\mbf J\mbf X\mbf X^T\mbf J^T$
+and $\nabla f(\mgbf\theta,\mbf X)=\mbf H(\mgbf\theta-\mgbf{\theta}^*)$.
+The degree of stochasticity is determined by the batch size $b$.
+
+As a experiment, we can define an ill-conditioned Jacobian matrix as
+\begin{equation*}
+J_{ij}=\left\{
+  \begin{array}{cl}
+    \frac{1}{i+j-1} & \text{if }i\text{ mod }j=0\text{ or }j\text{ mod }i=0, \\
+    0 & \text{otherwise}. \\
+  \end{array}
+\right.
+\end{equation*}
+
+\subsubsection{Stochastic gradient descent (SGD)}
+Simple stochastic gradient descent:
+\[ \mgbf\theta_{t+1}=\mgbf\theta_t-\eta_t\nabla f(\mgbf\theta_t,\mbf X_t), \]
+where $\eta_t>0$ is a scalar gain.
+The above formula converges to $\mgbf{\theta}^*=\text{arg min}_{\mgbf\theta} f(\mgbf\theta)$,
+if provided that
+\[ \sum_t\eta_t=\infty\text{ and } \sum_t\eta_t^2<\infty. \]
+A commonly used decay schedule:
+\[ \eta_t=\frac{\tau}{\tau+t}\eta_0, \]
+where $\eta_0,\tau>0$ are tuning parameters.
+
+SGD takes only $O(n)$ space and time per iteration,
+and suffers from slow convergence on ill-conditioned problems.
+
+\subsubsection{Stochastic meta-descent (SMD)}
+Giving each system parameter its own gain:
+\[ \mgbf\theta_{t+1}=\mgbf\theta_t-\mgbf\eta_t\cdot\nabla f(\mgbf\theta_t,\mbf X_t), \]
+where the vector gain $\mgbf\eta_t$ is adapted by
+\[ \mgbf\eta_t=\mgbf\eta_{t-1}\cdot\max\Big[\frac{1}{2},1-\mu\nabla f(\mgbf\theta_t,\mbf X_t)\cdot\mgbf\nu_t\Big], \]
+and the auxiliary vector:
+\[ \mgbf\nu_{t+1}=\lambda\mgbf\nu_t-\mgbf\eta_t\cdot[\nabla f(\mgbf\theta_t,\mbf X_t)+\lambda\mbf H_t\mgbf\nu], \]
+with another scalar tuning parameter $0\leqslant\lambda\leqslant1$.
+
+If $\mbf H_t\mgbf\nu_t$ can be computed efficiently (Schraudolph, 2002),
+SMD still takes only $O(n)$ space and time per iteration.
+
+\subsubsection{Natural gradient descent (NG)}
+Incorporate the Riemannian metric tensor
+$\mbf G_t=\mybE_{\mbf X}[\nabla f(\mgbf\theta_t,\mbf X_t)\nabla f(\mgbf\theta_t,\mbf X_t)^T]$
+into the stochastic gradient update:
+\[ \mgbf\theta_{t+1}=\mgbf\theta_t-\eta_t\hat{\mbf G}_t^{-1}\nabla f(\mgbf\theta_t,\mbf X_t), \]
+with the $\hat{\mbf G}_t$ updated via
+\[ \hat{\mbf G}_{t+1}=\frac{t-1}{t}\hat{\mbf G}_t+\frac{1}{t}\nabla f(\mgbf\theta_t,\mbf X_t)\nabla f(\mgbf\theta_t,\mbf X_t)^T. \]
+
+NG takes $O(n^2)$ space and time per iteration.
+
+\subsection{The (L)BFGS algorithm}
+\refp{Here} the author puts up more details of algorithms
+BFGS, oBFGS, LBFGS and oLBFGS in the form of pseudo-codes.
+
+% vim:sw=2:wrap

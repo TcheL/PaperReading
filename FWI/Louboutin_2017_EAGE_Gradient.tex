@@ -25,7 +25,7 @@ The gradients of the FWI objective $\Phi_s(\mbf m)$ for an acoustic medium:
 \[ \nabla\Phi_s(\mbf m)=-\sum_{t\in I}\big[\text{diag}(\mbf u[t])(\mbf D^T\mbf v[t])\big] \]
 where $\mbf m$: the square slowness; $\mbf u$: the forward wavefield; $\mbf v$: the adjoint wavefield; $\mbf D$: the time derivative discretization matrix; $I$: the time index set $[1,2,\ldots,n_t]$.\par
 For a slightly perturbed velocity model $\tilde{\mbf m}$ nearby $\mbf m$,
-\[ \mbf u(\tilde{\mbf m})[t]\approx\mbf u(\mbf m)[t+\tau],\mbf v(\tilde{\mbf m})[t]\approx\mbf v(\mbf m)[t-\tau] \]
+\[ \mbf u(\tilde{\mbf m})[t]\approx\mbf u(\mbf m)[t\mynnno{+\tau}],\mbf v(\tilde{\mbf m})[t]\approx\mbf v(\mbf m)[t\mynnno{-\tau}] \]
 so that the approximated gradient:
 \[ \nabla\Phi_s(\tilde{\mbf m})=-\sum_{t\in I}\big[\text{diag}(\mbf u[t+\tau])(\mbf D^T\mbf v[t-\tau])\big] \]
 And by limiting the maximum time shift to $\tau_{max}=\frac{1}{f_0}$, where $f_0$ is the peak frequency of the source wavelet, guaranty wavefields not to be shifted by more that half a wavelength.\par

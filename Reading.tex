@@ -29,8 +29,11 @@
 % -------------------------------------
 \usepackage{enumerate}                            % sorting package for enumerate environment
 %\usepackage{enumitem}                             % sorting package for enumitem environment
-\usepackage{times}                                % Times font package for Times New Roman font
-\usepackage{mathptmx}
+\usepackage{times}                                % Times New Roman font package for main text only
+% \usepackage{mathptmx}                             % Times New Roman font package for formula
+% \usepackage{txfonts}                              % faked Times font package for formula
+\usepackage{newtxmath}                            % faked Times font package for formula
+% \usepackage{mathastext}
 \usepackage{nicefrac}                             % fraction package for \nicefrac command
 \usepackage{amsmath}
 \usepackage{amssymb}                              % symbol package for \triangleq defination command
@@ -40,6 +43,7 @@
 % \usepackage{graphicx}                             % drawing package for \includegraphics command
 % \usepackage{subfig}                               % subgraph package for \subfloat command
 % \usepackage{bm}                                   % bold type package for \bm command
+\usepackage{tikz}                                 % tikz drawing package for framed words
 
 \setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
 \renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
@@ -56,17 +60,27 @@
 \newcommand{\refp}[1]{\href{run:\Ppath\prf}{#1}}
 \newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}}
 \newcommand{\sline}{*************************}
+
+\makeatletter
+\newcommand{\mybox}[1]{\textcolor{green}{\tikz[baseline={([yshift=-3pt]current bounding box.center)}] \node [rectangle, minimum width=1ex,rounded corners,draw] {\normalcolor\m@th$\displaystyle#1$};}}
+\makeatother
+
 \newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\mgbf}[1]{\boldsymbol{#1}}
 \newcommand{\myem}[1]{{\color{red}\uline{#1}}}
-\newcommand{\mynem}[1]{\textsl{\uline{#1}}}
+\newcommand{\mynem}[1]{{\color{blue}\uline{#1}}}
+\newcommand{\mynnem}[1]{\textsl{\uline{#1}}}
 \newcommand{\myno}[1]{{\color{blue}#1}}
 \newcommand{\mynno}[1]{{\color{red}#1}}
+\newcommand{\mynnno}[1]{{\color{green}#1}}
 \newcommand{\myde}[1]{{\color{white!45!lightgray!55}#1}}
 \newcommand{\myRe}{\mathfrak{Re}}
 \newcommand{\myIm}{\mathfrak{Im}}
 \newcommand{\mycR}{\mathcal{R}}
 \newcommand{\mycI}{\mathcal{I}}
 \newcommand{\mycH}{\mathcal{H}}
+\newcommand{\mybR}{\mathbb{R}}
+\newcommand{\mybE}{\mathbb{E}}
 \newcommand{\Frechet}{Fr\'{e}chet~}
 \newcommand{\Lame}{Lam\'{e}~}
 \newcommand{\Berenger}{B\'{e}renger~}
@@ -123,6 +137,9 @@
 \vspace{5mm}
 
 \input{FWI/Louboutin_2017_EAGE_Gradient}
+\vspace{5mm}
+
+\input{FWI/Schraudolph_2007_AIStat_Stochastic}
 \vspace{5mm}
 
 % ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
