@@ -19,7 +19,7 @@ Minimize the objective function $\Phi(\mbf x)$ with respect to $\mbf x\in R^N$ b
   \item computing descent directions as a weighted sum over all sampled gradients, i.e., $\mbf g_k\approx\sum\limits_{i=0}^p\omega_i\mbf g_{ki}$, such that $\sum\limits_{i=0}^p\omega_i=1$ and $\omega_i>0,\forall i$;
   \item updating the model according to $\mbf x_{k+1}=\mbf x_k-\alpha\mbf H^{-1}\mbf g_k$, where $\alpha$ is a step length obtained from a line search and $\mbf H^{-1}$ is an approximation of the inverse Hessian.
 \end{enumerate}\par
-Two major drawbacks are prohibitive computational costs for gradient samples and the quadratic subproblem for weights $\omega_i$, and we circumvolve these issues by implicit approximation of sampling of models in the ball $B_{\epsilon_k}(\mbf x_k)$ and predetermined random weights that satisfy the constraints (positive and sum to one), respectively.
+Two major drawbacks are prohibitive computational costs for gradient samples and the quadratic subproblem for weights $\omega_i$, and we circumvolve these issues by implicit approximation of sampling of models in the ball $B_{\epsilon_k}(\mbf x_k)$ and predetermined random weights that satisfy the constraints (positive and sum to one), respectively.\par
 \subsubsection{Implicit time shift}
 The gradients of the FWI objective $\Phi_s(\mbf m)$ for an acoustic medium:
 \[ \nabla\Phi_s(\mbf m)=-\sum_{t\in I}\big[\text{diag}(\mbf u[t])(\mbf D^T\mbf v[t])\big] \]
@@ -32,3 +32,4 @@ And by limiting the maximum time shift to $\tau_{max}=\frac{1}{f_0}$, where $f_0
 Another way to avoid storage and explicit calculations of gradients is:
 \[ \overline{\nabla\Phi_s(\mbf m)}=-\sum_{t\in\overline I}\big[\text{diag}(\overline{\mbf u}[t])(\overline{\mbf D^T\mbf v}[t])\big],\overline{\mbf u}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf u[t], \overline{\mbf D^T\mbf v}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf D^T\mbf v[t] \]
 where $\overline I=[t_1,t_2,\ldots,t_n]$ are the jitered time sampled from $[1,2,\ldots,n_t]$, and random weights $\sum\alpha_t=1$.\par
+% vim:sw=2:wrap
