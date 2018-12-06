@@ -1,0 +1,150 @@
+\renewcommand{\pmk}{Bozdag\_2011\_GJI\_Misfit functions for FWI}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Misfit functions for full waveform inversion based on instantaneous phase and envelope measurements}
+\renewcommand{\pay}{Ebru Bozdag, Jeannot Trampert and Jeroen Tromp, 2011}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2017/4/3 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Full waveform inversions in local and regional studies: Chen \etal, 2007b; Fichtner \etal., 2009; Tape \etal, 2009.
+  \item A global tomography approach in a synthetic experiment based on a source stacking technique: Capdeville \etal, 2005.
+  \item \sline
+  \item Ray-based tomography: Zhou, 1996 \& Boschi and Dziewonski, 2000 (using body-wave phases); Trampert and Woodhouse, 1995 \& Ekstrom \etal, 1997 (using surface waves).
+  \item Integration of different data sets to increase resolution in ray-based tomography: Su \etal, 1994; Masters \etal, 1996; Ritsema \etal, 1999; Megnin and Romanowicz, 2000; Gu \etal, 2001.
+  \item Finite-frequency tomography to improve resolution: Montelli \etal, 2004; Sigloch \etal, 2008; Boschi \etal, 2007.
+  \item Construct global models based on energy wave packets using asymptotic finite-frequency kernels: Li and Romanowicz, 1996; Megnin and Romanowicz, 2000; Gung and Romanowicz, 2004.
+  \item \sline
+  \item Solve the wave euqation numerically in realistic 3-D earth models: Komatitsch and Vilotte, 1998; Komatitsch and Tromp, 1999; Capdeville \etal, 2003.
+  \item Compute Green's functions in 3-D models to compute \Frechet derivatives: Zhao \etal, 2005.
+  \item Adjoint techniques: Tarantola, 1984 \& 1988; Fink, 1997; Talagrand and Courtier, 1987; Crase \etal, 1990; Pratt, 1999; Akcelik \etal, 2003.
+  \item Combine 3-D simulations with adjoint techniques to compute \Frechet derivatives: Tromp \etal, 2005.
+  \item Compare the scattering integral method (computing and storing 3-D Green's functions) with adjoint methods: Chen \etal, 2007a.
+  \item \sline
+  \item Common misfit functions based on: Luo and Schuster, 1991 \& Marquering \etal, 1999 \& Dahlen \etal, 2000 \& Zhao \etal, 2000 (cross-correlation traveltime measurements); Dahlen and Baig, 2002 \& Ritsema \etal, 2002 (relative amplitude variations); Tarantola, 1984 \& Tarantola, 1988 \& Nolet, 1987 (waveform differences).
+  \item Adjoint sensitivity kernels based on cross-correlation traveltime measurements: Liu and Tromp, 2006 \& 2008.
+  \item \myem{Automated phase-picking algorithms}: Maggi \etal, 2009.
+  \item Multitaper measurements: Zhou \etal, 2004.
+  \item Regional example of seismic tomography based on frequency-dependent traveltime measurements and multitaper measurements using CG method with adjoint kernels: Tape \etal, 2009.
+  \item Generalized seismological data functionals (GSDF) for frequency-dependent measurements: Gee and Jordan, 1992.
+  \item Time-frequency analysis separating phase and amplitude information: Fichtner \etal, 2008.
+  \item \sline
+  \item Instantaneous phases to increase resolution in exploration seismics: Taner \etal, 1979; Perz \etal, 2004; Barnes, 2007.
+  \item \sline
+  \item Spectral-element method (SEM): Komatitsch and Tromp 2002a \& 2002b.
+  \item PREM: Dziewonski and Anderson, 1981.
+  \item 3-D mantle model \mynno{S20RTS}: Ritsema \etal, 1999.
+  \item 3-D crustal model Crust2.0: Bassin \etal, 2000.
+  \item 3-D Q model: Dalton \etal, 2008.
+\end{enumerate}\par
+\myno{BACKGROUND:} In classical seismic tomography, the usable amount of data is often restricted because of approximations to the wave equation. 3-D numerical simulations of wave propagation provide new opportunities for increasing the amount of usable data in seismograms by choosing appropriate misfit functions.\par
+\myno{DEFINITIOIN:} ``Full waveform inversion'' is a technique which combines 3-D numerical wave simulations as a forward theory with \Frechet kernels computed in 3-D background models, to fit complete three-component seismograms.\par
+\myno{WHY:} The waveform misfit is easily applied to whole seismograms, but it favours high-amplitude phases in a wave train containing multiple phases with different amplitudes. Thus, to extract optimal information, phases should be selected as in traveltime measurements, or seismograms should be cut into wave packages with appropriate weightings (e.g. Li and Romanowicz, 1996).\par
+Waveform differences can be highly non-linear with respect to the model.\par
+\subsection{Misfit functions and adjoint sources}
+\subsubsection{Adjoint kernels}
+\myno{WORKFLOW:} In seismic waveform tomography, we extract information from a set of observed seismograms on model parameters describing Earth's interior. Model parameters are updated by minimizing a chosen misfit function between observed and synthetic data. In adjoint tomography, the gradient of the misfit function can be computed through the interaction of a forward wavefield with its adjoint wavefield, which is generated by the back-propagation of measurements made on data. The non-linear inverse problem is then solved iteratively based on a gradient method.
+Define a generic wavefor misfit function:
+\[ \chi(\mbf m)=\sum_{r=1}^N\int_0^Tg(\mbf x_r,t,\mbf m)dt \]
+where $N$ the number of receivers, $g(\mbf x_r,t,\mbf m)$ any kind of misfit at receiver position $\mbf x_r$ with model parameters $\mbf m$. Its gradient is
+\[ \delta\chi=\sum_{r=1}^N\int_0^T\partial_{\mbf s}g(\mbf x_r,t,\mbf m)\cdot\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+where $\delta\mbf s(\mbf x_r,t,\mbf m)$ displacement perturbations due to model perturbations $\delta\mbf m$. Using the Born approximation and the reciprocity of the Green's function, define the adjoint wavefield $\mbf s^\dagger$ and the adjoint source $\mbf f^\dagger$:
+\[ s_k^\dagger(\mbf x',t')=\int_0^{t'}\int_VG_{ki}(\mbf x',\mbf x_r;t'-t)f_i^\dagger(\mbf x,t)d^3\mbf xdt \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\partial_{s_i}g(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+The sensitivity kernels are the \Frechet derivatives with respect to the corresponding model parameter.\par
+Adjoint kernels depend on the adjoint wavefield, which is generated by the adjoint source. And the adjoint source depends on the pre-defined misfit function for specific observables.\par
+\subsubsection{Hilbert transform}
+An analytic signal $\tilde f(t)$ is constructed from a real signal $f(t)$ and its Hilbert transform $\mycH\{f(t)\}$:
+\[ \tilde f(t)=f(t) \mynno{-} i\mycH\{f(t)\} \]
+\[ \mycH\{f(t)\}= \mynno{-} \frac{1}{\pi}P\int_{-\infty}^{+\infty}\frac{f(\tau)}{t-\tau}d\tau \]
+where $P$ the Cauchy principal value. The analytic signal can be written as
+\[ \tilde f(t)=E(t)e^{i\phi(t)} \]
+where the instantaneous phase $\phi(t)$ and the instantaneous amplitude $E(t)$ are respectively:
+\[ \phi(t)=\arctan\frac{\mycI\{\tilde f(t)\}}{\mycR\{\tilde f(t)\}} \]
+\[ E(t)=\sqrt{\mycR\{\tilde f(t)\}^2+\mycI\{\tilde f(t)\}^2} \]\par
+\subsubsection{Instantaneous phase misfits}
+Define the squared instantaneous phase misfit:
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T[\phi_r^{obs}(t)-\phi_r(t,\mbf m)]^2dt \]
+where $\phi_r$ the instantaneous phase of a specific component recorded at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T(\phi_r^{obs}-\phi_r)\delta\phi_rdt \]
+Assume that $\tilde s_r$ is the analytic signal corresponding to the synthetic seismogram $s_r$, define $\phi_r$ as
+\[ \phi_r=\arctan\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)} \]
+so the perturbation
+\begin{align*}
+  \delta\phi_r & =\nicefrac{\delta\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]}{\big\{1+\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]^2\big\}} \\
+    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{s_r^2+(\mycH s_r)^2} \myno{\text{\hspace{2mm}(some problem on derivation)}} \\
+    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{E_r^2} \\
+\end{align*}
+and the gradient
+\begin{align*}
+  \delta\chi & =-\sum_{r=1}^N\int_0^T(\phi_r^{obs}-\phi_r)\Big[\frac{(\mycH s_r)\delta s_r}{E_r^2}-\frac{s_r\delta(\mycH s_r)}{E_r^2}\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[(\phi_r^{obs}-\phi_r)\frac{(\mycH s_r)}{E_r^2}\delta s_r+\mycH\Big\{(\phi_r^{obs}-\phi_r)\frac{s_r}{E_r^2}\Big\}\delta s_r\Big]dt \\
+\end{align*}
+Then the adjoint source
+\begin{align*}
+  f_i^\dagger(\mbf x,t)= & -\sum_{r=1}^N\Big[[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
+    & +\mycH\Big\{[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+\end{align*}
+where $w_r$ the weighting function, generically defined as $\nicefrac{1}{E_i^2}$.\par
+\subsubsection{Envelope misfits}
+Define the squared logarithmic envelope misfit:
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T\Big[\ln\frac{E_r^{obs}(t)}{E_r(t,\mbf m)}\Big]^2dt \]
+where $E_r$ the envelope of a specific component recorded at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{1}{E_r}\delta E_rdt \]
+Similarly, define $E_r$ as
+\[ E_r=\sqrt{\mycR(\tilde s_r)^2+\mycI(\tilde s_r)^2} \]
+so the perturbation
+\[ \delta E_r=\frac{s_r\delta s_r+(\mycH s_r)\delta(\mycH s_r)}{\sqrt{s_r^2+(\mycH s_r)^2}} \]
+and the gradient
+\begin{align*}
+  \delta\chi & =-\sum_{r=1}^N\int_0^T\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\Big[\frac{s_r\delta s_r}{E_r^2}+\frac{(\mycH s_r)\delta(\mycH s_r)}{E_r^2}\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{s_r}{E_r^2}\delta s_r-\mycH\Big\{\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{(\mycH s_r)}{E_r^2}\Big\}\delta s_r\Big]dt \\
+\end{align*}
+Then the adjoint source
+\begin{align*}
+  f_i^\dagger(\mbf x,t)= & -\sum_{r=1}^N\Big[\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
+    & =-\mycH\Big\{\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+\end{align*}
+where $w_r$ the weighting function.\par
+\subsubsection{Waveform misfits}
+The classical misfit function is defined as
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\int_0^T||\mbf d(\mbf x_r,t)-\mbf s(\mbf x_r,t,\mbf m)||^2dt \]
+where $\mbf d$ and $\mbf s$ the observed and synthetic waveforms, respectively. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\int_0^T[\mbf d(\mbf x_r,t)-\mbf s(\mbf x_r,t,\mbf m)]\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+And the adjoint source is
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N\frac{1}{M_r}[d_i(\mbf x_r,T-t)-s_i(\mbf x_r,T-t,\mbf m)]w_r(T-t)\delta(\mbf x-\mbf x_r) \]
+where $w_r$ the time window function, and the normalization term $M_r=\int_0^Tw_r(t)d_i^2(x_r,t)dt$.\par
+\subsubsection{Traveltime misfits}
+The squared traveltime misfit is
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]^2 \]
+where $T_r$ the traveltime of a selected phase at receiver $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]\delta T_r \]
+If traveltime differences are measured by cross-correlation, the perturbation
+\[ \delta T_r=\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t,\mbf m)\delta s_i(\mbf x_r,t,\mbf m)dt \]
+\[ N_r=\int_0^Nw_r(t)s_i(\mbf x_r,t,\mbf m)\partial_t^2s_i(\mbf x_r,t,\mbf m)dt \]
+where $w_r$ the time window function which isolates a specific phase, and the adjoint source
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N[T_r^{obs}-T_r(\mbf m)]\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Amplitude misfits}
+The amplitude misfit is
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{r=1}^N\Big[\ln\frac{A_r^{obs}}{A_r(\mbf m)}\Big]^2 \]
+where the amplitude $A_r=\sqrt{\nicefrac{1}{(t_2-t_1)}\int_{t_1}^{t_2}s_r^2(t)dt}$ (Dahlen and Baig, 2002) at station $r$. Its gradient is
+\[ \delta\chi=-\sum_{r=1}^N\ln\Big[\frac{A_r^{obs}}{A_r(\mbf m)}\Big]\delta\ln A_r \]
+\[ \delta\ln A_r=\frac{1}{M_r}\int_0^Tw_r(t)s_i(\mbf x_r,t,\mbf m)\delta s_i(\mbf x_r,t,\mbf m)dt \]
+where $w_r$ the time window function, and the normalization factor $M_r=\int_0^Tw_r(t)s_i^2(\mbf x_r,t,\mbf m)dt$. And the adjoint source
+\[ f_i^\dagger(\mbf x,t)=-\sum_{r=1}^N\ln\Big[\frac{A_r^{obs}}{A_r(\mbf m)}\Big]\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Attenuation kernels}
+Amplitudes or envelopes of seismograms are also very sensitive to variations in anelastic structure.\par
+Express the gradient of the misfit function
+\[ \delta\chi=\int_vK_\mu^Q(\mbf x)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]
+where $Q_\kappa^{-1}$ is ignored. The frequency-dependent shear modulus is (Liu \etal, 1976)
+\[ \mu(\omega)=\mu(\omega_0)\Big[1+\frac{2}{\pi}Q_\mu^{-1}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)Q_\mu^{-1}\Big] \]
+where $\omega_0$ a reference angular frequency, and the change (Tromp \etal, 2005)
+\[ \delta\mu(\omega)=\mu(\omega_0)\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]\delta Q_\mu^{-1} \]
+According to the Fourier transformed Born approximation, the anelastic adjoint wavefield is
+\[ \tilde f_i^\dagger(\mbf x,t)=\frac{1}{2\pi}\int_{-\infty}^\infty\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]f_i^\dagger(\mbf x,\omega)e^{i\omega t}d\omega \]
+where $f_i^\dagger(\mbf x,\omega)$ the Fourier transform of the regular elastic adjoint source.\par
+\subsection{Discussion}
+Waveform measurement (WF) favours the highest amplitude parts of seismograms.\par
+The drawback of traveltime (TT) and amplitude (AMP) measurements is that they need waveforms to be similar in shape and require isolating seismic phases from seismograms (need to pick every available phase); The major disadvantage of WF comes from mixing phase and amplitude information in a single observable and is highly non-linear with respect to Earth's structure.\par
+The advantages of instantaneous phase (IP) and envelope (ENV) measurements are less data processing and easier implementation.\par
+To avoid cycle skip problems in phase speed measurements, use long-period waveforms first, gradually increase the frequency content of data in subsequent iterations in the inversion.\par

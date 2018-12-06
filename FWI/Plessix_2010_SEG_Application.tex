@@ -1,0 +1,27 @@
+\renewcommand{\pmk}{Plessix\_2010\_SEG\_Application to land data set}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Application of acoustic full waveform inversion to a low-frequency large-offset land data set}
+\renewcommand{\pay}{Ren\'{e}-Edouard Plessix, Guido Baeten and Jan Willem de Maag \etal, 2010}
+\renewcommand{\pjo}{SEG 2010 Annual Meeting}
+\renewcommand{\pda}{2016/10/3 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Proposing of full waveform inversion: Tarantola, 1987.
+  \item 3D real marine examples: Plessix, 2009; Sirgue \etal, 2009; Vigh \etal, 2009.
+  \item \sline
+  \item Low frequencies and large offsets mitigate the sensitivity to the initial mdoel: Bunks \etal, 1995; Pratt, 1999.
+  \item FWI can update the long spatial wavelengths of velocity: Gauthier \etal, 1986; Pratt, 1999.
+  \item Apply to land data sets: Ravaut \etal, 2004; Brenders and Pratt, 2004. (Attenuate the elastic effects by focusing on the first breaks with windowing technique)
+  \item \sline
+  \item Solve the wave equation in the frequency domain: Plessix, 1997.
+  \item The width of the valleys of the least-squares misfit is inversely proportional to frequency: Bunks \etal, 1995.
+  \item Overlap the frequencies between scales to better retain the velocity updates of the low frequency scales: Brossier \etal, 2009.
+\end{enumerate}\par
+\subsection{Full waveform inversion}
+The misfit function
+\[ J_f(m)=\frac{1}{2}||W(c-d)||^2 \]
+with a frequency $f$, the velocity field $m$, the modeled data $c$, the observed data $d$ and a data weighting matrix $W$ which is a diagonal matrix where the diagonal elements are $h^\beta$ with the offset $h$ and a coefficient $\beta$ generally between $0$ and $2$.\par
+Minimize with the quasi-Newton algorithm
+\[ m_{k+1}=m_k-\alpha_kB_k\nabla_mJ_f(m_k) \]
+with the step length $\alpha_k$ and the approximated inverse $B_k$ of the Hessian.\par

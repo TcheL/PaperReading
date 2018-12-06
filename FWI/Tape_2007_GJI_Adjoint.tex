@@ -1,0 +1,180 @@
+\renewcommand{\pmk}{Tape\_2007\_GJI\_Adjoint tomography 2D}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Finite-frequency tomography using adjoint methods -- Methodology and examples using membrane surface waves}
+\renewcommand{\pay}{Carl Tape, Qinya Liu and Jeroen Tromp, 2007}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2017/1/30 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm*}]
+  \item 3D \Frechet sensitivity kernels based on 1D reference model: Marquering \etal, 1999; Zhao \etal, 2000; Dahlen \etal, 2000.
+  \item Seismic wave forward problem in complex media (SEM): Komatitsch and Vilotte, 1998; Komatitsch \etal, 2002; Capdeville \etal, 2003.
+  \item \sline
+  \item SEM 3D seismic wave propagation at regional and global scales: Komatitsch and Tromp, 1999; Komatitsch \etal, 2004; Komatitsch and Tromp, 2002a \& 2002b.
+  \item \sline
+  \item Adjoint methods: Tarantola, 1984; Talagrand and Courtier, 1987.
+  \item \sline
+  \item Adjoint methods in exploration geophysics (2D): Tarantola, 1984; Gauthier \etal, 1986; Mora, 1987; Pratt \etal, 1998; Pratt, 1999.
+  \item 3D ray tracing though 3D models to iteratively improve a global P-wave model: Bijwaard and Spakman, 2000.
+  \item Fully finite difference method to compute traveltime misfit function gradients for 3D models of Los Angeles: Zhao \etal, 2005.
+  \item A technique of stacking synthetic records that limits the number of forward simulations to one per event (per model iteration): Capdeville \etal, 2005.
+  \item Tomographic inversion using finite-element method and adjoint approach within a conjugate gradient framework: Akcelik \etal, 2003.
+  \item \sline
+  \item Time-reversal imaging: Fink \etal, 1989; Fink, 1992 \& 1997.
+  \item \sline
+  \item Classical tomography (compute model sensitivities for each measurement by constructing the gradient and Hessian of the misfit function): Woodhouse and Dziewonski, 1984; Ritsema \etal, 1999.
+  \item \sline
+  \item \myem{Membrane wave}: Tanimoto, 1990; Peter \etal, 2006.
+  \item Spherical spline basis functions to expand the fractional wave speed perturbations: Wang and Dahlen, 1995; Wang \etal, 1998.
+  \item Crustal structure and seismicity distribution in southern California: Hauksson, 2000.
+  \item Moho depth in southern California: Zhu and Kanamori, 2000.
+  \item Calculate cheaply and rapidly banana-doughnut kernels for 1-D earth models: Dahlen \etal, 2000.
+  \item Compute global finite-frequency kernels using normal modes for spherically symmetric models: Zhao and Jordan, 2006.
+  \item Data weighting in waveform inversion: Takeuchi and Kobayashi, 2004.
+  \item Add an explicit damping term to the misfit function to smooth the inversion: Akcelik \etal, 2002 \& 2003.
+  \item \myem{Conjugate gradient method}: Fletcher and Reeves, 1964.
+  \item \myem{Multiscale inversion method}: Bunks \etal, 1995.
+\end{enumerate}\par
+Seismic tomography based upon a 3-D reference model, 3-D numerical simulations depends largely on: (1) The accuracy and efficiency of the technique used to generate 3-D synthetic seismograms; (2) The efficiency of the inversion algorithm.\par
+\subsection{Inverse problem}
+Make a quadratic Taylor expansion of the misfit function $\chi(\mbf m+\delta\mbf m)$,
+\[ \chi(\mbf m+\delta\mbf m)\approx\chi(\mbf m)+\mbf g(\mbf m)^T\delta\mbf m+\frac{1}{2}\delta\mbf m^T\mbf H(\mbf m)\delta\mbf m \]
+where $\mbf m$ a particular model, $\delta\mbf m$ model corrections, and the gradient vector and the Hessian matrix are, respectively:
+\[ \mbf g(\mbf m)=\frac{\partial\chi}{\partial\mbf m}\Big|_{\mbf m} \text{,\hspace{5mm}} \mbf H(\mbf m)=\frac{\partial^2\chi}{\partial\mbf m\partial\mbf m}\Big|_{\mbf m} \]\par
+The gradient with respect to $\delta\mbf m$ is
+\[ \mbf g(\mbf m+\delta\mbf m)\approx\mbf g(\mbf m)+\mbf H(\mbf m)\delta\mbf m \]
+which can be set equal to zero to obtain the local minimum of misfit,
+\[ \mbf H(\mbf m)\delta\mbf m=-\mbf g(\mbf m) \]
+\[ \myno{\delta\mbf m=-\frac{\mbf g(\mbf m)}{\mbf H(\mbf m)}} \]\par
+If the gradient and (approximate) Hessian are both available, then the inverse approach is \myem{Newton method}; if only the gradient is available, then it is \myem{gradient method}.\par
+\subsection{Classical tomography}
+\subsubsection{Theory}
+The traveltime misfit function may be
+\[ \chi(\mbf m)=\frac{1}{2}\sum_{i=1}^N[T_i^{obs}-T_i(\mbf m)]^2 \]
+where $T_i^{obs}$ and $T_i(\mbf m)$ the observed and predicted (based upon $\mbf m$) traveltime for the $i$th source-receiver combination, and $N$ the number of traveltime measurements. The variation is
+\[ \delta\chi=-\sum_{i=1}^N\Delta T_i\delta T_i \]
+where $\delta T_i$ the theoretical traveltime perturbation, and the traveltime anomaly:
+\[ \Delta T_i=T_i^{obs}-T_i(\mbf m) \]
+where $\Delta$ and $\delta$ denote a differential measurement and a mathematical perturbation, respectively.\par
+In ray-based tomography, the predicted traveltime anomaly $\delta T_i$ along the $i$th ray path may be
+\[ \delta T_i=-\int_{ray_i}c^{-1}\delta\ln cds \]
+where \myem{fractional wave speed perturbations} $\delta\ln c=\nicefrac{\delta c}{c}$, and $ds$ a segment of the $i$th ray. Taking into account finite-frequency effects, the traveltime anomaly for the $i$th source-receiver combination may be
+\[ \delta T_i=\int_VK_i\delta\ln cd^3\mbf x \]
+where $K_i(\mbf x)$ \mynem{`banana-doughnut', sensitivity, finite-frequency or Born kernels}.\par
+For finite-frequency tomography,
+\[ \delta\chi=\int_VK\delta\ln cd^3\mbf x \]
+where the traveltime \myem{misfit kernel}
+\[ K(\mbf x)=-\sum_{i=1}^N\Delta T_iK_i(\mbf x) \]
+Note that misfit kernels $K(\mbf x)$ depend upon the data, whereas the banana-doughnut kernels $K_i(\mbf x)$ are data-independent.\par
+Choose a finite set of basis functions $B_k(\mbf x),k=1,2,\ldots,M$ and expand fractional phase-speed perturbations,
+\[ \delta\ln c(\mbf x)=\sum_{k=1}^M\delta m_kB_k(\mbf x) \]
+where $\delta m_k$ the perturbed model coefficients, determined in terms of $\mbf g$ and $\mbf H$ by the preceding relation.\par
+Thus,
+\[ \delta T_i=\sum_{k=1}^M\delta m_kG_{ik} \]
+where
+\begin{equation*}
+  G_{ik}\equiv\frac{\partial T_i}{\partial m_k}\Big|_{\mbf m}=\left\{
+  \begin{aligned}
+    & -\int_{ray_i}c^{-1}B_kds, & & \text{for ray theory} \\
+    & \int_VK_iB_kd^3\mbf x, & & \text{for finite-frequency tomography} \\
+  \end{aligned} \right.
+\end{equation*}\par
+Besides, for finite-frequency tomography,
+\[ \delta\chi=\sum_{k=1}^M\delta m_k\int_VKB_kd^3\mbf x \]
+and
+\[ \delta\chi\myno{=\frac{\partial\chi}{\partial m}\cdot\delta\mbf m}=\mbf g\cdot\delta\mbf m=\sum_{k=1}^Mg_k\delta m_k \]
+deduce that
+\[ g_k=\myde{\frac{\partial\chi}{\partial m_k}=}\int_VKB_kd^3\mbf x \]
+obtain
+\begin{align*}
+  g_k & =-\sum_{i=1}^N\int_VK_iB_kd^3\mbf x\Delta T_i \\
+  & =-\sum_{i=1}^NG_{ik}\Delta T_i \\
+\end{align*}
+In matrix notation,
+\[ \mbf g=-\mbf G^T\mbf d \]
+\[ \mbf d=(\Delta T_1,\Delta T_2,\ldots,\Delta T_N)^T \]
+As for ray-based tomography, same as finite-frequency tomography.\par
+\myno{Because of
+\[ \frac{\partial\Delta T_i}{\partial m_{k'}}=-\frac{\partial T_i}{\partial m_{k'}}=-G_{ik'} \]}
+thus the Hessian $\mbf H$
+\[ H_{kk'}=\frac{\partial^2\chi}{\partial m_k\partial m_{k'}}\Big|_{\mbf m}=\frac{\partial g_k}{\partial m_{k'}}\Big|_{\mbf m}=\sum_{i=1}^N\Big(G_{ik}G_{ik'}\mynno{-}\Delta T_i\frac{\partial^2T_i}{\partial m_k\partial m_{k'}}\Big|_{\mbf m}\Big) \]
+and the approximate Hessian $\tilde{\mbf H}$
+\[ \tilde H_{kk'}\equiv\sum_{i=1}^NG_{ik}G_{ik'} \]
+In matrix notation,
+\[ \tilde{\mbf H}\equiv\mbf G^T\mbf G \]
+If using the approximate Hessian instead of the exact one, then the inverse approach is a \myem{Gauss-Newton method}.\par
+Therefore, the model correction $\delta\mbf m$ is determined by
+\[ \mbf G^T\mbf G\delta\mbf m=\mbf G^T\mbf d \]
+In general, $\tilde{\mbf H}$ is not full rank. Introduce a damping matrix $\mbf D$ (typically the norm, gradient, or second derivative of wave speed perturbations) and a damping parameter $\gamma$ (generally determined by trading-off misfit of the solution against complexity of the model),
+\[ \tilde{\mbf H}_\gamma=\mbf G^T\mbf G+\gamma^2\mbf D \]
+\[ \delta\mbf m=(\mbf G^T\mbf G+\gamma^2\mbf D)^{-1}\mbf G^T\mbf d \]
+More details about how to add a regularization term to the misfit function refer to Appendix A of the original papaer. For non-linear inverse problems, an iterative Gauss-Newton method to minimize the misfit function.\par
+\subsubsection{Experimental set-up}
+2-D elastic wave equation for Membrane wave (traveling in the $x-y$ plane with a vertical $z$ component of motion):
+\[ \rho\partial^2_ts=\partial_x(\mu\partial_xs)+\partial_y(\mu\partial_ys)+f \]
+where $s(x,y,t)$ the vertical component of displacement, $\rho(x,y)$ the density, $\mu(x,y)$ the shear modulus and the source
+\[ f(x,y,t)=h(t)\delta(x-x_s)\delta(y-y_s) \]
+where $h(t)$ the source-time function and $(x_s,y_s)$ the source location. A Gaussian form of the source-time function:
+\[ h(t)=-\frac{2\alpha^3}{\sqrt\pi}(t-t_s)e^{-\alpha^2(t-t_s)^2} \]
+The relationship $\mu=\rho c^2$ and $c$ is the membrane-wave phase-speed.\par
+\subsection{The gradient}
+For the 2-D case, the gradient of the misfit function is
+\[ g_k=\int_\Omega KB_kd^2\mbf x \]
+where $K$ the misfit kernel.\par
+\subsubsection{Event kernels}
+The source for the adjoint wavefield for a particular event is (Tromp \etal, 2005, eq.57)
+\[ f^\dagger(x,y,t)=-\sum_{r=1}^{N_r}\Delta T_r\frac{1}{M_r}w_r(T-t)\partial_ts(x_r,y_r,T-t)\times\delta(x-x_r)\delta(y-y_r) \]
+where $r$ the receiver index, $N_r$ the number of receivers, $\Delta T_r$ the cross-correlation traveltime measurement over a time window $w_r(t)$, $s(x,y,t)$ the forward wavefield, $(x_r,y_r)$ the location of the receiver, $T$ the length of the time-series, and $M_r$ the normalization factor.\par
+The adjoint source comprises time-reversed velocity seismograms, input at the location of the receivers and weighted by the traveltime measurement associated with each receiver.\par
+For a given earthquake (event), the membrane event kernel:
+\[ K(x,y)=-2\mu(x,y)\int_0^T[\partial_xs^\dagger(x,y,T-t)\partial_xs(x,y,t)+\partial_ys^\dagger(x,y,T-t)\partial_ys(x,y,t)]dt \]
+where $s^\dagger$ the adjoint wavefield given by the above adjoint source.\par
+For a single receiver and a uniform model perturbation, the event kernel resembles a banana-doughnut kernel. The event kernel shows the region of the current model that gives rise to the discrepancy between the data and the synthetics.\par
+To obtain a negative variation of the misfit function $\delta\chi$ to minimize the misfit, invoke a fast and positive structural perturbation where the kernel is negative, and/or a slow and negative structural perturbation where the kernel is positive.\par
+\subsubsection{Misfit kernels}
+Define the misfit kernel as a sum of event kernels for a particular model.\par
+To remove spurious amplitudes in the vicinity of the sources and receivers, smooth the misfit kernel by convolving (in 2-D) the original misfit kernel with a Gaussian form:
+\[ G(x,y)=\frac{4}{\pi\Gamma^2}e^{-\nicefrac{4(x^2+y^2)}{\Gamma^2}} \]
+where $\Gamma$ the scalelength of smoothing. The choice of $\Gamma$ involves a degree of subjectivity, and it is feasible to take the value somewhat less than the wavelengths of the seismic waves.\par
+The smoothing operation will tend to remove some subresolution features from the kernel.\par
+\subsubsection{Basis function}
+The basis functions embedded in the numerical method, using Lagrange polynomials for the SEM, refer to the Section 5.3 of the original paper.\par
+\subsection{Optimization}
+\subsubsection{Conjugate gradient algorithm}
+Given an initial model $\mbf m^0$, calculate $\chi(\mbf m^0), \mbf g^0=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^0)$, and set the initial search direction $\mbf p^0=-\mbf g^0$. If $||\mbf p^0||<\epsilon$, then $\mbf m^0$ is the desired model; otherwise:
+\begin{enumerate}[(i)]
+  \item Perform a line search to obtain the scalar $v_k$ that minimizes the function $\tilde\chi^k(v)$, where $\tilde\chi^k(v)=\chi(\mbf m^k+v\mbf p^k)$ and $\tilde g^k(v)=\nicefrac{\partial\tilde\chi^k}{\partial v}=\mbf g(\mbf m^k+v\mbf p^k)\cdot\mbf p^k$:
+  \begin{enumerate}[$\bullet$]
+    \item Choose a test parameter $v_t^k=-\nicefrac{2\tilde\chi^k(0)}{\tilde g^k(0)}$;
+    \item Calculate the test model $\mbf m_t^k=\mbf m^k+v_t^k\mbf p^k$, $\chi(\mbf m_t^k)$, $\mbf g(\mbf m_t^k)$, $\tilde\chi^k(v_t^k)$ and $\tilde g^k(v_t^k)$;
+    \item Interpolate the function $\tilde\chi^k(v)$ by a quadratic or cubic polynomial \myno{(resolve a quadratic or cubic polynomial $\tilde\chi^k(v)$ according to the two misfits $\tilde\chi^k(0)$, $\tilde\chi^k(v_t^k)$, the gradient(s) $\tilde g^k(0)$, not or and $\tilde g^k(v_t^k)$)} and obtain the $v^k$ that gives the minimum of this polynomial \myno{(more details refer to Appendix B2 of the original paper)}.
+  \end{enumerate}
+  \item Update the model: $\mbf m^{k+1}=\mbf m^k+v^k\mbf p^k$, then calculate $\mbf g^{k+1}=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^{k+1})$.
+  \item Update the conjugate gradient search direction: $\mbf p^{k+1}=-\mbf g^{k+1}+\beta^{k+1}\mbf p^k$, where $\beta^{k+1}=\mbf g^{k+1}\cdot\nicefrac{(\mbf g^{k+1}-\mbf g^k)}{(\mbf g^k\cdot\mbf g^k)}$.
+  \item If $||\mbf p^{k+1}||<\epsilon$, then $\mbf m^{k+1}$ is the desired model; otherwise replace $k$ with $k+1$ and restart from (i).
+\end{enumerate}\par
+A detailed cycle of the conjugate gradient algorithm for the adjoint tomography refer to the Fig.11 of the original paper.\par
+Entrapment into local minima is common in the conjugate gradient method, and it may be avoided by using multiscale methods (Bunks \etal, 1995), and alternatively by starting at longer periods and gradually moving to shorter periods.\par
+\subsection{Source, structure and joint inversions}
+\subsubsection{Source inversion}
+A perturbation of the point source may be:
+\[ \delta f(x,y,t)=-\dot h(t)\delta t_s\delta(x-x_s)\delta(y-y_s)+h(t)(\delta x_s\partial_{x_s}+\delta y_s\partial_{y_s})[\delta(x-x_s)\delta(y-y_s)] \]
+where $\delta t_s$ a perturbation in the origin time, $(\delta x_s,\delta y_s)$ a perturbation in the source location.\par
+Change in misfit due to a change in the point source is
+\[ \delta\chi=\int_0^T\int_\Omega\delta f(x,y,t)s^\dagger(x,y,T-t)dxdydt \]
+where $s^\dagger$ the adjoint wavefield, whose sources are injected at the receivers, just same as in the case of the previous structure inversions. Thus,
+\[ \delta\chi=-\delta t_s\int_0^T\dot h(t)s^\dagger(x_s,y_s,T-t)dt+(\delta x_s\partial_{x_s}+\delta y_s\partial_{y_s})\int_0^Th(t)s^\dagger(x_s,y_s,T-t)dt \]
+\[ \delta\chi=\mbf g\cdot\delta\mbf m \]
+where
+\[ \delta\mbf m\myno{=\Big[\frac{\delta x_s}{\lambda},\frac{\delta y_s}{\lambda},\frac{\delta t_s}{\tau}\Big]^T}=\Big[\frac{x_s^k-x_s^0}{\lambda},\frac{y_s^k-y_s^0}{\lambda},\frac{t_s^k-t_s^0}{\tau}\Big]^\myno{T} \]
+\[ \mbf g=\Big[\lambda\int_0^Th(t)\partial_{x_s}s^\dagger(x_s,y_s,T-t)dt,\lambda\int_0^Th(t)\partial_{y_s}s^\dagger(x_s,y_s,T-t)dt,-\tau\int_0^T\dot h(t)s^\dagger(x_s,y_s,T-t)dt\Big] \]
+where $\tau$ the reference period, $\lambda=c\tau$ the reference wavelength and $c$ the reference phase speed.\par
+\subsubsection{Joint inversions}
+The model vector for the joint inversion is $\delta\mbf m=[\delta\mbf m_{str};\delta\mbf m_{src}]$ with dimension $N_{structure}+3N_{event}$. The gradient is
+\[ \mbf g^k=[F\mbf g_{str}^k;\mbf g_{src}^k] \]
+\[ F=\frac{||\mbf g_{src}^0||_2}{||\mbf g_{str}^0||_2} \]
+where $||\cdot||_2$ the L2-norm of the enclosed vector.\par
+\subsection{Discussion}
+\subsubsection{Three kernel types}
+Banana-doughnut kernels: a phase-specific (e.g. P) kernel for an individual source-receiver combination, not incorporate the measurement; Event kernels: a sum of individual banana-doughnut kernels, weighted by its corresponding measurement; Misfit kernel: the sum of event kernels, a graphical representation of the gradient of the misfit function.\par
+Use the banana-doughnut kernels in classical tomography and the misfit kernels in adjoint tomography.\par

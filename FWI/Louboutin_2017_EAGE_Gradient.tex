@@ -1,0 +1,34 @@
+\renewcommand{\pmk}{Louboutin\_2017\_EAGE\_Gradient sampling algorithm}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Extending the Search Space of Time-domain Adjoint-state FWI with Randomized Implicit Time Shifts}
+\renewcommand{\pay}{M. Louboutin, F. J. Herrmann, 2017}
+\renewcommand{\pjo}{79th EAGE Conference \& Exhibition}
+\renewcommand{\pda}{2018/12/5 Wen.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Wavefield reconstruction inversion (\myem{WRI}) where both the velocity model and wavefields are unknown: van Leeuwen \etal, 2014; van Leeuwen and Herrmann, 2015.
+\end{enumerate}\par
+\subsection{Gradient sampling for FWI}
+\subsubsection{Gradient sampling algorithm}
+By working with local neighborhoods instead with a single model, the algorithm is able to reap global information on the objective from local gradient at small cost.\par
+Minimize the objective function $\Phi(\mbf x)$ with respect to $\mbf x\in R^N$ by
+\begin{enumerate}[\hspace{10mm}$\bullet$]
+  \item sampling $N+1$ vectors $\mbf x_{ki}$ in a ball $B_{\epsilon_k}(\mbf x_k)$ defined as all $\mbf x_{ki}$ such that $||\mbf x_k-\mbf x_{ki}||_2^2<\epsilon_k$, where $\epsilon_k$ is the maximum distance between the current estimate and a sampled vector;
+  \item calculating gradients for each sample, i.e., $\mbf g_{ki}=\nabla\Phi(\mbf x_{ki})$;
+  \item computing descent directions as a weighted sum over all sampled gradients, i.e., $\mbf g_k\approx\sum\limits_{i=0}^p\omega_i\mbf g_{ki}$, such that $\sum\limits_{i=0}^p\omega_i=1$ and $\omega_i>0,\forall i$;
+  \item updating the model according to $\mbf x_{k+1}=\mbf x_k-\alpha\mbf H^{-1}\mbf g_k$, where $\alpha$ is a step length obtained from a line search and $\mbf H^{-1}$ is an approximation of the inverse Hessian.
+\end{enumerate}\par
+Two major drawbacks are prohibitive computational costs for gradient samples and the quadratic subproblem for weights $\omega_i$, and we circumvolve these issues by implicit approximation of sampling of models in the ball $B_{\epsilon_k}(\mbf x_k)$ and predetermined random weights that satisfy the constraints (positive and sum to one), respectively.
+\subsubsection{Implicit time shift}
+The gradients of the FWI objective $\Phi_s(\mbf m)$ for an acoustic medium:
+\[ \nabla\Phi_s(\mbf m)=-\sum_{t\in I}\big[\text{diag}(\mbf u[t])(\mbf D^T\mbf v[t])\big] \]
+where $\mbf m$: the square slowness; $\mbf u$: the forward wavefield; $\mbf v$: the adjoint wavefield; $\mbf D$: the time derivative discretization matrix; $I$: the time index set $[1,2,\ldots,n_t]$.\par
+For a slightly perturbed velocity model $\tilde{\mbf m}$ nearby $\mbf m$,
+\[ \mbf u(\tilde{\mbf m})[t]\approx\mbf u(\mbf m)[t+\tau],\mbf v(\tilde{\mbf m})[t]\approx\mbf v(\mbf m)[t-\tau] \]
+so that the approximated gradient:
+\[ \nabla\Phi_s(\tilde{\mbf m})=-\sum_{t\in I}\big[\text{diag}(\mbf u[t+\tau])(\mbf D^T\mbf v[t-\tau])\big] \]
+And by limiting the maximum time shift to $\tau_{max}=\frac{1}{f_0}$, where $f_0$ is the peak frequency of the source wavelet, guaranty wavefields not to be shifted by more that half a wavelength.\par
+Another way to avoid storage and explicit calculations of gradients is:
+\[ \overline{\nabla\Phi_s(\mbf m)}=-\sum_{t\in\overline I}\big[\text{diag}(\overline{\mbf u}[t])(\overline{\mbf D^T\mbf v}[t])\big],\overline{\mbf u}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf u[t], \overline{\mbf D^T\mbf v}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf D^T\mbf v[t] \]
+where $\overline I=[t_1,t_2,\ldots,t_n]$ are the jitered time sampled from $[1,2,\ldots,n_t]$, and random weights $\sum\alpha_t=1$.\par

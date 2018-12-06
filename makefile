@@ -1,5 +1,6 @@
-xlx := xelatex -interaction=nonstopmode
 file := Reading
+xlx := xelatex -interaction=nonstopmode
+csuf := aux blg bbl log out synctex.gz tex.bak toc
 
 all : tex2pdf backup view
 
@@ -24,7 +25,9 @@ backup : $(file).tex $(file).pdf
 	tar -zpcv -f Backup.tar.gz $(file).tex $(file).pdf
 
 clean :
-	-rm -f $(addprefix $(file), .aux .blg .bbl .log .out .synctex.gz .tex.bak .toc)
+	-rm -f $(foreach cs,$(csuf),$(file).$(cs))
+	-rm -f $(foreach cs,$(csuf),FWI/*.$(cs))
+	-rm -f $(foreach cs,$(csuf),WaveForward/*.$(cs))
 
 clear :
 	-rm -f $(file).pdf

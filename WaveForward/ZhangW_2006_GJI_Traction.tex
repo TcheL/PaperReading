@@ -1,0 +1,54 @@
+\renewcommand{\pmk}{ZhangW\_2006\_GJI\_Traction image method}
+\renewcommand{\prf}{WaveForward/\pmk.pdf}
+\renewcommand{\pti}{Traction image method for irregular free surface boundaries in finite difference seismic wave simulation}
+\renewcommand{\pay}{Wei Zhang, Xiaofei Chen, 2006}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2016/10/29 Sat.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Use finite difference method (FDM) in rupture dynamics of earthquake source: Madariaga, 1976; Andrews, 1976a \& 1976b; Olsen \etal, 1997; Madariaga \etal, 1998; Cruz-Atienza and Virieux, 2004.
+  \item Use FDM in seismic wave propagation in complex heterogeneous media: Boore, 1972; Kelly \etal, 1976; Bayliss \etal, 1986; Virieux, 1984 \& 1986; Levander, 1988; Graves, 1996; Dai \etal, 1995; Zahradnik, 1995.
+  \item Free surface conditions: Jih \etal, 1988; Oprsal and Zahradnik, 1999; Ohminato and Chouet, 1997; Robertsson, 1996; Hestholm and Ruud, 1994 \& 1998.
+  \item \sline
+  \item Free surface conditions for a planar surface: Gottschammer and Olsen, 2001; Kristek \etal, 2002.
+  \item Vacuum method: Boore, 972; Graves, 1996.
+  \item Characteristic variables method: Bayliss \etal, 1986.
+  \item Adjusted FD approximations (AFDA) technique: Kristek \etal, 2002.
+  \item Stress image method: Levander, 1988; Graves, 1996.
+  \item \sline
+  \item Extend the stress image method with staircase approximation to the general topographic problem in the second-order accurate staggered finite difference scheme: Ohminato and Chouet, 1997.
+  \item Implement the stress image method with staircase approximation to the irregular surface in the fourth-order staggered scheme: Robertsson, 1996; Pitarka and Irikura, 1996.
+  \item \sline
+  \item Vertical grid mapping to match the computational grids with the surface topography in staggered finite difference schemes: Hestholm and Ruud, 1994 \& 1998.
+  \item \sline
+  \item Boundary-conforming grid in seismic wave simulation with pseudospectral method: Fornberg, 1988.
+  \item Numerical grid generation: Thompson \etal, 1985.
+  \item The original MacCormack scheme with 2nd-order accurate in both time and space: MacCormack, 1969.
+  \item Extend MacCormack scheme to 2nd-order accurate in time and 4th-order accurate in space (2-4 MacCormack scheme): Gottlieb and Turkel, 1976.
+  \item Introduce 2-4 MacCormack scheme into seismic wave modelling: Bayliss \etal, 1986 (implement with an operator splitting).
+  \item Use 2-4 MacCormack splitting scheme in seismic wave problems: Xie and Yao, 1988; Tsingas \etal, 1990; Vafidis \etal, 1992; Dai \etal, 1995.
+  \item High-accuracy MacCormack schemes with the DRP/opt MacCormack scheme: Hixon, 1997.
+  \item DRP (dispersion relation preserving) methodology: Tam and Webb, 1993.
+  \item 4-6 LDDRK (low dispersion and dissipation Runge-Kutta) scheme: Hu \etal, 1996.
+  \item 4/4 compact MacCormack scheme: Hixon and Turkel, 2000.
+  \item Treat the discontinuous interior interfaces by effective parameters (arithmetic average or harmonic average): Moczo \etal, 2002.
+  \item The approximated delta function by Herrmann pseudo-delta functions: Herrmann, 1979; Wang \etal, 2001.
+  \item The split-field perfectly matched layer (PML) approach: \Berenger, 1994; Marcinkovich and Olsen, 2003.
+\end{enumerate}\par
+\subsection{DRP/opt MacCormack scheme}
+In the DRP scheme, the forward and backward partial difference operators are:
+\[ \hat W_i^F=\frac{1}{\Delta x}\sum_{j=-1}^3a_jW_{i+j} \]
+\[ \hat W_i^B=\frac{1}{\Delta x}\sum_{j=-1}^3-a_jW_{i-j} \]
+where the expansion coefficients are: $a_{-1}=-0.30874,a_0=-0.6326,a_1=1.2330,a_2=-0.3334,a_3=0.04168$ and these coefficients are obtained by minimizing the dissipation error at eight points or more per wavelength.\par
+\subsection{Compact MacCormack scheme}
+The 4/4 compact MacCormack scheme is:
+\[ \hat W_{j-1}^B+2\hat W_j^B=\frac{1}{2\Delta x}(W_{j+1}+4W_j-5W_{j-1}) \]
+\[ 2\hat W_j^F+\hat W_{j+1}^F=\frac{1}{2\Delta x}(5W_{j+1}-4W_j-W_{j-1}) \]
+where $\hat W_j^F$ and $\hat W_j^B$ denote the forward and backward difference operators.\par
+\subsection{Interior interface conditions}
+Treat the discontinuous interior interfaces by effective parameters, the density by arithmetic average:
+\[ \rho_{ij}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\rho dxdy \]
+and the \Lame parameters by harmonic average:
+\[ \frac{1}{\mu_{ij}}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\frac{1}{\mu}dxdy \]
+\[ \frac{1}{\lambda_{ij}}=\frac{1}{\Delta S}\int_{i-\nicefrac{1}{2}}^{i+\nicefrac{1}{2}}\int_{j-\nicefrac{1}{2}}^{j+\nicefrac{1}{2}}\frac{1}{\lambda}dxdy \]\par

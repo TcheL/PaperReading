@@ -1,0 +1,64 @@
+\renewcommand{\pmk}{Moghaddam\_2013\_Geophy\_Stochastic gradient method}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{A new optimizatioin approach for source-encoding full-waveform inversion}
+\renewcommand{\pay}{Peyman P. Moghaddam, Henk Keers, Felix J. Herrmann, \etal, 2013}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2017/6/11 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item FWI on a large scale: Virieux and Operto, 2009; Kapoor \etal, 2010; Vigh \etal, 2010.
+  \item Conventional FWI: Tarantola, 1984 \& 1986; Mora, 1987; Crase \etal, 1990; ...
+  \item Source encoding technique: Krebs \etal 2009; Li and Herrmann, 2010; Moghaddam and Herrmann, 2010; van Leeuwen \etal, 2011; Haber \etal, 2012; Li \etal, 2012.
+  \item \sline
+  \item Stochastic optimization method: Goldberg, 1989; Spall, 1992.
+  \item \sline
+  \item Marmousi model: Bourgeois \etal, 1991.
+  \item \sline
+  \item \mynem{The adjoint-state method} to avoid the computation of sensitivity matrix: Lions and Magenes, 1972; Lailly, 1983; Tarantola, 1984; Giles \etal, 2003; Plessix, 2006; Virieux and Operto, 2009.
+  \item The limited-memory Broyden-Fletcher-Goldfarb-Shanno (\myem{LBFGS}) method: Byrd \etal, 1995; Mulder and Plessix, 2004; Nocedal and Wright, 2006; Plessix, 2004.
+  \item Preconditioned conjugate gradient method: Ravaut \etal, 2004.
+  \item Gauss-Newton method: Virieux and Operto, 2009.
+  \item The online LBFGS (oLBFGS): Schraudolph \etal, 2007; Yu \etal, 2010.
+  \item Stochastic gradient descent: Schraudolph \etal, 2007; Sunehag \etal, 2009.
+\end{enumerate}\par
+The misfit function and its gradient for source-encoding waveform inversion is an unbiased random estimation of the misfit function used in conventional waveform inversion.\par
+Main drawbacks of FWI: the requirement to have an accurate initial model; and expensive computational cost.\par
+Source encoding uses a linear combinations of all shots, with random weights assigned to each shot.\par
+\subsection{Stochastic optimization}
+\paragraph{Stochastic gradient descent}
+Stochastic gradient descent is:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\nabla J(\sigma_k,\mbf w_k) \]
+where $k$ the iteration number, $\eta_k$ the step length, $J$ the misfit function, $\sigma_k$ the model at iteration $k$ and $\mbf w_k$ the current randomized weight.\par
+\paragraph{Stochastic LBFGS}
+Each step of the LBFGS algorithm takes:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\mbf H_k\nabla J(\sigma_k,\mbf w_k) \]
+where the inverse Hessian matrix $\mbf H_k$ updated in each iteration by (refer to the last second formula of \href{https://en.wikipedia.org/wiki/Broyden-Fletcher-Goldfarb-Shanno_algorithm}{Wikipedia page}):
+\[ \mbf H_{k+1}=\mbf V_k^T\mbf H_k\mbf V_k+\rho_k\mbf s_k\mbf s_k^T \]
+with $\rho_k=\nicefrac{1}{\mbf y_k^T\mbf s_k}$, $\mbf V_k=\mbf I-\rho_k\mbf y_k\mbf s_k^T$ and $\mbf s_k=\sigma_{k+1}-\sigma_k$, $\mbf y_k=\nabla J(\sigma_{k+1},\mbf w_k)-\nabla J(\sigma_k,\mbf w_k)$. Note that for construction of $\mbf y_k$, take the same random weighting $\mbf w_k$ for the current gradient at $k+1$ and the previous one at $k$.\par
+The LBFGS routine is carried out in two steps. First, the latest $m$ iterations are calculated. Second, the routine updates the LBFGS direction as the following:
+\begin{enumerate}[\hspace{15mm}1:~]
+%\begin{enumitem}%[\hspace{15mm}1:~]
+  \item $\mbf q\leftarrow\nabla J(\mbf m_k,\mbf w_k)$
+  \item $\mbf H_k^0\leftarrow\nicefrac{(\mbf y_k^T\mbf s_k)}{(\mbf y_k^T\mbf y_k)}$
+  \item FOR $i=k$ to $k-m+1$
+  \item \quad\quad $\alpha_i\leftarrow\rho_i\mbf s_i^T\mbf q$
+  \item \quad\quad $\mbf q\leftarrow\mbf q-\alpha_i\mbf y_i$
+  \item END FOR
+  \item $\mbf r\leftarrow\mbf H_k^0\mbf q$
+  \item FOR $i=k-m+1$ to $k$
+  \item \quad\quad $\beta\leftarrow\rho_i\mbf y_i^T\mbf r$
+  \item \quad\quad $\mbf r\leftarrow\mbf r+\mbf s_i(\alpha_i-\beta)$
+  \item END FOR
+  \item Stop with $\mbf r=\mbf H_{k+1}\nabla J(\mbf m_{k+1},\mbf w_{k+1})$
+\end{enumerate}%\par
+%\end{enumitem}%\par
+\paragraph{Stochastic oLBFGS}
+For better convergence, the oLBFGS method uses $\mbf y_k=\nabla J(\mbf m_{k+1},\mbf w_k)-\nabla J(\mbf m_k,\mbf w_k)+\lambda\mbf s_k$. And the step $\mbf r\leftarrow\mbf H_k^0\mbf q$ in the above procedures is replaced by:
+\[ \mbf r=\frac{\mbf q}{\min(k,m)}\sum_{i=1}^{\min(k,m)}\frac{\mbf s_{k-i}^T\mbf y_{k-i}}{\mbf y_{k-i}^T\mbf y_{k-i}} \]
+where we can set $\lambda=0.1\cdot\nicefrac{||J(\mbf m_0,\mbf w_0)||_2^2}{||\mbf m_0||_2^2}$.\par
+\paragraph{Integrated stochastic gradient descent}
+To accelerate the convergence, in the integrated stochastic gradient descent (iSGD) method, the iteration step takes:
+\[ \sigma_{k+1}=\sigma_k-\eta_k\overline{\nabla J(\sigma_k)} \]
+\[ \overline{\nabla J(\sigma_k)}=\frac{\sum_{i=k-m}^ke^{\alpha(i-k)}\nabla J(\sigma_i,\mbf w_i)}{\sum_{i=k-m}^ke^{\alpha(i-k)}} \]
+where we can set $m=10$.\par

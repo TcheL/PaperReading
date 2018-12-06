@@ -1,0 +1,144 @@
+\renewcommand{\pmk}{ZhangW\_2010\_Geophy\_ADE CFS-PML}
+\renewcommand{\prf}{WaveForward/\pmk.pdf}
+\renewcommand{\pti}{Unsplit complex frequency-shifted PML implementation using auxiliary differential equations for seismic wave modeling}
+\renewcommand{\pay}{Wei Zhang, Yang Shen, 2010}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2016/11/6 Sun.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Absorbing boundary conditions (ABC), a proper boundary condition where waves only propagate outward: Clayton and Engquist, 1977; Liao \etal, 1984; Bayliss \etal, 1986; Higdon, 1986 \& 1990; Randall, 1988.
+  \item Absorbing boundary layers (ABL), finite layers to gradually damp wave amplitude: Cerjan \etal, 1985 \& Sochacki \etal, 1987 using the Dirichlet boundary condition.
+  \item Strengths and weaknesses of ABC and ABL: Festa and Vilotte, 2005; Komatitsch and Martin, 2007.
+  \item PML in elastic wave modeling: Chew and Liu, 1996; Hastings \etal, 1996; Collino and Tsogka, 2001; Marcinkovich and Olsen, 2003; Wang and Tang, 2003.
+  \item \sline
+  \item Interpret PML: Sacks \etal, 1995 \& Gedney, 1996 as an artificial anisotropic medium; Chew and Weedon, 1994 \& Teixeira and Chew, 2000 as complex coordinate streching.
+  \item Unsplit-field PML implementations: Wang and Tang, 2003 \& Komatitsch and Martin, 2007 involving convolution terms; Zeng and Liu, 2004 \& Drossaert and Giannopoulos, 2007a involving integral terms; Ramadan, 2003 involving auxiliary differential equations (ADE).
+  \item Modified modal solution to derive PML equations: Hagstrom, 2003 (proposal); Appel\"{o} and Kreiss, 2006 (implementation in 2D elastic wave modeling).
+  \item \sline
+  \item Complex-frequency-shifted PML (CFS-PML): Kuzuoglu and Mittra, 1996.
+  \item \sline
+  \item Unsplit-field CFS convolutional-PML (C-PML) involving a convolution term: Roden and Gedney, 2000.
+  \item Recursive convolution algorithm: Luebbers and Hunsberger, 1992 (proposal); Komatitsch and Martin, 2007 \& Drossaert and Giannopoulos, 2007b (implementation in elastic wave modeling).
+  \item CFS-PML implementation involving integral terms: Drossaert and Giannopoulos, 2007a.
+  \item Recursive integration in C-PML: Giannopoulos, 2008 (1st-order accuracy).
+  \item Trapezoidal rule in recursive integration PML (RIPML): Drossaert and Giannopoulos, 2007a (2nd-order accuracy).
+  \item \sline
+  \item Unsplit-field implementation of the standard PML using auxiliary differential equations (ADE CFS-PML): Ramadan, 2003 (electromagnetic simulation).
+  \item Extend ADE CFS-PML to CFS-PML with 2D alternating-direction-implicit finite difference time domain method: Wang and Liang, 2006.
+  \item \sline 
+  \item Adjusted finite difference approximations (AFDA) technique: Kristek \etal, 2002 (using a compact finite difference operator and biased finite difference operators).
+\end{enumerate}\par
+\subsection{Finite difference numerical scheme}
+For an isotropic elastic medium:
+\[ \mbf v_{,t}=\frac{1}{\rho}\nabla\cdot\mbf\sigma \]
+\[ \mbf\sigma_{,t}=\mbf c:[\nabla\mbf v+(\nabla\mbf v)^T] \]
+and for the $v_x$ component:
+\[ \rho v_{x,t}=\sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z} \]\par
+The second-order leapfrog scheme is
+\[ \mbf\sigma^{n+\nicefrac{1}{2}}=\mbf\sigma^{n-\nicefrac{1}{2}}+\Delta t\tilde{L}(\mbf v^n) \]
+\[ \mbf v^{n+1}=\mbf v^n+\Delta t\tilde{L}(\mbf\sigma^{n+\nicefrac{1}{2}}) \]\par
+\subsection{CFS-PML using ADE}
+Complex stretched coordinate $\tilde x$:
+\[ \tilde x=\int_0^xs_x(\eta)d\eta \myno{ \hspace{5mm}\Rightarrow\hspace{5mm} \frac{\partial\tilde x}{\partial x}=s_x(x) \hspace{5mm}\Rightarrow\hspace{5mm} } \frac{\partial}{\partial\tilde x}=\frac{1}{s_x}\frac{\partial}{\partial x} \]
+where $s_x$ is the \myem{complex stretching function}. As an example in the frequency domain,
+\[ i\omega\rho\hat v_x=\frac{1}{s_x}\frac{\partial\hat\sigma_{xx}}{\partial x}+\frac{\partial\hat\sigma_{xy}}{\partial y}+\frac{\partial\hat\sigma_{xz}}{\partial z} \]
+Moreover,
+\[ s_x(x)=1+\frac{d_x(x)}{i\omega} \hspace{5mm}\text{for the standard PML} \]
+\[ s_x(x)=\beta_x(x)+\frac{d_x(x)}{\alpha_x(x)+i\omega} \hspace{5mm}\text{for the CFS-PML} \]
+where $d_x\geqslant 0$ is the attenuation factor that reduces exponentially the amplitude, $\alpha_x\geqslant 0$ is the frequency-shifted factor that makes the attenuation frequency-dependent, and $\beta_x\geqslant 1$ is the scaling factor for absorption of evanescent waves and near-grazing incident waves.\par
+The basic idea of ADE implementation of CFS-PML is
+\[ \frac{1}{s_x}=\frac{1}{\beta_x+\frac{d_x}{\alpha_x+i\omega}} \myno{=\frac{\alpha_x+i\omega}{\beta_x(\alpha_x+i\omega)+d_x}} =\frac{1}{\beta_x}-\frac{1}{\beta_x}\frac{d_x}{(\alpha_x+i\omega)\beta_x+d_x} \]
+Thus,
+\[ \frac{1}{s_x}\frac{\partial\hat\sigma_{xx}}{\partial x}=\frac{1}{\beta_x}\hat\sigma_{xx,x}-\frac{1}{\beta_x}\hat T_{xx}^x \]
+\[ \myno{ \hat T_{xx}^x=\frac{d_x}{(\alpha_x+i\omega)\beta_x+d_x}\hat\sigma_{xx,x} } \]
+\[ i\omega\hat T_{xx}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)\hat T_{xx}^x=\frac{d_x}{\beta_x}\hat\sigma_{xx,x} \]
+where $T_{xx}^x$ is the \myem{auxiliary memory variable}. For the $v_x$ component in the frequency domain,
+\[ i\omega\rho\hat v_x=\frac{1}{\beta_x}\hat\sigma_{xx,x}-\frac{1}{\beta_x}\hat T_{xx}^x+\hat\sigma_{xy,y}+\hat\sigma_{xz,z} \]
+FT to the time domain, the ADE CFS-PML equation of $v_x$ is:
+\[ \rho v_{x,t}=\sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xx,x}-\frac{1}{\beta_x}T_{xx}^x \]
+\[ T_{xx,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xx}^x=\frac{d_x}{\beta_x}\sigma_{xx,x} \]
+In the staggered second-order leapfrog scheme, discretize the above equation,
+\[ \frac{T_{xx}^{x|n+1}-T_{xx}^{x|n}}{\Delta t}+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)\frac{T_{xx}^{x|n+1}+T_{xx}^{x|n}}{2}=\frac{d_x}{\beta_x}\delta_{xx,x}^{n+\nicefrac{1}{2}} \]
+Then update $T_{xx}^x$ and $v_x$ through
+\[ T_{xx}^{x|n+1}=\frac{2-\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}T_{xx}^{x|n}+\frac{\Big(\frac{2\Delta td_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}\sigma_{xx,x}^{n+\nicefrac{1}{2}} \]
+\[ \myno{ T_{xx}^{x|n+\nicefrac{1}{2}}=\frac{T_{xx}^{x|n+1}+T_{xx}^{x|n}}{2}=\frac{2}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}T_{xx}^{x|n}+\frac{\Big(\frac{\Delta td_x}{\beta_x}\Big)}{2+\Delta t\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)}\sigma_{xx,x}^{n+\nicefrac{1}{2}} } \]
+\[ v_x^{n+1}=v_x^n+\frac{\Delta t}{\rho}(\sigma_{xx,x}^{n+\nicefrac{1}{2}}+\sigma_{xy,y}^{n+\nicefrac{1}{2}}+\sigma_{xz,z}^{n+\nicefrac{1}{2}})+\frac{\Delta t}{\rho}\Big(\frac{1}{\beta_x}-1\Big)\sigma_{xx,x}^{n+\nicefrac{1}{2}}-\frac{\Delta t}{\rho\beta_x}T_{xx}^{x|n+\nicefrac{1}{2}} \]\par
+\subsection{Free-surface boundary conditions}
+At the flat surface, the free-surface boundary condition requires
+\[ \sigma_{zz}=0 \text{,\hspace{5mm}} \sigma_{yz}=0 \text{,\hspace{5mm}} \sigma_{xz}=0 \]
+\[ v_{z,z}=-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y} \]
+Taking into the stress-strain relation, update $\sigma_{xx}$ and $\sigma_{yy}$ at the free surface through
+\[ \sigma_{xx,t}=(\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda\Big[-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y}\Big] \]
+\[ \sigma_{yy,t}=\lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda\Big[-\frac{\lambda}{\lambda+2\mu}v_{x,x}-\frac{\lambda}{\lambda+2\mu}v_{y,y}\Big] \]
+Under the intersection of the free surface and the PML, \myno{(different form with eq.A-13 and A-14 in the original paper)}
+\begin{align*}
+%   \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda v_{z,z}+(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+(\lambda+2\mu)\frac{1}{\beta_x}V_x^x+\lambda\frac{1}{\beta_y}V_y^y \\
+%     & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\frac{1}{\beta_x}V_x^x+\frac{1}{\beta_y}V_y^y\bigg\} \\
+%   \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\frac{1}{\beta_x}V_x^x+(\lambda+2\mu)\frac{1}{\beta_y}V_y^y \\
+%     & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\frac{1}{\beta_x}V_x^x+\frac{1}{\beta_y}V_y^y\bigg\} \\
+  \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y} \myde{+\lambda v_{z,z}} +(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y} \mynno{-} (\lambda+2\mu)\frac{1}{\beta_x}V_x^x \mynno{-} \lambda\frac{1}{\beta_y}V_y^y \\
+    & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{ \myde{\Big[} \frac{1}{\beta_x} \myde{-1\Big]} v_{x,x}+ \myde{\Big[} \frac{1}{\beta_y} \myde{-1\Big]} v_{y,y} \mynno{-} \frac{1}{\beta_x}V_x^x \mynno{-} \frac{1}{\beta_y}V_y^y\bigg\} \\
+  \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y} \myde{+\lambda v_{z,z}} +\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y} \mynno{-} \lambda\frac{1}{\beta_x}V_x^x \mynno{-} (\lambda+2\mu)\frac{1}{\beta_y}V_y^y \\
+    & -\frac{\lambda^2}{\lambda+2\mu}\bigg\{ \myde{\Big[} \frac{1}{\beta_x} \myde{-1\Big]} v_{x,x}+ \myde{\Big[} \frac{1}{\beta_y} \myde{-1\Big]} v_{y,y} \mynno{-} \frac{1}{\beta_x}V_x^x \mynno{-} \frac{1}{\beta_y}V_y^y\bigg\} \\
+\end{align*}
+\subsection{Optimal parameters}
+The $d$ usually is zero at the PML-interior interface and maximum at the exterior boundary, $\beta$ is one at the PML-interior interface and maximum at the exterior boundary, and $\alpha$ is maximum at the PML-interior interface and gradually reduces to zero at the exterior boundary.\par
+The commonly used optimal parameters is $p$-order polynomial scaling functions:
+\[ \alpha_x=\alpha_0\Big[1-\Big(\frac{x}{L}\Big)^{p_\alpha}\Big] \]
+\[ d_x=d_0\Big(\frac{x}{L}\Big)^{p_d} \]
+\[ \beta_x=1+(\beta_0-1)\Big(\frac{x}{L}\Big)^{p_\beta} \]
+where $x$ is the distance to the PML-interior interface and $L$ is the width of the PML layer. The parameters $p_\alpha$, $p_d$ and $p_\beta$ typically range from $2\sim4$, and $2$ is commonly used, e.g. $p_d=2$, $p_\beta=2$, and $p_\alpha=1$ (the linear variation of $\alpha$ for $p_\alpha=1$ gets a more pronounced decay of energy).\par
+The $\alpha_0$ is recommended to be $\pi f_c$ (Festa and Vilotte, 2005), where $f_c$ is the dominant frequency of the source time function.\par
+The $d_0$ is (Collino and Tsogka, 2001):
+\[ d_0=-\frac{(p_d+1)c_p}{2L}\ln R \]
+where $c_p$ is the compressional wave speed and $R$ is the theoretical reflection coefficient for a normal-incident plane P-wave with a Dirichlet condition ($\mbf v=0$ and $\sigma=0$) at the exterior boundary of the PML layer. $R$ for an $N$ cell size PML layer is:
+\[ \log_{10}(R)=-\frac{\log_{10}(N)-1}{\log_{10}(2)}-3 \]
+For oblique incident waves, a larger $d_0$ is needed to obtain optimal damping.\par
+The optimal $\beta_0$ is
+\[ \beta_0=\frac{C}{0.5\cdot \mathrm{PPW}_0\cdot\Delta hf_c} \]
+where $C$ is wave velocity, PPW$_0$ is the minimal PPW requirement of the numerical scheme, $\Delta h$ is grid spacing, and $f_c$ is source dominant frequency.\par
+\subsection{Complete ADE CFS-PML equations}
+\mynem{The complete ADE CFS-PML equations} for the velocity-stress equations are:
+\begin{equation*}
+ \left\{
+  \begin{aligned}
+    \sigma_{xx,t}= & (\lambda+2\mu)v_{x,x}+\lambda v_{y,y}+\lambda v_{z,z}+(\lambda+2\mu)\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -(\lambda+2\mu)\frac{1}{\beta_x}V_x^x-\lambda\frac{1}{\beta_y}V_y^y-\lambda\frac{1}{\beta_x}V_z^z \\
+    \sigma_{yy,t}= & \lambda v_{x,x}+(\lambda+2\mu)v_{y,y}+\lambda v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+(\lambda+2\mu)\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+\lambda\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -\lambda\frac{1}{\beta_x}V_x^x-(\lambda+2\mu)\frac{1}{\beta_y}V_y^y-\lambda\frac{1}{\beta_z}V_z^z \\
+    \sigma_{zz,t}= & \lambda v_{x,x}+\lambda v_{y,y}+(\lambda+2\mu)v_{z,z}+\lambda\Big[\frac{1}{\beta_x}-1\Big]v_{x,x}+\lambda\Big[\frac{1}{\beta_y}-1\Big]v_{y,y}+(\lambda+2\mu)\Big[\frac{1}{\beta_z}-1\Big]v_{z,z} \\
+      & -\lambda\frac{1}{\beta_x}V_x^x-\lambda\frac{1}{\beta_y}V_y^y-(\lambda+2\mu)\frac{1}{\beta_z}V_z^z \\
+    \sigma_{xy,t}= & \mu(v_{x,y}+v_{y,x})+\mu\Big(\Big[\frac{1}{\beta_y}-1\Big]v_{x,y}+\Big[\frac{1}{\beta_x}-1\Big]v_{y,x}\Big)-\mu\Big(\frac{1}{\beta_y}V_x^y+\frac{1}{\beta_x}V_y^x\Big) \\
+    \sigma_{xz,t}= & \mu(v_{x,z}+v_{z,x})+\mu\Big(\Big[\frac{1}{\beta_z}-1\Big]v_{x,z}+\Big[\frac{1}{\beta_x}-1\Big]v_{z,x}\Big)-\mu\Big(\frac{1}{\beta_z}V_x^z+\frac{1}{\beta_x}V_z^x\Big) \\
+    \sigma_{yz,t}= & \mu(v_{y,z}+v_{z,y})+\mu\Big(\Big[\frac{1}{\beta_z}-1\Big]v_{y,z}+\Big[\frac{1}{\beta_y}-1\Big]v_{z,y}\Big)-\mu\Big(\frac{1}{\beta_z}V_y^z+\frac{1}{\beta_y}V_z^y\Big) \\
+    \rho v_{x,t}= & \sigma_{xx,x}+\sigma_{xy,y}+\sigma_{xz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xx,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{xy,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{xz,z} \\
+      & -\frac{1}{\beta_x}T_{xx}^x-\frac{1}{\beta_y}T_{xy}^y-\frac{1}{\beta_z}T_{xz}^z \\
+    \rho v_{y,t}= & \sigma_{xy,x}+\sigma_{yy,y}+\sigma_{yz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xy,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{yy,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{yz,z} \\
+      & -\frac{1}{\beta_x}T_{xy}^x-\frac{1}{\beta_y}T_{yy}^y-\frac{1}{\beta_z}T_{yz}^z \\
+    \rho v_{z,t}= & \sigma_{xz,x}+\sigma_{yz,y}+\sigma_{zz,z}+\Big[\frac{1}{\beta_x}-1\Big]\sigma_{xz,x}+\Big[\frac{1}{\beta_y}-1\Big]\sigma_{yz,y}+\Big[\frac{1}{\beta_z}-1\Big]\sigma_{zz,z} \\
+      & -\frac{1}{\beta_x}T_{xz}^x-\frac{1}{\beta_y}T_{yz}^y-\frac{1}{\beta_z}T_{zz}^z \\
+  \end{aligned}
+ \right.
+\end{equation*}
+where the auxiliary differential equations for the memory variables damping along $x$, $y$ and $z$ are:
+\begin{gather*}
+  x\left\{
+  \begin{aligned}
+    V_{x,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_x^x=\frac{d_x}{\beta_x}v_{x,x}, && V_{y,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_y^x=\frac{d_x}{\beta_x}v_{y,x}, && V_{z,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)V_z^x=\frac{d_x}{\beta_x}v_{z,x} \\
+	T_{xx,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xx}^x=\frac{d_x}{\beta_x}\sigma_{xx,x}, && T_{xy,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xy}^x=\frac{d_x}{\beta_x}\sigma_{xy,x}, && T_{xz,t}^x+\Big(\alpha_x+\frac{d_x}{\beta_x}\Big)T_{xz}^x=\frac{d_x}{\beta_x}\sigma_{xz,x}
+  \end{aligned}
+  \right. \\
+  y\left\{
+  \begin{aligned}
+    V_{x,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_x^y=\frac{d_y}{\beta_y}v_{x,y}, && V_{y,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_y^y=\frac{d_y}{\beta_y}v_{y,y}, && V_{z,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)V_z^y=\frac{d_y}{\beta_y}v_{z,y} \\
+	T_{xy,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{xy}^y=\frac{d_y}{\beta_y}\sigma_{xy,y}, && T_{yy,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{yy}^y=\frac{d_y}{\beta_y}\sigma_{yy,x}, && T_{yz,t}^y+\Big(\alpha_y+\frac{d_y}{\beta_y}\Big)T_{yz}^y=\frac{d_y}{\beta_y}\sigma_{yz,y}
+  \end{aligned}
+  \right. \\
+  z\left\{
+  \begin{aligned}
+    V_{x,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_x^z=\frac{d_z}{\beta_z}v_{x,z}, && V_{y,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_y^z=\frac{d_z}{\beta_z}v_{y,z}, && V_{z,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)V_z^z=\frac{d_z}{\beta_z}v_{z,z} \\
+	T_{xz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{xz}^z=\frac{d_z}{\beta_z}\sigma_{xz,z}, && T_{yz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{yz}^z=\frac{d_z}{\beta_z}\sigma_{yz,z}, && T_{zz,t}^z+\Big(\alpha_z+\frac{d_z}{\beta_z}\Big)T_{zz}^z=\frac{d_z}{\beta_z}\sigma_{zz,z}
+  \end{aligned}
+  \right.
+\end{gather*}\par

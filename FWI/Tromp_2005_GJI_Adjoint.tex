@@ -1,0 +1,263 @@
+\renewcommand{\pmk}{Tromp\_2005\_GJI\_Adjoint methods}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Seismic tomography, adjoint methods, time reversal and banana-doughnut kernels}
+\renewcommand{\pay}{Jeroen Tromp, Carl Tape and Qinya Liu, 2005}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2016/10/17 Mon.}
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Solve iteratively the seismic inverse problem by numerically calculating the \Frechet derivatives of a waveform misfit function \& introduce the concept of an adjoint field: Tarantola, 1984 (for the acoustic wave equation) \& 1987 \& 1988 (for the (an-)elastic wave equation).
+  \item Develop and implement the acoustic theory on seismic inversion: Tarantola, 1984.
+  \item Illustrate numerically the acoustic theory of seismic waveform inversion: Gauthier \etal, 1986.
+  \item Extend the acoustic theory to the (an-)elastic wave equation: Tarantola, 1987 \& 1988.
+  \item Apply the (an-)elastic theory to real data: Crase \etal, 1990.
+  \item Other applications of the solving iteratively theory: Mora, 1987 \& 1988; Pratt, 1999; Akcelik \etal, 2002 \& 2003.
+  \item \sline
+  \item Introduce an `adjoint' calculation as a means of determining the gradient of a misfit function: Talagrand and Courtier, 1987.
+  \item \sline
+  \item Found the concept of `time-reversal mirrors' (an acoustic signal is recorded, time-reversed and retransmitted) \& time-reversal imaging: Fink \etal, 1989; Fink, 1992 \& 1997.
+  \item \sline
+  \item Take use of finite-frequency kernels for traveltime or amplitude inversions: Marquering \etal, 1999; Zhao \etal, 2000; Dahlen \etal, 2000; Hung \etal, 2000; Dahlen and Baig, 2002.
+  \item Implement finiet-frequency kernels for compressional-wave tomography: Montelli \etal, 2004.
+  \item \sline
+  \item The least-squares waveform misfit function: Nolet, 1987.
+  \item Determine \Frechet derivatives based upon the Born approximation: Hudson, 1977; Wu and Aki, 1985.
+  \item A standard conjugate-gradient algorithm: Fletcher and Reeves, 1964; Mora, 1987 \& 1988.
+  \item Reconstruct the regular field $\mbf s$ using the final displacement field $\mbf s(\mbf x,T)$ as a starting point for integration backward in time: Gauthier \etal, 1986
+  \item The spectral-element method of seismic wave propagation in anelastic materials: Komatitsch and Tromp, 1999 \& 2002a.
+  \item The finite-frequency traveltime tomography: Zhao \etal, 2000; Dahlen \etal, 2000; Hung \etal, 2000.
+  \item The Generalized Seismological Data Functionals (GSDF): Gee and Jordan, 1992 (introduce); Chen \etal, 2004 (extend).
+  \item \myem{Spectral-element method}: Komatitsch and Tromp, 1999.
+  \item The finite-frequency traveltime kernels using ray-based methods: Hung \etal, 2000.
+  \item Welch tapering window: Press \etal, 1994.
+\end{enumerate}\par
+\subsection{Waveform tomography}
+To minimize the differences between waveform data $\mbf d(\mbf x_r,t)$ recorded at $N$ stations $\mbf x_r,r=1,2,\ldots,N$, and the corresponding synthetics $\mbf s(\mbf x_r,t,\mbf m)$ for the current $M$-dimensional model vector $\mbf m$, introduce the least-squares waveform misfit function:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\int_0^T||\mbf s(\mbf x_r,t,\mbf m)-\mbf d(\mbf x_r,t)||^2dt \]
+where $\mbf d$ and $\mbf s$ can be windowed and filtered on the time interval $[0,T]$. An iterative inversion requires the calculation of the \Frechet derivatives:
+\[ \delta\chi=\sum_{r=1}^N\int_0^T[\mbf s(\mbf x_r,t,\mbf m)-\mbf d(\mbf x_r,t)]\cdot\delta\mbf s(\mbf x_r,t,\mbf m)dt \]
+where $\delta\mbf s$ denotes the perturbation in the displacement field $\mbf s$ due to a model perturbation $\delta\mbf m$.\par
+In seismic tomography, \Frechet derivatives may be Determined based upon the \myem{Born approximation}. Suppose having a generic background model $\{\rho,c_{jklm}\}$ with perturbations $\{\delta\rho,\delta c_{jklm}\}$, the associated perturbed displacement (the following equation can be referred to eq.2.43 on P.28 of the doctoral thesis of Yan Jiang):
+\[ \delta s_i(\mbf x,t)=-\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t')+\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt' \]
+where $V$ is the model volume. Obtain:
+\begin{align*}
+  \delta\chi= & -\sum_{r=1}^T\int_0^T[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & \delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the field:
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_{t'}^TG_{ik}(\mbf x_r,\mbf x';t-t')[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]dt \]
+Using the reciprocity $G_{ik}(\mbf x_r,\mbf x';t-t')=G_{ki}(\mbf x',\mbf x_r;t-t')$,
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_{t'}^TG_{ki}(\mbf x',\mbf x_r;t-t')[s_i(\mbf x_r,t)-d_i(\mbf x_r,t)]dt \]
+Making the substitution $t\rightarrow T-t$,
+\[ \Phi_k(\mbf x',t')=\sum_{r=1}^N\int_0^{T-t'}G_{ki}(\mbf x',\mbf x_r;T-t-t')[s_i(\mbf x_r,T-t)-d_i(\mbf x_r,T-t)]dt \]
+Next define the \mynem{waveform adjoint source}:
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N[s_i(\mbf x_r,T-t)-d_i(\mbf x_r,T-t)]\delta(\mbf x-\mbf x_r) \]
+With the above definition,
+\[ \Phi_k(\mbf x',t')=\int_0^{T-t'}\myde{\int_V}G_{ki}(\mbf x',\mbf x;T-t-t')f_i^\dagger(\mbf x,t)\myde{d^3\mbf x}dt \]
+Take the relationship $\Phi_k(\mbf x',T-t')=s_k^\dagger(\mbf x',t')$,
+\[ s_k^\dagger(\mbf x',t')=\int_0^{t'}\myde{\int_V}G_{ki}(\mbf x',\mbf x;t'-t)f_i^\dagger(\mbf x,t)\myde{d^3\mbf x}dt \]
+where $\mbf s^\dagger$ is the introduced \mynem{waveform adjoint field} generated by the waveform adjoint source.\par
+With the introduction of the adjoint field,
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_{c_{jklm}}(\mbf x)\delta\ln c_{jklm}(\mbf x)]d^3\mbf x \]
+where $\delta\ln\rho=\nicefrac{\delta\rho}{\rho}$ and $\delta\ln c_{jklm}=\nicefrac{\delta c_{jklm}}{c_{jklm}}$ denote relative model perturbations, and the 3-D \mynem{waveform misfit kernels} for density and the elastic parameters are respectively:
+\[ K_\rho(\mbf x)=-\int_0^T\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)dt \]
+\[ K_{c_{jklm}}(\mbf x)=-\int_0^T\epsilon_{jk}^\dagger(\mbf x,T-t)c_{jklm}(\mbf x)\epsilon_{lm}(\mbf x,t)dt \]
+where \myno{$\mbf\epsilon^\dagger=\nicefrac{1}{2}[\nabla\mbf s^\dagger+(\nabla\mbf s^\dagger)^T]$,} $\epsilon_{lm}$ and $\epsilon_{jk}^\dagger$ denote the strain and the waveform adjoint strain tensors, respectively.\par
+For an isotropic matreical, $c_{jklm}=(\kappa-\nicefrac{2\mu}{3})\delta_{jk}\delta_{lm}+\mu(\delta_{jl}\delta_{km}+\delta_{jm}\delta_{kl})$, thus
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_\mu(\mbf x)\delta\ln\mu(\mbf x)+K_\kappa(\mbf x)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{isotropic misfit kernels} $K_\mu$ and $K_\kappa$ for the bulk and shear moduli $\kappa$ and $\mu$ are respectively:
+\[ K_\mu(\mbf x)=-\int_0^T2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t)dt \]
+\[ K_\kappa(\mbf x)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\mbf s^\dagger(\mbf x,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\mbf D$ and $\mbf D^\dagger$ denote the traceless strain deviator and its waveform adjoint, respectively.\par
+Alternatively,
+\[ \delta\chi=\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \]
+\[ K_\rho^\prime=K_\rho+K_\kappa+K_\mu, \hspace{5mm} K_\beta=2\Big(K_\mu-\frac{4\mu}{3\kappa}K_\kappa\Big), \hspace{5mm} K_\alpha=2\Big(\frac{\kappa+(\nicefrac{4}{3})\mu}{\kappa}\Big)K_\kappa \]\par
+\subsubsection{Topography on internal discontinuities}
+Let $\delta h$ denote topographic perturbations in the direction of the unitoutward normal $\hat{\mbf n}$ on solid-solid discontinuities $\Sigma_{SS}$ or fluid-solid discontinuities $\Sigma_{FS}$., the perturbed displacement field $\delta\mbf s$ due to topographic perturbations $\delta h$ (Dahlen, 2004):
+\begin{align*}
+  \delta s_i(\mbf x,t)= & \int_0^t\int_\Sigma[\rho(\mbf x')G_{ij}(\mbf x,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t')+\partial_k^\prime G_{ij}(\mbf x,\mbf x';t-t')c_{jklm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+    & -\hat{n}_k(\mbf x')\partial_n^\prime G_{ij}(\mbf x,\mbf x';t-t')c_{jklm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+	& -\hat{n}_k(\mbf x')c_{jklm}(\mbf x')\partial_l^\prime G_{im}(\mbf x,\mbf x';t-t')\partial_n^\prime s_j(\mbf x',t')]_-^+\delta h(\mbf x')d^2\mbf x'dt' \\
+	& +\int_0^t\int_{\Sigma_{FS}}[G_{ik}(\mbf x,\mbf x';t-t')\hat{n}_j(\mbf x')\hat{n}_p(\mbf x')c_{jplm}(\mbf x')\partial_l^\prime s_m(\mbf x',t') \\
+	& +s_k(\mbf x',t')\hat{n}_j(\mbf x')\hat{n}_p(\mbf x')c_{jplm}(\mbf x')\partial_l^\prime G_{im}(\mbf x,\mbf x';t-t')]_-^+\nabla_k^{\Sigma^\prime}\delta h(\mbf x')d^2\mbf x'dt'
+\end{align*}
+where $\Sigma=\Sigma_{SS}+\Sigma_{FS}$ denote all discontinuities, the surface gradient $\nabla^\Sigma=(\mbf I-\hat{\mbf n}\hat{\mbf n})\cdot\nabla$ and the normal derivative $\partial_n=\hat{\mbf n}\cdot\nabla$. Therefore, the gradient of the misfit function due to topographic perturbations $\delta h$:
+\[ \delta\chi=\int_\Sigma K_h(\mbf x)\delta h(\mbf x)d^2\mbf x+\int_{\Sigma_{FS}}\mbf K_h(\mbf x)\cdot\nabla^\Sigma\delta h(\mbf x)d^2\mbf x \]
+where
+\begin{align*}
+  K_h(\mbf x)= & \int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\mbf\epsilon^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t) \\
+    & -\hat{\mbf n}(\mbf x)\partial_n\mbf s^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)-\hat{\mbf n}(\mbf x)\partial_n\mbf s(\mbf x,t):\mbf c(\mbf x):\mbf\epsilon^\dagger(\mbf x,T-t)]_-^+dt
+\end{align*}
+\[ \mbf K_h(\mbf x)=\int_0^T[\mbf s^\dagger(\mbf x,T-t)\hat{\mbf n}(\mbf x)\hat{\mbf n}(\mbf x):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)+\mbf s(\mbf x,t)\hat{\mbf n}(\mbf x)\hat{\mbf n}(\mbf x):\mbf c(\mbf x):\mbf\epsilon^\dagger(\mbf x,T-t)]_-^+dt \]
+In an isotropic earth model,
+\begin{align*}
+  K_h(\mbf x)= & \int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\kappa(\mbf x)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)\nabla\cdot\mbf s(\mbf x,t)+2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t) \\
+    & -\kappa(\mbf x)\hat{\mbf n}(\mbf x)\cdot\partial_n\mbf s^\dagger(\mbf x,T-t)\nabla\cdot\mbf s(\mbf x,t)-2\mu(\mbf x)\hat{\mbf n}(\mbf x)\partial_n\mbf s^\dagger(\mbf x,T-t):\mbf D(\mbf x,t) \\
+	& -\kappa(\mbf x)\hat{\mbf n}(\mbf x)\cdot\partial_n\mbf s(\mbf x,t)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)-2\mu(\mbf x)\hat{\mbf n}(\mbf x)\partial_n\mbf s(\mbf x,t):\mbf D^\dagger(\mbf x,T-t)]_-^+dt
+\end{align*}
+\begin{align*}
+  \mbf K_h(\mbf x)= & \int_0^T[\mbf s^\dagger(\mbf x,T-t)[\kappa(\mbf x)\nabla\cdot\mbf s(\mbf x,t)+2\mu(\mbf x)\hat{\mbf n}(\mbf x)\cdot\mbf D(\mbf x,t)\cdot\hat{\mbf n}(\mbf x)] \\
+    & +\mbf s(\mbf x,t)[\kappa(\mbf x)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)+2\mu(\mbf x)\hat{\mbf n}(\mbf x)\cdot\mbf D^\dagger(\mbf x,T-t)\cdot\hat{\mbf n}(\mbf x)]]_-^+dt
+\end{align*}
+Besides, on the Earth's free surface the traction vanishes,
+\[ K_h(\mbf x)=-\int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\mbf\epsilon^\dagger(\mbf x,T-t):\mbf c(\mbf x):\mbf\epsilon(\mbf x,t)]dt \]
+In the isotropic case,
+\[ K_h(\mbf x)=-\int_0^T[\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)+\kappa(\mbf x)\nabla\cdot\mbf s(\mbf x,t)\nabla\cdot\mbf s^\dagger(\mbf x,T-t)+2\mu(\mbf x)\mbf D(\mbf x,t):\mbf D^\dagger(\mbf x,T-t)]dt \]\par
+\subsection{Adjoint equations}
+The equation of motion in an anelastic earth model:
+\[ \rho\partial_t^2\mbf s=\nabla\cdot\mbf T+\mbf f \]
+where $\mbf T$ is the symmetric stress tensor in an anelastic matreical. For the unrelaxed elastic tensor $\mbf c^U$, the displacement gradient $\nabla\mbf s$ and $L$ symmetric memory variable tensors $\mbf R^l,l=1,2,\ldots,L$,
+\[ \mbf T=\mbf c^U:\nabla\mbf s-\sum_{l=1}^L\mbf R^l \]
+where $\mbf R^l$ represent standard linear solids. For each standard linear solid,
+\[ \partial_t\mbf R^l=-\frac{\mbf R^l}{\tau^{\sigma l}}+\frac{\delta\mbf c^l:\nabla\mbf s}{\tau^{\sigma l}} \]
+The above equations need to be subject to the boundary conditions, that on the stress-free surface $\hat{\mbf n}\cdot\mbf T=0$ and at solid-solid boundaries both $\mbf s$ and $\hat{\mbf n}\cdot\mbf T$ are continuous whereas at fluid-solid boundaries both $\hat{\mbf n}\cdot\mbf s$ and $\hat{\mbf n}\cdot\mbf T$ are continuous. In terms of the relaxed modulus $c_{ijkl}^R$,
+\[ c_{ijkl}^U=c_{ijkl}^R\bigg(1-\sum_{l=1}^L\Big(1-\frac{\tau_{ijkl}^{\epsilon l}}{\tau^{\sigma l}}\Big)\bigg) \]
+where $\tau_{ijkl}^{\epsilon l}$ and $\tau^{\sigma l}$ are the strain and stress relaxation times, respectively. The modulus defect $\delta\mbf c^l$:
+\[ \delta c_{ijkl}^l=-c_{ijkl}^R\Big(1-\frac{\tau_{ijkl}^{\epsilon l}}{\tau_{\sigma l}}\Big) \]\par
+Replace the source $\mbf f$ with the waveform adjoint source $\mbf f^\dagger$, obtain the \myem{adjoint equations}:
+\[ \rho\partial_t^2\mbf s^\dagger=\nabla\cdot\mbf T^\dagger+\mbf f^\dagger \]
+\[ \mbf T^\dagger=\mbf c^U:\nabla\mbf s^\dagger-\sum_{l=1}^L\mbf R^{l\dagger} \]
+\[ \partial_t\mbf R^{l\dagger}=-\frac{\mbf R^{l\dagger}}{\tau^{\sigma l}}+\frac{\delta\mbf c^l:\nabla\mbf s^\dagger}{\tau^{\sigma l}} \]\par
+For completeness, the adjoint momentum equation for a rotating, self-gravitating Earth model is:
+\[ \rho(\partial_t^2\mbf s^\dagger-2\Omega\times\partial_t\mbf s^\dagger)=\nabla\cdot\mbf T^\dagger+\nabla(\rho\mbf s^\dagger\cdot\mbf g)-\rho\nabla\phi^\dagger-\nabla\cdot(\rho\mbf s^\dagger)\mbf g+\mbf f^\dagger \]
+where $\Omega$ and $\mbf g$ denote the angular velocity and the equilibrium gravitational acceleration of the earth model, respectively.\par
+\subsection{Traveltime tomography}
+Introduce the traveltime misfit function
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N[T_r(m)-T_r^{obs}]^2 \]
+where $T_r(m)$ and $T_r^{obs}$ denote the predicted and observed traveltime at station $r$, respectively. The gradient of the misfit function is:
+\[ \delta\chi=\sum_{r=1}^N[T_r(m)-T_r^{obs}]\delta T_r \]\par
+\subsubsection{Banana-doughnut kernels}
+The \Frechet derivative of the traveltime in terms of the cross-correlation of an observed and synthetic waveform (refer to eq.2.46 on P.31 of the doctoral thesis of Yan Jiang):
+\[ \delta T_r=\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t)\delta s_i(\mbf x_r,t)dt \]
+\[ N_r=\int_0^Tw_r(t)s_i(\mbf x_r,t)\partial_t^2s_i(\mbf x_r,t)dt \]
+where $w_r$ denotes the cross-correlation window and $\delta s_i$ the displacement perturbation. After substitution of $\delta\mbf s$ based on the Born approximation,
+\begin{align*}
+  \delta T_r= & -\frac{1}{N_r}\int_0^Tw_r(t)\partial_ts_i(\mbf x_r,t)\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & +\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the \mynem{traveltime adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{traveltime adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t') & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t)dt \\
+    & =\frac{1}{N_r}\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')w_r(T-t)\partial_ts_i(\mbf x_r,T-t)dt
+\end{align*}
+With this definition the isotropic traveltime \Frechet derivative is:
+\[ \delta T_r=\int_V[\bar K_\rho(\mbf x,\mbf x_r)\delta\ln\rho(\mbf x)+\bar K_\mu(\mbf x,\mbf x_r)\delta\ln\mu(\mbf x)+\bar K_\kappa(\mbf x,\mbf x_r)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{banana-doughnut kernels} $\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
+\[ \bar K_\rho(\mbf x,\mbf x_r)=-\int_0^T\rho(\mbf x)[\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)]dt \]
+\[ \bar K_\mu(\mbf x,\mbf x_r)=-\int_0^T2\mu(\mbf x)\bar{\mbf D}^\dagger(\mbf x,\mbf x_r,T-t):\mbf D(\mbf x,t)dt \]
+\[ \bar K_\kappa(\mbf x,\mbf x_r)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\bar{\mbf D}^\dagger$ denotes the traveltime adjoint strain deviator associated with $\bar{\mbf s}^\dagger$. Alternatively,
+\[ \delta T_r=\int_V[\bar K_\rho^\prime(\mbf x,\mbf x_r)\delta\ln\rho(\mbf x)+\bar K_\beta(\mbf x,\mbf x_r)\delta\ln\beta(\mbf x)+\bar K_\alpha(\mbf x,\mbf x_r)\delta\ln\alpha(\mbf x)]d^3\mbf x \]
+\[ \bar K_\rho^\prime=\bar K_\rho+\bar K_\kappa+\bar K_\mu, \hspace{5mm} \bar K_\beta=2\Big(\bar K_\mu-\frac{4\mu}{3\kappa}\bar K_\kappa\Big), \hspace{5mm} \bar K_\alpha=2\Big(1+\frac{4\mu}{3\kappa}\Big)\bar K_\kappa \]\par
+\subsubsection{Misfit kernels}
+The \Frechet derivative of the traveltime misfit function is:
+\begin{align*}
+  \delta\chi & =\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\delta T_r \\
+    & =\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x
+\end{align*}
+where the \mynem{traveltime misfit kernels} $K_\rho^\prime$, $K_\beta$ and $K_\alpha$ are:
+\[ K_\rho^\prime(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\rho^\prime(\mbf x,\mbf x_r) \]
+\[ K_\beta(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\beta(\mbf x,\mbf x_r) \]
+\[ K_\alpha(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\alpha(\mbf x,\mbf x_r) \]\par
+Define the \mynem{combined traveltime adjoint field} $\mbf s^\dagger$ and the \mynem{combined traveltime adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\frac{1}{N_r}w_r(T-t)\partial_ts_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]\par
+\subsubsection{Differential traveltime tomography}
+Suppose observed Differential traveltimes $\Delta T_r^{obs}$ and predicted Differential traveltimes $\Delta T_r(m)=T_r^A(m)-T_r^B(m)$ between two phases A and B for the station $r$ ($r=1,2,\ldots,N$). Minimize the \mynem{differential traveltime misfit function} and its gradient are:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N[\Delta T_r(m)-\Delta T_r^{obs}]^2 \]
+\[ \delta\chi=\sum_{r=1}^N[\Delta T_r(m)-\Delta T_r^{obs}]\delta\Delta T_r \]
+where $\delta\Delta T_r=\delta T_r^A-\delta T_r^B$.\par
+Define the \mynem{combined differential traveltime adjoint field} $\Delta\mbf s^\dagger$ and the \mynem{combined differential traveltime adjoint source} $\mbf f^\dagger$:
+\[ \Delta\mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\big(\Delta T_r-\Delta T_r^{obs}\big)[\bar{\mbf s}^{A\dagger}(\mbf x,\mbf x_r,t)-\bar{\mbf s}^{B\dagger}(\mbf x,\mbf x_r,t)] \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\big(\Delta T_r-\Delta T_r^{obs}\big)\Big[\frac{1}{N_r^A}w_r^A(T-t)\partial_ts_i^A(\mbf x_r,T-t)-\frac{1}{N_r^B}w_r^B(T-t)\partial_ts_i^B(\mbf x_r,T-t)\Big]\delta(\mbf x-\mbf x_r) \]\par
+\subsection{Amplitude tomography}
+Let $A_r^{obs}$ and $A_r(m)$ denote the observed and predicted amplitude of a particular body-wave arrival at the station $r$, introduce the \mynem{amplitude misfit function}:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\Big[\frac{A_r^{obs}}{A_r(m)}-1\Big]^2 \]
+and its gradient is:
+\[ \delta\chi=\sum_{r=1}^N\Big[\frac{A_r^{obs}}{A_r(m)}-1\Big]\delta\ln A_r \]\par
+The \myno{amplitude \Frechet derivative} is (Dahlen and Baig, 2002):
+\[ \delta\ln A_r=\frac{1}{M_r}\int_0^Tw_r(t)s_i(\mbf x_r,t)\delta s_i(\mbf x_r,t)dt \]
+\[ M_r=\int_0^Tw_r(t)s_i^2(\mbf x_r,t)dt \]
+where $w_r$ denotes the cross-correlation window and $\delta s_i$ the displacement perturbation.\par
+Define the \mynem{amplitude adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{amplitude adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t') & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t) dt \\
+    & =\frac{1}{M_r}\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')w_r(T-t)s_i(\mbf x_r,T-t)dt
+\end{align*}
+And in terms of the \mynem{amplitude kernels} $\bar K_\rho^\prime$, $\bar K_\beta$ and $\bar K_\alpha$,
+\[ \delta\ln A_r=\int_V[\bar K_\rho^\prime(\mbf x,\mbf x_r)\delta\ln\rho^\prime(\mbf x)+\bar K_\beta(\mbf x,\mbf x_r)\delta\ln\beta(\mbf x)+\bar K_\alpha(\mbf x,\mbf x_r)\delta\ln\alpha(\mbf x)]d^3\mbf x \]\par
+Define the \mynem{combined amplitude adjoint field} $\mbf s^\dagger$ and the \mynem{combined amplitude adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\frac{1}{M_r}w_r(T-t)s_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+And
+\[ \delta\chi=\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \]\par
+\subsubsection{Attenuation}
+For an absorption-band solid, the shear modulus $\mu$ is (Liu \etal, 1976):
+\[ \mu(\omega)=\mu(\omega_0)\Big[1+\frac{2}{\pi}Q_\mu^{-1}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)Q_\mu^{-1}\Big] \]
+where $\omega_0$ denotes the reference angular frequency. The change in the shear modulus $\delta\mu$ due to perturbations in shear attenuation $\delta Q_\mu^{-1}$ is:
+\[ \delta\mu(\omega)=\mu(\omega_0)\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]\delta Q_\mu^{-1} \]\par
+Taking use of the Born approximation, define the wavefield:
+\[ \psi_i(\mbf x,t)=\frac{1}{2\pi}\int_{-\infty}^\infty\Big[\frac{2}{\pi}\ln\frac{|\omega|}{\omega_0}-i\sgn(\omega)\Big]s_i(\mbf x,\omega)e^{i\omega t}d\omega \]
+and introduce the \mynem{Q adjoint source}:
+\[ \bar f_i^\dagger(\mbf x,t)=\frac{1}{M_r}w_r(T-t\psi_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+thus the amplitude anomaly is:
+\[ \delta\ln A_r=\int_V\bar K_\mu(\mbf x,\mbf x_r)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]\par
+Introduce the \mynem{combined Q adjoint source}:
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\Big(\frac{A_r^{obs}}{A_r}-1\Big)\frac{1}{M_r}w_r(T-t)\psi_i(\mbf x_r,T-t)\delta(\mbf x-\mbf x_r) \]
+thus the gradient of the \myno{attenuation} misfit function is:
+\[ \delta\chi=\int_VK_\mu(\mbf x)\delta Q_\mu^{-1}(\mbf x)d^3\mbf x \]\par
+\subsection{Generalizations}
+Let $\tau_r(\omega_\lambda)$ denote the frequency-dependent either traveltime anomaly $\tau_p$ or amplitude anomaly $\tau_q$ at receiver $r$ ($r=1,2,\ldots,N$) determined at $L$ discrete angular frequencies $\omega_\lambda$ ($\lambda=1,2,\ldots,L$) for the current model $m$, define the \mynem{GSDF misfit function}:
+\[ \chi(m)=\frac{1}{2}\sum_{r=1}^N\sum_{\lambda=1}^L[\tau_r(\omega_\lambda)]^2 \]
+and its gradient is:
+\[ \delta\chi=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\delta\tau_r(\omega_\lambda) \]
+\subsubsection{Banana-doughnut kernels}
+The time-dependent function $\Psi_i(\mbf x_r,t,\omega_\lambda)$ relates the GSDF parameter perturbations $\delta\tau_r(\omega_\lambda)$ to the seismogram perturbations $\delta s_i$:
+\[ \delta\tau_r(\omega_\lambda)\int_0^T\Psi_i(\mbf x_r,t,\omega_\lambda)\delta s_i(\mbf x_r,t)dt \]
+After substitution of $\delta\mbf s$ based on the Born approximation,
+\begin{align*}
+  \delta\tau_r(\omega_\lambda)= & -\int_0^T\Psi_i(\mbf x_r,t,\omega_\lambda)\int_0^t\int_V[\delta\rho(\mbf x')G_{ij}(\mbf x_r,\mbf x';t-t')\partial_{t'}^2s_j(\mbf x',t') \\
+    & +\delta c_{jklm}(\mbf x')\partial_k^\prime G_{ij}(\mbf x_r,\mbf x';t-t')\partial_l^\prime s_m(\mbf x',t')]d^3\mbf x'dt'dt
+\end{align*}\par
+Define the \mynem{GSDF adjoint source} $\bar{\mbf f}^\dagger$ and the \mynem{GSDF adjoint field} $\bar{\mbf s}^\dagger$:
+\[ \bar f_i^\dagger(\mbf x,t)=\Psi_i(\mbf x_r,T-t,\omega_\lambda)\delta(\mbf x-\mbf x_r) \]
+\begin{align*}
+  \bar s_j^\dagger(\mbf x',\mbf x_r,T-t',\omega_\lambda) & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x;T-t-t')\bar f_i^\dagger(\mbf x,t)dt \\
+    & =\int_0^{T-t'}G_{ji}(\mbf x',\mbf x_r;T-t-t')\Psi_i(\mbf x_r,T-t,\omega_\lambda)dt
+\end{align*}
+thus
+\[ \delta\tau_r(\omega_\lambda)=\int_V[\bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\rho(\mbf x)+\bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\mu(\mbf x)+\bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{GSDF kernels} $\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
+\[ \bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T\rho(\mbf x)[\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda)\cdot\partial_t^2\mbf s(\mbf x,t)]dt \]
+\[ \bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T2\mu(\mbf x)\bar{\mbf D}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda):\mbf D(\mbf x,t)dt \]
+\[ \bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t,\omega_\lambda)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
+where $\bar{\mbf D}^\dagger$ denotes the GSDF adjoint strain deviator associated with the GSDF adjoint field.\par
+\subsubsection{Misfit kernels}
+Introduce the \mynem{combined GSDF adjoint field} $\mbf s^\dagger$ and the \mynem{combined GSDF adjoint source} $\mbf f^\dagger$:
+\[ \mbf s^\dagger(\mbf x,t)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,t,\omega_\lambda) \]
+\[ f_i^\dagger(\mbf x,t)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\Psi_i(\mbf x_r,T-t,\omega_\lambda)\delta(\mbf x-\mbf x_r) \]
+and the gradient is:
+\[ \delta\chi=\int_V[K_\rho(\mbf x)\delta\ln\rho(\mbf x)+K_\mu(\mbf x)\delta\ln\mu(\mbf x)+K_\kappa(\mbf x)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
+where the \mynem{combined GSDF kernels} $K_\rho$, $K_\mu$ and $K_\kappa$ are:
+\[ K_\rho(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\rho(\mbf x,\mbf x_r,\omega_\lambda) \]
+\[ K_\mu(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\mu(\mbf x,\mbf x_r,\omega_\lambda) \]
+\[ K_\kappa(\mbf x)=\sum_{r=1}^N\sum_{\lambda=1}^L\tau_r(\omega_\lambda)\bar K_\kappa(\mbf x,\mbf x_r,\omega_\lambda) \]\par
+\subsection{Source inversions}
+The response $\mbf s(\mbf x,t)$ due to a finite source represented by a moment-density distribution $\mbf m(\mbf x,t)$ on a fault plane $\Sigma$ is (Dahlen and Tromp, 1998):
+\[ s_i(\mbf x,t)=\int_0^t\int_\Sigma\partial_j^\prime G_{ik}(\mbf x,\mbf x';t-t')m_{jk}(\mbf x',t')d^2\mbf x'dt' \]
+thus the change $\delta\mbf s$ due to the perturbation $\delta\mbf m$ is:
+\[ \delta s_i(\mbf x,t)=\int_0^t\int_\Sigma\partial_j^\prime G_{ik}(\mbf x,\mbf x';t-t')\delta m_{jk}(\mbf x',t')d^2\mbf x'dt' \]
+So the previous \Frechet derivative of the waveform misfit function is recast into:
+\[ \delta\chi=\int_0^T\int_\Sigma\mbf\epsilon^\dagger(\mbf x,T-t):\delta\mbf m(\mbf x,t)d^2\mbf xdt \]
+For a point source located at $\mbf x_s$ with the centroid-moment tensor $\mbf M(t)$,
+\[ \delta\chi=\int_0^T\mbf\epsilon^\dagger(\mbf x_s,T-t):\delta\mbf M(\mbf x_s,t)dt \]\par
+\subsection{Joint inversions}
+For example, the waveform misfit function may be jointly minimized with structural, topographic and source parameters. In that case, its gradient involves perturbations $\delta\mbf s$ due to structural, topographic and source parameters:
+\begin{align*}
+  \delta\chi= & \int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x \\
+    & +\int_\Sigma K_h(\mbf x)\delta h(\mbf x)d^2\mbf x+\int_{\Sigma_{FS}}\mbf K_h(\mbf x)\cdot\nabla^\Sigma\delta h(\mbf x)d^2\mbf x \\
+	& +\int_0^T\int_\Sigma\mbf\epsilon^\dagger(\mbf x,T-t):\delta\mbf m(\mbf x,t)d^2\mbf xdt
+\end{align*}\par
