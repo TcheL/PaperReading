@@ -22,7 +22,7 @@ edit :
 	vim $(file).tex
 
 backup : $(file).tex $(file).pdf
-	tar -zpcv -f Backup.tar.gz $(file).tex $(file).pdf
+	tar -zpcv -f Backup.tar.gz $(file).tex $(file).pdf FWI/*.tex WaveForward/*.tex
 
 clean :
 	-rm -f $(foreach cs,$(csuf),$(file).$(cs))
