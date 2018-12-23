@@ -1,4 +1,5 @@
 Backup.tar.gz
+*.swp
 *.aux
 *.blg
 *.bbl

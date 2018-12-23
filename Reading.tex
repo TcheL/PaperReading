@@ -7,7 +7,8 @@
 \fancyhf{}
 \fancyhead[L]{\sf \myleftmark}
 \fancyhead[R]{\sf Tche L.}
-\fancyfoot[C]{\thepage{}}
+\fancyfoot[L]{\thepage{}}
+\fancyfoot[R]{\hyperref[toc]{$\circlearrowright$}}
 % -------------------------------------
 \usepackage[text={148mm,220mm},centering,includehead,vmarginratio=1:1]{geometry} % set paper layout
 \setlength{\headwidth}{\textwidth}                % set header width
@@ -27,23 +28,28 @@
 % \titleformat{\subsubsection}{}{\arabic{subsubsection}}{1em}{\em}
 % \titleformat{\paragraph}{\sc}{}{}{\hspace{2em}}
 % -------------------------------------
+
 \usepackage{enumerate}                            % sorting package for enumerate environment
 %\usepackage{enumitem}                             % sorting package for enumitem environment
+
 \usepackage{times}                                % Times New Roman font package for main text only
 % \usepackage{mathptmx}                             % Times New Roman font package for formula
+% no difference between normal and bold Greek characters
 % \usepackage{txfonts}                              % faked Times font package for formula
 \usepackage{newtxmath}                            % faked Times font package for formula
-% \usepackage{mathastext}
+% \usepackage{mathastext}                           % deal math same as text package
+
 \usepackage{nicefrac}                             % fraction package for \nicefrac command
 \usepackage{amsmath}
 \usepackage{amssymb}                              % symbol package for \triangleq defination command
+
 \usepackage{ulem}                                 % underline package for \uline commmand
-\usepackage[stable]{footmisc}                             % footnote package for \footnote in chapter or section title
+\usepackage[stable]{footmisc}                     % footnote package for \footnote in chapter or section title
 \usepackage[colorlinks,linkcolor=blue,anchorcolor=yellow,citecolor=green]{hyperref}      % hyperreference package
 % \usepackage{graphicx}                             % drawing package for \includegraphics command
 % \usepackage{subfig}                               % subgraph package for \subfloat command
 % \usepackage{bm}                                   % bold type package for \bm command
-\usepackage{tikz}                                 % tikz drawing package for framed words
+% \usepackage{tikz}                                 % tikz drawing package for framed words
 
 \setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
 \renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
@@ -93,7 +99,7 @@
 
 \maketitle
 \renewcommand{\pmk}{Contents}
-\tableofcontents
+\tableofcontents\label{toc}
 \newpage
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
