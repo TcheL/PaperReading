@@ -4,56 +4,85 @@
 \renewcommand{\pay}{Qinya Liu and Jeroen Tromp, 2006}
 \renewcommand{\pjo}{Bulletin of the Seismological Society of America}
 \renewcommand{\pda}{2016/12/23 Fri.}
+
 \section{\pinfo}
 \subsection{Introduction}
 \begin{enumerate}[\hspace{10mm}*]
-  \item Calculate sensitivity or \Frechet kernels: Marquering \etal, 1999 (surface-wave Green's functions); Zhao \etal, 2000 (normal modes); Dahlen \etal, 2000 \& Hung \etal, 2000 \& Zhou \etal, 2004 (asymptotic ray-based methods).
-  \item Implement 3D travel-time (``banana-doughnut'') kernels for compressional-wave tomography: Montelli \etal, 2004.
+  \item Calculate sensitivity or \Frechet kernels:
+    Marquering \etal, 1999 (surface-wave Green's functions);
+    Zhao \etal, 2000 (normal modes);
+    Dahlen \etal, 2000 \& Hung \etal, 2000 \& Zhou \etal, 2004 (asymptotic ray-based methods).
+  \item Implement 3D travel-time (``banana-doughnut'') kernels for compressional-wave tomography:
+    Montelli \etal, 2004.
   \item \sline
-  \item Obtain 3D finite-frequency sensitivity kernels for 3D reference models by calculating and storing 3D Green's functions: Zhao \etal, 2005.
-  \item Obtain the gradient of a misfit function based on just a regular and an ``adjoint'' simulation for each earthquake: Tromp \etal, 2005.
+  \item Obtain 3D finite-frequency sensitivity kernels for 3D reference models
+    by calculating and storing 3D Green's functions: Zhao \etal, 2005.
+  \item Obtain the gradient of a misfit function based on
+    just a regular and an ``adjoint'' simulation for each earthquake: Tromp \etal, 2005.
   \item \sline
-  \item Use spectral element method (SEM) on global or regional scales: Komatitsch and Tromp, 1999 \& 2002a \& 200b; Chaljub \etal, 2003; Komatitsch \etal, 2004.
+  \item Use spectral element method (SEM) on global or regional scales:
+    Komatitsch and Tromp, 1999 \& 2002a \& 200b; Chaljub \etal, 2003; Komatitsch \etal, 2004.
   \item Implement the SEM on parallel computers: Komatitsch \etal, 2003.
   \item Calculate synthetic seismograms based on SEM: Komatitsch \etal, 2004.
   \item Paraxial absorbing equation: Clayton and Engquist, 1977; Quarteroni \etal, 1998.
-  \item Perfectly matched layer (PML) methodology: \Berenger, 1994; Collino and Tsogka, 2001; Komatitsch and Tromp, 2003; Festa and Vilotte, 2005.
+  \item Perfectly matched layer (PML) methodology: \Berenger, 1994; Collino and Tsogka, 2001;
+    Komatitsch and Tromp, 2003; Festa and Vilotte, 2005.
   \item The width of the 1st Fresnel zone is $\sqrt{\lambda L}$: Dahlen \etal, 2000.
   \item Los Angeles basin model: Hauksson, 2000 (background model); S\"{u}ss and Shaw, 2003 (detailed).
   \item 3D source inversion technique: Liu \etal, 2004.
   \item Salton Trough model: Hauksson, 2000 (background model); Lovely \etal, 2006.
   \item $P_{nl}$ wave train: Helmberger and Engen, 1980 (combination of the $P_n$ and $PL$ phases).
   \item Conjugate gradient approaches for 2D adjoint method: Tape \etal, 2006.
-\end{enumerate}\par
-The main benefit of the adjoint approach is that the \Frechet derivatives of the misfit function may be obtained based on two 3D simulations for each earthquake. A disadvantage is the fact that the Hessian is unavailable, which leads to the use of iterative methods in the inversion problem.\par
+\end{enumerate}
+
+The main benefit of the adjoint approach is that the \Frechet derivatives of the misfit function
+may be obtained based on two 3D simulations for each earthquake.
+A disadvantage is the fact that the Hessian is unavailable,
+which leads to the use of iterative methods in the inversion problem.
+
 \subsection{Lagrange multiplier method}
 To minimize the least-squares waveform misfit function:
 \[ \chi=\frac{1}{2}\sum_r\int_0^T||\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)||^2dt \]
-where $[0,T]$ denotes the time series of interest, $\mbf s(\mbf x_r,t)$ the synthetic and $\mbf d(\mbf x_r,t)$ the observed displacement at receiver $\mbf x_r$ on time $t$. In practice, both $\mbf d$ and $\mbf s$ will be windowed, filtered, and possibly weighted.\par
-An Earth model with volume $\Omega$ and outer free surface $\partial\Omega$. The synthetic $\mbf s(\mbf x,t)$ is determinde by:
+where $[0,T]$ denotes the time series of interest, $\mbf s(\mbf x_r,t)$ the synthetic
+and $\mbf d(\mbf x_r,t)$ the observed displacement at receiver $\mbf x_r$ on time $t$.
+In practice, both $\mbf d$ and $\mbf s$ will be windowed, filtered, and possibly weighted.
+
+An Earth model with volume $\Omega$ and outer free surface $\partial\Omega$.
+The synthetic $\mbf s(\mbf x,t)$ is determinde by:
 \[ \rho\partial_t^2\mbf s-\nabla\cdot\mbf T=\mbf f \]
 \[ \mbf T=\mbf c:\nabla\mbf s \]
-where $\rho$ density and $\mbf c$ elastic tensor. The boundary condition and the initial conditions:
+where $\rho$ density and $\mbf c$ elastic tensor.
+The boundary condition and the initial conditions:
 \[ \hat{\mbf n}\cdot\mbf T=0 \text{,\hspace{5mm} on } \partial\Omega \]
 \[ \mbf s(\mbf x,0)=0 \text{,\hspace{5mm}} \partial_t\mbf s(\mbf x,0)=0 \]
-where $\hat{\mbf n}$ the unit outward normal. A simple point source at $\mbf x_s$ in terms of the moment tensor $\mbf M$ and source time function $S(t)$ as:
-\[ \mbf f=-\mbf M\cdot\nabla\delta(\mbf x-\mbf x_s)S(t) \]\par
+where $\hat{\mbf n}$ the unit outward normal.
+A simple point source at $\mbf x_s$ in terms of the moment tensor $\mbf M$
+and source time function $S(t)$ as:
+\[ \mbf f=-\mbf M\cdot\nabla\delta(\mbf x-\mbf x_s)S(t) \]
+
 Minimizing the misfit function when $\mbf s$ satisfies wave equation implies
 \[ \chi=\frac{1}{2}\sum_r\int_0^T[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]^2dt-\int_0^T\int_\Omega\lambda\cdot(\rho\partial_t^2\mbf s-\nabla\cdot\mbf T-\mbf f)d^3\mbf xdt \]
-where the vector \myem{Lagrange multiplier} $\lambda(\mbf x,t)$ remains to be determined. Using Hooke's law, upon integrating by parts \myno{(more detials refer to eq.9 of the original noted paper)}, because of the free surface boundary condition and the initial conditions,
+where the vector \myem{Lagrange multiplier} $\lambda(\mbf x,t)$ remains to be determined.
+Using Hooke's law, upon integrating by parts
+\myno{(more detials refer to eq.9 of the original noted paper)},
+because of the free surface boundary condition and the initial conditions,
 \begin{align*}
   \delta\chi= & \int_0^T\int_\Omega\sum_r[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]\delta(\mbf x-\mbf x_r)\cdot\delta\mbf s(\mbf x,t)d^3\mbf xdt \\
   & -\int_0^T\int_\Omega(\delta\rho\lambda\cdot\partial_t^2\mbf s+\nabla\lambda:\delta\mbf c:\nabla\mbf s-\lambda\cdot\delta\mbf f)d^3\mbf xdt-\int_0^T\int_\Omega[\rho\partial_t^2\lambda-\nabla\cdot(\mbf c:\nabla\lambda)]\cdot\delta\mbf sd^3\mbf xdt \\
   & -\int_\Omega[\rho(\lambda\cdot\partial_t\delta\mbf s-\partial_t\lambda\cdot\delta\mbf s)]_Td^3\mbf x-\int_0^T\int_{\partial\Omega}\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt
 \end{align*}
-where $[f]_T$ means $f(T)$.\par
-If no model parameter perturbations $\delta\rho$, $\delta\mbf c$ and $\delta\mbf f$, $\delta\chi$ vanish. In terms of $\delta\mbf s$, $\lambda$ statisfies
+where $[f]_T$ means $f(T)$.
+
+If no model parameter perturbations $\delta\rho$, $\delta\mbf c$ and $\delta\mbf f$,
+and $\delta\chi$ vanish.
+In terms of $\delta\mbf s$, $\lambda$ statisfies
 \[ \rho\partial_t^2\lambda-\nabla\cdot(\mbf c:\nabla\lambda)=\sum_r[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]\delta(\mbf x-\mbf x_r) \]
 with the free surface boundary condition and the end conditions:
 \[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=0 \text{,\hspace{5mm} on } \partial\Omega \]
 \[ \lambda(\mbf x,T)=0 \text{,\hspace{5mm}} \partial_t\lambda(\mbf x,T)=0 \]
 Generally, $\lambda$ is provided by the above equations, the variation reduces to
-\[ \delta\chi=-\int_0^T\int_\Omega(\delta\rho\lambda\cdot\partial_t^2\mbf s+\nabla\lambda:\delta\mbf c:\nabla\mbf s-\lambda\cdot\delta\mbf f)d^3\mbf xdt \]\par
+\[ \delta\chi=-\int_0^T\int_\Omega(\delta\rho\lambda\cdot\partial_t^2\mbf s+\nabla\lambda:\delta\mbf c:\nabla\mbf s-\lambda\cdot\delta\mbf f)d^3\mbf xdt \]
+
 Define the adjoint wave field $\mbf s^\dagger$ in terms of $\lambda$ by
 \[ \mbf s^\dagger(\mbf x,t)\equiv\lambda(\mbf x,T-t) \]
 Thus $\mbf s^\dagger$ satisfies
@@ -61,46 +90,68 @@ Thus $\mbf s^\dagger$ satisfies
 with the free surface boundary condition and the initial conditions:
 \[ \hat{\mbf n}\cdot\mbf T^\dagger=0 \text{,\hspace{5mm} on } \partial\Omega \]
 \[ \mbf s^\dagger(\mbf x,0)=0 \text{,\hspace{5mm}} \partial_t\mbf s^\dagger(\mbf x,0)=0 \]
-where define the adjoint stress $\mbf T^\dagger=\mbf c:\nabla\mbf s^\dagger$.\par
-\myno{If no source perturbation $\delta\mbf f$ (some changes refer to the original noted paper),} the gradient of misfit function may be rewritten:
+where define the adjoint stress $\mbf T^\dagger=\mbf c:\nabla\mbf s^\dagger$.
+
+\myno{If no source perturbation $\delta\mbf f$ (some changes refer to the original noted paper),}
+the gradient of misfit function may be rewritten:
 \[ \delta\chi=\int_\Omega(\delta\rho K_\rho+\delta\mbf c::\mbf K_c)d^3\mbf x \]
 where $\delta\mbf c::\mbf K_c=\delta c_{ijkl}K_{c_{ijkl}}$ and difine the kernels
 \[ K_\rho(\mbf x)=-\int_0^T\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)dt \]
-\[ \mbf K_c(\mbf x)=-\int_0^T\nabla\mbf s^\dagger(\mbf x,T-t)\nabla\mbf s(\mbf x,t)dt \]\par
-In an isotropic Earth model $c_{jklm}=(\kappa-\nicefrac{2}{3})\delta_{jk}\delta_{lm}+\mu(\delta_{jl}\delta_{km}+\delta_{jm}\delta_{kl})$, where $\mu$ shear moduli and $\kappa$ bulk moduli. Thus
+\[ \mbf K_c(\mbf x)=-\int_0^T\nabla\mbf s^\dagger(\mbf x,T-t)\nabla\mbf s(\mbf x,t)dt \]
+
+In an isotropic Earth model
+$c_{jklm}=(\kappa-\nicefrac{2}{3})\delta_{jk}\delta_{lm}+\mu(\delta_{jl}\delta_{km}+\delta_{jm}\delta_{kl})$,
+where $\mu$ shear moduli and $\kappa$ bulk moduli.
+Thus
 \[ \delta\mbf c::\mbf K_c=\delta\ln\mu K_\mu+\delta\ln\kappa K_\kappa \]
-where $\delta\ln\mu=\nicefrac{\delta\mu}{\mu}$, $\delta\ln\kappa=\nicefrac{\delta\kappa}{\kappa}$ and the isotropic kernels
+where $\delta\ln\mu=\nicefrac{\delta\mu}{\mu}$, $\delta\ln\kappa=\nicefrac{\delta\kappa}{\kappa}$
+and the isotropic kernels
 \[ K_\mu(\mbf x)=-\int_0^T2\mu(\mbf x)\mbf D^\dagger(\mbf x,T-t):\mbf D(\mbf x,t)dt \]
 \[ K_\kappa(\mbf x)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\mbf s^\dagger(\mbf x,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
 where the traceless strain deviator and its adjoint
 \[ \mbf D=\frac{1}{2}[\nabla\mbf s+(\nabla\mbf s)^T]-\frac{1}{3}(\nabla\cdot\mbf s)\mbf I \]
 \[ \mbf D^\dagger=\frac{1}{2}[\nabla\mbf s^\dagger+(\nabla\mbf s^\dagger)^T]-\frac{1}{3}(\nabla\cdot\mbf s^\dagger)\mbf I \]
-where the superscript $T$ denotes the transpose.\par
+where the superscript $T$ denotes the transpose.
+
 If in terms of $\rho$, shear wave speed $\beta$ and compressional wave speed $\alpha$,
 \[ K_\rho'=K_\rho+K_\kappa+K_\mu \]
 \[ K_\beta=2\Big(K_\mu-\frac{4\mu}{3\kappa}K_\kappa\Big) \]
-\[ K_\alpha=2\bigg(\frac{\kappa+\frac{4}{3}\mu}{\kappa}\bigg)K_\kappa \]\par
+\[ K_\alpha=2\bigg(\frac{\kappa+\frac{4}{3}\mu}{\kappa}\bigg)K_\kappa \]
+
 \subsection{Absorbing boundaries}
-A regional Earth model has a boundary $\partial\Omega=\Sigma+\Gamma$, where $\Sigma$ the free surface and $\Gamma$ the artificial boundary. On $\Gamma$, absorbed energy based on the paraxial equation (Quarteroni \etal, 1998):
-\[ \hat{\mbf n}\cdot\mbf T=\rho[\alpha(\hat{\mbf n}\hat{\mbf n})+\beta(\mbf I-\hat{\mbf n}\hat{\mbf n})]\cdot\partial_t\mbf s\equiv\mbf B\cdot\partial_t\mbf s \text{,\hspace{5mm} on } \Gamma \]\par
-In the original variation, substituting free surface boundary condition and the above absorbing boundary condition, upon integrating by parts,
+A regional Earth model has a boundary $\partial\Omega=\Sigma+\Gamma$,
+where $\Sigma$ the free surface and $\Gamma$ the artificial boundary.
+On $\Gamma$, absorbed energy based on the paraxial equation (Quarteroni \etal, 1998):
+\[ \hat{\mbf n}\cdot\mbf T=\rho[\alpha(\hat{\mbf n}\hat{\mbf n})+\beta(\mbf I-\hat{\mbf n}\hat{\mbf n})]\cdot\partial_t\mbf s\equiv\mbf B\cdot\partial_t\mbf s \text{,\hspace{5mm} on } \Gamma \]
+
+In the original variation, substituting free surface boundary condition
+and the above absorbing boundary condition, upon integrating by parts,
 \begin{gather*}
   \int_0^T\int_{\partial\Omega}\lambda\cdot[\hat{\mbf n}\cdot(\delta\mbf c:\nabla\mbf s+\mbf c:\nabla\delta\mbf s)]-\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt=-\int_0^T\int_\Sigma\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)\cdot\delta\mbf sd^2\mbf xdt \\
   \hspace{50mm} +\int_\Gamma[\lambda\cdot\mbf B\cdot\delta\mbf s]_Td^2\mbf x-\int_0^T\int_\Gamma[\hat{\mbf n}\cdot(\mbf c:\nabla\lambda)+\mbf B\cdot\partial_t\lambda]\cdot\delta\mbf sd^2\mbf xdt
 \end{gather*}
-Thus, to vanish the Lagrange multiplier field, the free surface condition, the end condition and the absorbing boundary condition:
+Thus, to vanish the Lagrange multiplier field, the free surface condition,
+the end condition and the absorbing boundary condition:
 \[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=0 \text{,\hspace{5mm} on } \Sigma \]
 \[ \lambda(\mbf x,T)=0 \text{,\hspace{5mm} on } \Gamma \]
 \[ \hat{\mbf n}\cdot(\mbf c:\nabla\lambda)=-\mbf B\cdot\partial_t\lambda \text{,\hspace{5mm} on } \Gamma \]
-For the adjoint wave equation, the free surface boundary condition and the absorbing boundary condition:
+For the adjoint wave equation, the free surface boundary condition
+and the absorbing boundary condition:
 \[ \hat{\mbf n}\cdot\mbf T^\dagger=0 \text{,\hspace{5mm} on } \Sigma \]
 \[ \hat{\mbf n}\cdot\mbf T^\dagger=\mbf B\cdot\partial_t\mbf s^\dagger \text{,\hspace{5mm} on } \Gamma \]
-which are same as for the regular wave equation.\par
+which are same as for the regular wave equation.
+
 \subsection{Numerical implementation}
-If no attenuation, to reconstruct the forward wave field, backward in time from the displacement and velocity wave field at the end of the simulation. The backward wave equation is:
+If no attenuation, to reconstruct the forward wave field, backward in time from the displacement
+and velocity wave field at the end of the simulation. The backward wave equation is:
 \[ \rho\partial_t^2\mbf s=\nabla\cdot(\mbf c:\nabla\mbf s)+\mbf f \]
 \[ \mbf s(\mbf x,T) \text{ and } \partial_t\mbf s(\mbf x,T) \text{ given} \]
 \[ \hat{\mbf n}\cdot(\mbf c:\nabla\mbf s)=0 \text{, on } \partial\Omega \]
-Technically, the only difference between solving the backward and forward wave equation is the change in the sign of the timestep parameter $\Delta t$.\par
-For regional simulations, by saving the wave field on the absorbing boundaries at every timestep and the entire wave field at the end, reconstruct the forward wave field in reverse time by solving the backward wave equation, reinjecting the absorbed wave field as going along.\par
+Technically, the only difference between solving the backward and forward wave equation
+is the change in the sign of the timestep parameter $\Delta t$.
+
+For regional simulations, by saving the wave field on the absorbing boundaries at every timestep
+and the entire wave field at the end, reconstruct the forward wave field in reverse time
+by solving the backward wave equation, reinjecting the absorbed wave field as going along.
+
 % vim:sw=2:wrap

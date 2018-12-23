@@ -1,60 +1,107 @@
 \renewcommand{\pmk}{Fichtner\_2010\_EPSL\_Full waveform tomography}
 \renewcommand{\prf}{FWI/\pmk.pdf}
-\renewcommand{\pti}{Full waveform tomography for radially anisotropic structure: New insights into present and past states of the Australasian upper mantle}
+\renewcommand{\pti}{Full waveform tomography for radially anisotropic structure:
+New insights into present and past states of the Australasian upper mantle}
 \renewcommand{\pay}{Andreas Fichtner, Brian L. N. Kennett and Heiner Igel \etal, 2010}
 \renewcommand{\pjo}{Earth and Planetary Science Letters}
 \renewcommand{\pda}{2016/10/13 Thu.}
+
 \section{\pinfo}
 \subsection{Introduction}
 \begin{enumerate}[\hspace{10mm}*]
-  \item Simulating of seismic waves with heterogeneous Earth models: Faccioli \etal, 1997; Komatitsch and Tromp, 2002; Dumbser and K\"{a}ser, 2006.
+  \item Simulating of seismic waves with heterogeneous Earth models: Faccioli \etal, 1997;
+    Komatitsch and Tromp, 2002; Dumbser and K\"{a}ser, 2006.
   \item \sline
-  \item Full waveform tomography: Konishi \etal, 2009; Tape \etal, 2009; Fichtner \etal, 2009a \& 2009b.
+  \item Full waveform tomography: Konishi \etal, 2009; Tape \etal, 2009;
+    Fichtner \etal, 2009a \& 2009b.
   \item \sline
   \item Spectral-element method in an Earth model with 3D variations: Fichtner \etal, 2009a.
   \item The discrete equations are solved in parallel: Oeser \etal, 2006.
-  \item \myem{Crust2.0} model: Bassin \etal, 2000 (please hit \href{http://igppweb.ucsd.edu/~gabi/crust2.html}{here} to download the model data).
+  \item \myem{Crust2.0} model: Bassin \etal, 2000
+    (please hit \href{http://igppweb.ucsd.edu/~gabi/crust2.html}{here} to download the model data).
   \item Measure time-frequency phase misfits to extract waveform information: Fichtner \etal, 2008.
   \item The $\eta$ parameter: Takeuchi and Saito, 1972 (NO Source).
-  \item Set the variations of $v_{ph}$ and $v_{pv}$ to 0.5 times the variations of $v_{sh}$ and $v_{sv}$: Nettles and Dziewonski, 2008.
-  \item Previous tomography results of the Australasian upper mantle: Debayle and Kennett, 2000a; Fishwick \etal, 2005.
-  \item Minimise the cumulative phase misfit using a preconditioned conjugate-gradient method: Fichtner \etal, 2009b.
-  \item \myem{The adjoint method}: Tarantola, 1988; Tromp \etal, 2005; Fichtner \etal, 2006; Sieminski \etal, 2007a \& 2007b.
+  \item Set the variations of $v_{ph}$ and $v_{pv}$ to 0.5 times
+    the variations of $v_{sh}$ and $v_{sv}$: Nettles and Dziewonski, 2008.
+  \item Previous tomography results of the Australasian upper mantle:
+    Debayle and Kennett, 2000a; Fishwick \etal, 2005.
+  \item Minimise the cumulative phase misfit using a preconditioned conjugate-gradient method:
+    Fichtner \etal, 2009b.
+  \item \myem{The adjoint method}: Tarantola, 1988; Tromp \etal, 2005; Fichtner \etal, 2006;
+    Sieminski \etal, 2007a \& 2007b.
   \item Refracted body wave studies on Australasian region: Kaiho and Kennett, 2000.
   \item Elastic 1D reference model PREM: Dziewonski and Anderson, 1981.
   \item 3D model of shear wave attenuation on Australasian region: Abdulah, 2007.
-  \item Previous surface wave studies on Australia: Zielhuis and van der Hilst, 1996; Simons \etal, 1999 \& 2002; Debayle and Kennett, 2000a; Yoshizawa and Kennett, 2004; Fishwick \etal, 2005. 
+  \item Previous surface wave studies on Australia: Zielhuis and van der Hilst, 1996;
+    Simons \etal, 1999 \& 2002; Debayle and Kennett, 2000a; Yoshizawa and Kennett, 2004;
+    Fishwick \etal, 2005. 
   \item Time-frequency phase and amplitude misfits are strongly related: Tian \etal, 2009.
-  \item Tomographic study of the radial anisotropy in the Australian region: Debayle and Kennett, 2000a \& 2000b.
-  \item Global studies of radial anisotropy: Montagner, 2002; Panning and Romanowicz, 2006; Nettles and Dziewonski, 2008.
+  \item Tomographic study of the radial anisotropy in the Australian region:
+    Debayle and Kennett, 2000a \& 2000b.
+  \item Global studies of radial anisotropy: Montagner, 2002; Panning and Romanowicz, 2006;
+    Nettles and Dziewonski, 2008.
   \item \myem{AK135} model: Kennett \etal, 1995.
   \item A Centralian Superbasin existed between 1000 and 750 Ma: Myers \etal, 1996.
   \item SKS splitting studies below Australia: Clitheroe and van der Hilst, 1998.
-  \item Azimuthal anisotropy studies around $150km$ depth below Australia: Debayle and Kennett, 2000a \& 2000b; Simons \etal, 2002.
+  \item Azimuthal anisotropy studies around $150km$ depth below Australia:
+    Debayle and Kennett, 2000a \& 2000b; Simons \etal, 2002.
   \item \myem{The Lehmann discontinuity}: Lehmann, 1961; Karato, 1992.
-  \item Dislocation creep continues to be dominant to depth of $330km$: Mainprince \etal, 2005; Raterron \etal, 2009.
-\end{enumerate}\par
+  \item Dislocation creep continues to be dominant to depth of $330km$:
+    Mainprince \etal, 2005; Raterron \etal, 2009.
+\end{enumerate}
+
 \subsection{Seismic anisotropy}
-\textbf{Mineralogical seismic anisotropy} (MSA) is the result of the coherent lattice-preferred orientation of anisotropic minerals over length scales that exceed the resolution length. \textbf{Structural seismic anisotropy} (SSA) is induced by heterogeneities with length scales that can not be resolved. MSA and SSA can not be distinguished seismologically, but the influence of SSA on the tomographic images can be reduced by increasing the tomographic resolution.\par
-The geodynamic interpretation of seismic anisotropy is based on its relation to flow in the Earth. Horizontal (vertical) flow causes preferentially Horizontal (vertical) alignment of small-scale heterogeneities and thus leads to positive (negative) radial SSA, i.e. $v_{sh}>v_{sv}$ ($v_{sh}<v_{sv}$). The development of MSA in the presence of flow depends mostly on the relation between shear strain and the lattice-preferred orientation formation of olivine.\par
+\textbf{Mineralogical seismic anisotropy} (MSA) is the result of
+the coherent lattice-preferred orientation of anisotropic minerals over length scales
+that exceed the resolution length.
+\textbf{Structural seismic anisotropy} (SSA) is induced by heterogeneities with length scales
+that can not be resolved.
+MSA and SSA can not be distinguished seismologically,
+but the influence of SSA on the tomographic images can be reduced
+by increasing the tomographic resolution.
+
+The geodynamic interpretation of seismic anisotropy is based on its relation to flow in the Earth.
+Horizontal (vertical) flow causes preferentially horizontal (vertical) alignment
+of small-scale heterogeneities and thus leads to positive (negative) radial SSA,
+i.e. $v_{sh}>v_{sv}$ ($v_{sh}<v_{sv}$).
+The development of MSA in the presence of flow depends mostly on the relation
+between shear strain and the lattice-preferred orientation formation of olivine.
+
 \subsection{Filtering of tomographic images}
-The spatial filtering of regional tomographic images involves: the representation of the images in terms of spherical splines; the application of a spherical convolution.\par
+The spatial filtering of regional tomographic images involves:
+the representation of the images in terms of spherical splines;
+the application of a spherical convolution.
+
 \subsubsection{Spherical spline expansion}
-A physical quantity $m_d$ is defined at discrete points $\mbf\xi_1,\mbf\xi_2,\ldots,\mbf\xi_N$ that lie within a section $\Omega_s$ of the unit sphere $\Omega$. The discretely defined quantity $m$ can be interpolated using a spherical spline of the form
+A physical quantity $m_d$ is defined at discrete points $\mbf\xi_1,\mbf\xi_2,\ldots,\mbf\xi_N$
+that lie within a section $\Omega_s$ of the unit sphere $\Omega$.
+The discretely defined quantity $m$ can be interpolated using a spherical spline of the form
 \[ m(\mbf x)=\sum_{k=1}^N\mu_kK_h(\mbf x,\mbf\xi_k), \hspace{5mm} \mbf x,\mbf\xi_1,\mbf\xi_2,\ldots,\mbf\xi_N\in\Omega_s\subset\Omega  \]
 where $K_h$ is a spline basis function and when using an Abel-Poisson kernel:
 \[ K_h(\mbf x,\mbf\xi_k)=\frac{1}{4\pi}\frac{1-h^2}{[1+h^2-2h(\mbf x\cdot\mbf\xi_k)]^{\nicefrac{3}{2}}} \]
-And $h$ is chosen depending on the typical distance between the collocation points $\mbf\xi_k$. $\mu_k$ is found through the solution of the linear system of equations:
-\[ m_d(\mbf\xi_i)=m(\mbf\xi_i)=\sum_{k=1}^N\mu_kK_h(\mbf\xi_i,\mbf\xi_k),i=1,2,\ldots,N \]\par
+And $h$ is chosen depending on the typical distance between the collocation points $\mbf\xi_k$.
+$\mu_k$ is found through the solution of the linear system of equations:
+\[ m_d(\mbf\xi_i)=m(\mbf\xi_i)=\sum_{k=1}^N\mu_kK_h(\mbf\xi_i,\mbf\xi_k),i=1,2,\ldots,N \]
+
 \subsubsection{Filtering through spherical convolution}
-Filter a tomographic image by convolving its spherical spline representation, $m(\mbf x)$ with a filter function $\phi\in L^2[-1,1]$:
+Filter a tomographic image by convolving its spherical spline representation,
+$m(\mbf x)$ with a filter function $\phi\in L^2[-1,1]$:
 \[ (m*\phi)(\mbf x)=\int_\Omega m(\mbf\xi)\phi(\mbf\xi\cdot\mbf x)d^3\mbf\xi \]
-The above equation is called the spherical convolution of $m$ with $\phi$. When expressed in terms of the Legendre coefficients $\phi_n$ of $\phi$ and the spherical harmonic coeffients $m_{nj}$ of $\mbf m$:
+The above equation is called the spherical convolution of $m$ with $\phi$.
+When expressed in terms of the Legendre coefficients $\phi_n$ of $\phi$
+and the spherical harmonic coeffients $m_{nj}$ of $\mbf m$:
 \[ (m*\phi)(\mbf x)=\sum_{n=0}^\infty\sum_{j=1}^{2n+1}\phi_nm_{nj}Y_{nj}(\mbf x) \]
-where $Y_{nj}$ are the spherical harmonic functions of degree $n$ and order $j$. A filter function $\phi$ with continuously decreasing Legendre coefficients acts as a low-pass filter.\par
+where $Y_{nj}$ are the spherical harmonic functions of degree $n$ and order $j$.
+A filter function $\phi$ with continuously decreasing Legendre coefficients
+acts as a low-pass filter.
+
 The Abel-Poisson scaling functions:
 \[ \phi^{(a)}(t)=\frac{1}{4\pi}\frac{1-p^2}{(1+p^2-2pt)^{\nicefrac{3}{2}}},p=e^{-2^{-a}}\myno{,a\in N^+} \]
-where small values of $a$ give low-pass filters and vice versa. The Legendre coefficients $\phi_n^{(a)}$ of $\phi^{(a)}$ are $e^{-n2^{-a}}$. Combining spherical splines and Abel-Poisson scaling functions, obtain:
+where small values of $a$ give low-pass filters and vice versa.
+The Legendre coefficients $\phi_n^{(a)}$ of $\phi^{(a)}$ are $e^{-n2^{-a}}$.
+Combining spherical splines and Abel-Poisson scaling functions, obtain:
 \[ (m*\phi)(\mbf x)=\sum_{k=1}^N\mu_kK_{h'}(\mbf x,\mbf\xi_k), \hspace{5mm} h'=he^{-2^{-a}} \]
-Thus, the filtering is achieved by simply replacing the parameter $h$ in the original sperical spline with the modified parameter $h'=he^{-2{-a}}$.\par
+Thus, the filtering is achieved by simply replacing the parameter $h$
+in the original sperical spline with the modified parameter $h'=he^{-2{-a}}$.
+
 % vim:sw=2:wrap

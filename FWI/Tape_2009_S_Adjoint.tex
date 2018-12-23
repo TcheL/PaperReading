@@ -4,51 +4,110 @@
 \renewcommand{\pay}{Carl Tape, Qinya Liu, and Alessia Maggi \etal, 2009}
 \renewcommand{\pjo}{Science}
 \renewcommand{\pda}{2016/11/27 Sun.}
+
 \section{\pinfo}
 \subsection{Introduction}
 \begin{enumerate}[\hspace{10mm}*]
-  \item Seismic tomography adopts PREM model to produce images of Earth's interior: [1] Woodhouse and Dziewonski, 1984 \& [2] Romanowicz, 2003 in the mantle; [3] Grand \etal, 1997 in subducting slabs; [4] Montelli \etal, 2004 in mantle plumes.
-	\item Start the minimization procedure with more realistic 3D initial models: [6] Komatitsch \etal, 2002; [7] Akcelik \etal, 2003; [8] Chen \etal, 2007; [9] Fichtner \etal, 2008.
-	\item Use adjoint method within the minimization problem: [10] Tarantola, 1984; [11] Talagrand \etal, 1987; [12] Tromp \etal, 2005.
-	\item Adjoint tomography: [13] Tape \etal, 2007.
-	\item \sline
-	\item 3D seismological model of the southern California crust: [14] S\"{u}ss and Shaw, 2003; [15] Komatitsch \etal, 2004.
-	\item SEM wave propagation code: [15] Komatitsch \etal, 2004; [17] Liu and Tromp, 2006 (modify to facilitate an inverse problem).
-	\item \sline
-	\item Empirical relations between elastic wavespeeds and density in Crust: [20] Brocher, 2005.
-	\item \sline
-    \item \myem{FLEXWIN} windowing code - automated time-window selection algorithm for seismic tomography: [21] Maggi \etal, 2009 (please hit \href{http://geodynamics.org/cig/software/flexwin/}{here} to download the package).
-	\item \sline
-    \item Multi-taper method to make travel-time measurement: [S8] Zhou \etal, 2004.
-    \item Subspace methods for multiple parameter classes: [S11] Kennett \etal, 1988; [S12] Sambridge \etal, 1991.
-    \item Locate southern California seismicity from 1981 to 2005: [S16] Lin \etal, 2007.
-    \item Double-difference earthquake location algorithm: [S20] Waldhauser and Ellsworth, 2000.
-    \item Use information from controlled sources (quarry blasts and shots) to estimate uncertainties of absolute locations and absolute origin times: [S16] Lin \etal, 2007; [S21] Lin \etal, 2007.
-    \item Absolute locations for quarry seismicity: [S22] Lin \etal, 2006.
-    \item Cut-and-paste method to source estimation: [S13] Zhu and Helmberger, 1996; [S27] Zhao and Helmberger, 1994.
-    \item Use amplitude ratios between P and S waves to constrain the focal mechanisms: [S25] Hardebeck and Shearer, 2003.
-    \item Moment tensor inversions with SEM: [S31] Liu \etal, 2004.
-\end{enumerate}\par
+  \item Seismic tomography adopts PREM model to produce images of Earth's interior:
+    [1] Woodhouse and Dziewonski, 1984 \& [2] Romanowicz, 2003 in the mantle;
+    [3] Grand \etal, 1997 in subducting slabs; [4] Montelli \etal, 2004 in mantle plumes.
+  \item Start the minimization procedure with more realistic 3D initial models:
+    [6] Komatitsch \etal, 2002; [7] Akcelik \etal, 2003;
+    [8] Chen \etal, 2007; [9] Fichtner \etal, 2008.
+  \item Use adjoint method within the minimization problem:
+    [10] Tarantola, 1984; [11] Talagrand \etal, 1987; [12] Tromp \etal, 2005.
+  \item Adjoint tomography: [13] Tape \etal, 2007.
+  \item \sline
+  \item 3D seismological model of the southern California crust:
+    [14] S\"{u}ss and Shaw, 2003; [15] Komatitsch \etal, 2004.
+  \item SEM wave propagation code: [15] Komatitsch \etal, 2004;
+    [17] Liu and Tromp, 2006 (modify to facilitate an inverse problem).
+  \item \sline
+  \item Empirical relations between elastic wavespeeds and density in Crust: [20] Brocher, 2005.
+  \item \sline
+  \item \myem{FLEXWIN} windowing code - automated time-window selection algorithm
+    for seismic tomography: [21] Maggi \etal, 2009
+    (please hit \href{http://geodynamics.org/cig/software/flexwin/}{here} to download the package).
+  \item \sline
+  \item Multi-taper method to make travel-time measurement: [S8] Zhou \etal, 2004.
+  \item Subspace methods for multiple parameter classes:
+    [S11] Kennett \etal, 1988; [S12] Sambridge \etal, 1991.
+  \item Locate southern California seismicity from 1981 to 2005: [S16] Lin \etal, 2007.
+  \item Double-difference earthquake location algorithm: [S20] Waldhauser and Ellsworth, 2000.
+  \item Use information from controlled sources (quarry blasts and shots)
+    to estimate uncertainties of absolute locations and absolute origin times:
+    [S16] Lin \etal, 2007; [S21] Lin \etal, 2007.
+  \item Absolute locations for quarry seismicity: [S22] Lin \etal, 2006.
+  \item \myem{Cut-and-paste method} to source estimation:
+    [S13] Zhu and Helmberger, 1996; [S27] Zhao and Helmberger, 1994.
+  \item Use amplitude ratios between P and S waves to constrain the focal mechanisms:
+    [S25] Hardebeck and Shearer, 2003.
+  \item Moment tensor inversions with SEM: [S31] Liu \etal, 2004.
+\end{enumerate}
+
 \subsection{Adjoint tomography}
-Different results from different data sets: seismic reflection and industry well-log data to constrain the geometry and structure of major basins, receiver function data to estimate the depth to the Mohorovicic discontinuity, and local earthquake data to obtain the 3D background wave-speed structure.\par
-Combine shear wave speed $V_S$ and bulk sound speed $V_B$ to compute compressional wave speed: $V_P^2=(\nicefrac{4}{3})V_S^2+V_B^2$.\par
-An earthquake not used in the tomographic inversion or any future earthquake may be used to independently assess the misfit reduction of the inversion which use these data deriven from other earthquakes.\par
-The approach is that of a minimization problem: (1) specification of an initial model that describes a set of earthquake source parameters and 3D variations in density, shear wave speed and bulk sound speed; (2) specification of a misfit function; (3) computation of the value of the misfit function for the initial model; (4) computation of the gradient and/or Hessian of the misfit function for the initial model; and (5) iterative minimization of the misfit function.\par
+Different results from different data sets:
+seismic reflection and industry well-log data
+to constrain the geometry and structure of major basins,
+receiver function data to estimate the depth to the Mohorovicic discontinuity,
+and local earthquake data to obtain the 3D background wave-speed structure.
+
+Combine shear wave speed $V_S$ and bulk sound speed $V_B$
+to compute compressional wave speed: $V_P^2=(\nicefrac{4}{3})V_S^2+V_B^2$.
+
+An earthquake not used in the tomographic inversion or any future earthquake
+may be used to independently assess the misfit reduction of the inversion
+which use these data deriven from other earthquakes.
+
+The approach is that of a minimization problem:
+(1) specification of an initial model that describes a set of earthquake source parameters
+and 3D variations in density, shear wave speed and bulk sound speed;
+(2) specification of a misfit function;
+(3) computation of the value of the misfit function for the initial model;
+(4) computation of the gradient and/or Hessian of the misfit function for the initial model;
+and (5) iterative minimization of the misfit function.
+
 \subsubsection{Misfit function}
-A given time window, or ``measurement window'', is selected if there is a user-specified, quantifiable level of agreement between the observed and simulated seismograms.\par
+A given time window, or ``measurement window'', is selected if there is a user-specified,
+quantifiable level of agreement between the observed and simulated seismograms.
+
 For a single time window on a single seismogram, the travel-time misfit measure is:
 \[ F_i^T(\mbf m)=\int_{-\infty}^\infty \frac{h_i(\omega)}{H_i}\Big[\frac{\Delta T_i(\omega,\mbf m)}{\sigma_i}\Big]^2d\omega \]
-where $\mbf m$ is a model vector, $\Delta T_i(\omega,\mbf m)=T_i^{obs}(\omega)-T_i^{syn}(\omega,\mbf m)$ is the frequency-dependent travel-time measurement associated with the $i$th window, $\sigma_i$ is the estimated uncertainty associated with the travel-time measurement ($\sigma_i\geqslant\sigma_0$ the ``water-level'' minimum), and $h_i(\omega)$ is a frequency-domain window with associated normalization constant $H_i=\int_{-\infty}^\infty h_i(\omega)d\omega$ (the multi-taper method). If independent of frequency, $F_i^T(\mbf m)=[\nicefrac{\Delta T_i(\mbf m)}{\sigma_i}]^2$. For a single earthquake, the misfit function is:
+where $\mbf m$ is a model vector,
+$\Delta T_i(\omega,\mbf m)=T_i^{obs}(\omega)-T_i^{syn}(\omega,\mbf m)$
+is the frequency-dependent travel-time measurement associated with the $i$th window,
+$\sigma_i$ is the estimated uncertainty associated with the travel-time measurement
+($\sigma_i\geqslant\sigma_0$ the ``water-level'' minimum),
+and $h_i(\omega)$ is a frequency-domain window
+with associated normalization constant $H_i=\int_{-\infty}^\infty h_i(\omega)d\omega$
+(the multi-taper method).
+If independent of frequency, $F_i^T(\mbf m)=[\nicefrac{\Delta T_i(\mbf m)}{\sigma_i}]^2$.
+For a single earthquake, the misfit function is:
 \[ F_s^T(\mbf m)=\frac{1}{2}\frac{1}{N_s}\sum_{i=1}^{N_s}F_i^T(\mbf m) \]
-where $N_s$ denotes the total number of measurement windows for earthquake $s$. Overall misfit function is:
+where $N_s$ denotes the total number of measurement windows for earthquake $s$.
+Overall misfit function is:
 \[ F^(\mbf m)=\frac{1}{S}\sum_{s=1}^SF_s^T(\mbf m) \]
-where $S$ is the number of earthquakes.\par
+where $S$ is the number of earthquakes.
+
 \subsection{Misfit analysis}
-Use the travel-time misfit measure within the tomographic inversion and the waveform misfit measure to assess the misfit reduction.\par
+Use the travel-time misfit measure within the tomographic inversion
+and the waveform misfit measure to assess the misfit reduction.
+
 For a single time window on a single seismogram, the waveform misfit measure is:
 \[ F_i^W(\mbf m)=\frac{\int_{-\infty}^\infty w_i(t)[d(t)-s(t,\mbf m)]^2dt}{\Big\{\int_{-\infty}^\infty w_i(t)[d(t)]^2dt\int_{-\infty}^\infty w_i(t)[s(t,\mbf m)]^2dt\Big\}^{\nicefrac{1}{2}}} \]
-where $d(t)$ denotes the recorded time series, $s(t,\mbf m)$ the simulated time series, $w_i(t)$ the $i$th time-domain window.\par
+where $d(t)$ denotes the recorded time series, $s(t,\mbf m)$ the simulated time series,
+$w_i(t)$ the $i$th time-domain window.
+
 \subsection{Earthquake source parameters}
-Four criteria, in order of importance, influenced selection of earthquakes for the tomographic inversion: (1) availability of good quality seismic waveforms for the period range of interest (must have at least 10 good stations); (2) availability of a relocated hypocenter (with origin time); (3) occurrence in a region with few other earthquake; (4) availability of a ``reasonable'' initial focal mechanism.\par
-The dense coverage of stations in the vicinity of the earthquakes is important for epicenter estimation, as well as for depth and origin time.\par
+Four criteria, in order of importance,
+influenced selection of earthquakes for the tomographic inversion:
+(1) availability of good quality seismic waveforms for the period range of interest
+(must have at least 10 good stations);
+(2) availability of a relocated hypocenter (with origin time);
+(3) occurrence in a region with few other earthquake;
+(4) availability of a ``reasonable'' initial focal mechanism.
+
+The dense coverage of stations in the vicinity of the earthquakes is important
+for epicenter estimation, as well as for depth and origin time.
+
 % vim:sw=2:wrap

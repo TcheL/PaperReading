@@ -1,22 +1,29 @@
 \renewcommand{\pmk}{Pratt\_1997\_GJI\_Newton methods}
 \renewcommand{\prf}{FWI/\pmk.pdf}
-\renewcommand{\pti}{Gauss-Newton and full Newton methods in frequency-space seismic waveform inversion}
+\renewcommand{\pti}{Gauss-Newton and full Newton methods
+in frequency-space seismic waveform inversion}
 \renewcommand{\pay}{R. G. Pratt, C. Shin and G. J. Hicks, 1997}
 \renewcommand{\pjo}{Geophys. J. Int.}
 \renewcommand{\pda}{2016/9/3 Sun.}
+
 \section{\pinfo}
 \subsection{Introduction}
 \begin{enumerate}[\hspace{10mm}*]
-  \item Wave inversion 1st attempt: Lines and Kelly, 1983 (partial derivatives of the seismogram, wedge-shaped model).
-  \item An important step: Lailly, 1983; Tarantola, 1984 (steepest descent direction for the inverse problem, backpropagate the data residuals and correlate).
-  \item Numerical results of backpropagating methods: Kolb, Collino and Lailly, 1986; Gauthier, Virieux and Tarantola, 1986.
+  \item Wave inversion 1st attempt: Lines and Kelly, 1983
+    (partial derivatives of the seismogram, wedge-shaped model).
+  \item An important step: Lailly, 1983; Tarantola, 1984
+    (steepest descent direction for the inverse problem,
+    backpropagate the data residuals and correlate).
+  \item Numerical results of backpropagating methods:
+    Kolb, Collino and Lailly, 1986; Gauthier, Virieux and Tarantola, 1986.
   \item Extend to elastic and complex problems: Mora, 1987a.
   \item Apply to the frequency domain with FDFD: Pratt and Worthington, 1990; Pratt, 1990.
   \item \sline
   \item Apply to ray theoretical solutions: Beydoun \etal, 1989; Lambare \etal, 1992.
   \item Ray-based techniques to real reflection data: Beydoun \etal, 1989; Beydoun \etal, 1990.
   \item Outside the ray paradigm to reflection data: Crase \etal, 1990.
-  \item Tomography from real cross-borehole data: Zhou \etal, 1995 in time-domain; Song, Williamson and Pratt, 1995 \& Pratt \etal, 1995 in frequency-domain.
+  \item Tomography from real cross-borehole data: Zhou \etal, 1995 in time-domain;
+    Song, Williamson and Pratt, 1995 \& Pratt \etal, 1995 in frequency-domain.
   \item \sline
   \item Gauss-Newton method with FDFE: Shin, 1988.
   \item Full Newton method for small problem: Santosa, 1987.
@@ -26,86 +33,116 @@
   \item The combined FDM/FDI: Tarantola, 1987 (replace functional analysis with matrix algebra).
   \item \sline
   \item Matrix algebra of FDM/FDI formalism: Lailly, 1983.
-\end{enumerate}\par
+\end{enumerate}
+
 \subsection{Forward}
 Wave equations:
 \[ \mbf M\ddot{\tilde{\mbf u}}(t)+\mbf K\tilde{\mbf u}(t)=\tilde{\mbf f}(t) \text{\hspace{5mm}or\hspace{5mm}if viscous,~} \mbf M\ddot{\tilde{\mbf u}}(t)+\mbf C\dot{\tilde{\mbf u}}+\mbf K\tilde{\mbf u}(t)=\tilde{\mbf f}(t) \]
-where $\mbf M$: mass matrix; $\mbf C$: damping matrix; $\mbf K$: stiffness matrix; $\tilde{\mbf f}$: source terms.\par
+where $\mbf M$: mass matrix; $\mbf C$: damping matrix; $\mbf K$:
+stiffness matrix; $\tilde{\mbf f}$: source terms.
+
 Take FT:
 \[ \mbf K\mbf u(\omega)+i\omega\mbf C\mbf u(\omega)-\omega^2\mbf M\mbf u(\omega)=\mbf f(\omega) \]
 i.e.
 \[ \mbf S\mbf u=\mbf f \text{\hspace{5mm}or\hspace{5mm}} \mbf u=\mbf S^{-1}\mbf f \text{,\hspace{5mm}with~} \mbf S=\mbf K-\omega^2\mbf M+i\omega\mbf C \]
-when $f_i=\delta_{ij}$ Kronecker delta, $\mbf S^{-1}=[\mbf g^{(1)},\mbf g^{(2)},\ldots,\mbf g^{(l)}]$, where $\mbf g^{(j)}$ approximate the discretized Green's function for an impulse at the $j$th node, and $l$ is nodal point number.\par
+when $f_i=\delta_{ij}$ Kronecker delta,
+$\mbf S^{-1}=[\mbf g^{(1)},\mbf g^{(2)},\ldots,\mbf g^{(l)}]$,
+where $\mbf g^{(j)}$ approximate the discretized Green's function for an impulse at the $j$th node,
+and $l$ is nodal point number.
+
 \subsection{Inversion}
-Residual error: $\delta d_i=u_i-d_i,(i=1,2,\ldots,n)$, where $n$ is the number of receivers.\par
+Residual error: $\delta d_i=u_i-d_i,(i=1,2,\ldots,n)$, where $n$ is the number of receivers.
+
 Minimize the misfit function:
 \[ \mbf E(\mbf p)=\frac{1}{2}\delta\mbf d^t\delta\mbf d^*\myno{=\frac{|\delta\mbf d|^2}{2}} \]
-where $\mbf p$ is model parameters, and the superscript t and * represent matrix transpose and complex conjugate, respectively.\par
+where $\mbf p$ is model parameters, and the superscript t and *
+represent matrix transpose and complex conjugate, respectively.
+
 \subsubsection{Gradient method}
 \[ \mbf p^{(k+1)}=\mbf p^{(k)}-\alpha^{(k)}\nabla_p\mbf E^{(k)} \]
 \[ \nabla_p\mbf E=\frac{\partial\mbf E}{\partial\mbf p}=\myRe\{\mbf J^t\delta\mbf d^*\} \]
-where $\mbf J$ is the \Frechet derivative matrix and $J_{ij}=\nicefrac{\partial u_i}{\partial p_j},i=(1,2,\ldots,n),j=(1,2,\ldots,m)$, $m$ is the number of model parameters.\par
+where $\mbf J$ is the \Frechet derivative matrix
+and $J_{ij}=\nicefrac{\partial u_i}{\partial p_j},i=(1,2,\ldots,n),j=(1,2,\ldots,m)$,
+$m$ is the number of model parameters.
+
 For linear forward problems:
 \[ \alpha^{(k)}=\frac{|\nabla_p\mbf E|^2}{|\mbf J\nabla_p E|^2}. \]
-While for nonlinear forward problems, find $\alpha^{(k)}$ using line-search method.\par
-Augment $\mbf J_{m\times n}$ to $\hat{\mbf J}_{m\times l}$ and $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$, rewrite:
-\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^* \} \]\par
+While for nonlinear forward problems, find $\alpha^{(k)}$ using line-search method.
+
+Augment $\mbf J_{m\times n}$ to $\hat{\mbf J}_{m\times l}$
+and $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$,
+rewrite:
+\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^* \} \]
+
 Assuming source is independent of parameter, because of $\mbf S\mbf u=\mbf f$:
 \[ \mbf S\frac{\partial\mbf u}{\partial p_i}=-\frac{\partial\mbf S}{\partial p_i}\mbf u \hspace{5mm}\Rightarrow\hspace{5mm} \frac{\partial\mbf u}{\partial p_i}=\mbf S^{-1}\mbf f^{(i)} \text{,\hspace{5mm}with~} \mbf f^{(i)}=-\frac{\partial\mbf S}{\partial p_i}\mbf u\]
-where $\mbf f^{(i)}$ is \myem{the virtual source term}.\par
+where $\mbf f^{(i)}$ is \myem{the virtual source term}.
+
 \subsubsection{Gradient direction}
-\[ \hat{\mbf J}=\Big[\frac{\partial\mbf u}{\partial p_1},\frac{\partial\mbf u}{\partial p_2},\ldots,\frac{\partial\mbf u}{\partial p_m}\Big]=\mbf S^{-1}[\mbf f^{(1)},\mbf f^{(2)},\ldots,\mbf f^{(m)}] \text{\hspace{5mm}or\hspace{5mm}} \hat{\mbf J}=\mbf S^{-1}\mbf F \]\par
+\[ \hat{\mbf J}=\Big[\frac{\partial\mbf u}{\partial p_1},\frac{\partial\mbf u}{\partial p_2},\ldots,\frac{\partial\mbf u}{\partial p_m}\Big]=\mbf S^{-1}[\mbf f^{(1)},\mbf f^{(2)},\ldots,\mbf f^{(m)}] \text{\hspace{5mm}or\hspace{5mm}} \hat{\mbf J}=\mbf S^{-1}\mbf F \]
+
 Gradient:
 \[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t\mbf v\}. \]
 Because $\mbf S^{-1}$ is symmetric for seismic source-receiver reciprocal problems,
-\[ \mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*=\mbf S^{-1}\delta\hat{\mbf d}^* \]\par
+\[ \mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*=\mbf S^{-1}\delta\hat{\mbf d}^* \]
+
 Another development:
 \[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\hat{\mbf J}^{t*}\delta\hat{\mbf d}\} \]
 \[ \mbf w=\mbf v^*=[\mbf S^{-1}]^{t*}\delta\hat{\mbf d}=[\mbf S^{-1}]^*\delta\hat{\mbf d} \]
-where $\mbf v$ and $\mbf w$ are \myem{the backpropagated fields}.\par
+where $\mbf v$ and $\mbf w$ are \myem{the backpropagated fields}.
+
 For the $i$th component:
-\[ (\nabla_p\mbf E)_i=\myRe\{\mbf f^{(i)t}\mbf v\}=\myRe\{\mbf u^t\Big[\frac{\partial\mbf S^t}{\partial p_i}\Big]\mbf v\} \]\par
+\[ (\nabla_p\mbf E)_i=\myRe\{\mbf f^{(i)t}\mbf v\}=\myRe\{\mbf u^t\Big[\frac{\partial\mbf S^t}{\partial p_i}\Big]\mbf v\} \]
+
 \subsubsection{Newton method}
 Taylor expansion:
 \[ \mbf E(\mbf p+\delta\mbf p)=\mbf E(\mbf p)+\delta\mbf p^t\nabla_p\mbf E(\mbf p)+\frac{1}{2}\delta\mbf p^t\mbf H\delta\mbf p+O(|\delta\mbf p|^3)  \]
 where $\mbf H$ is the $m\times m$ Hessian second-derivative matrix and
-\[ H_{ij}=\frac{\partial^2\mbf E(\mbf p)}{\partial p_i\partial p_j},i=(1,2,\ldots,m),j=(1,2,\ldots,m) \]\par
+\[ H_{ij}=\frac{\partial^2\mbf E(\mbf p)}{\partial p_i\partial p_j},i=(1,2,\ldots,m),j=(1,2,\ldots,m) \]
+
 Minimizing with $\delta\mbf p$, take the first-derivative, the solution is
-\[ \mbf H\delta\mbf p=-\nabla_p\mbf E \text{\hspace{5mm}or\hspace{5mm}} \delta\mbf p=-\mbf H^{-1}\nabla_p\mbf E \]\par
+\[ \mbf H\delta\mbf p=-\nabla_p\mbf E \text{\hspace{5mm}or\hspace{5mm}} \delta\mbf p=-\mbf H^{-1}\nabla_p\mbf E \]
+
 Newton method for iterative solution:
 \[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H^{-1}\nabla_p\mbf E \]
 \[ H_{ij}=\frac{\partial^2\mbf E}{\partial p_i\partial p_j}=\myRe\{\mbf J^t\mbf J^*\}+\myRe\Big\{\Big[\Big(\frac{\partial}{\partial p_1}\mbf J^t\Big)\delta\mbf d^*,\Big(\frac{\partial}{\partial p_2}\mbf J^t\Big)\delta\mbf d^*,\ldots,\Big(\frac{\partial}{\partial p_m}\mbf J^t\Big)\delta\mbf d^*\Big]\Big\}=\mbf H_a+\mbf R \]
 where
 \[ \mbf H_a=\myRe\{\mbf J^t\mbf J^*\} \]
-\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial p_t}\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]\par
+\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial p_t}\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]
+
 \subsubsection{Gauss-Newton method}
 If we neglect the 2nd term $\mbf R$, Gauss-Newton formula:
-\[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H_a^{-1}\nabla_p\mbf E \text{\hspace{5mm}and\hspace{5mm}} \delta\mbf p=-\mbf H_a^{-1}\nabla_p\mbf E \]\par
+\[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H_a^{-1}\nabla_p\mbf E \text{\hspace{5mm}and\hspace{5mm}} \delta\mbf p=-\mbf H_a^{-1}\nabla_p\mbf E \]
+
 Apply a damping term of regularization:
-\[ \delta\mbf p=-(\mbf H_a+\lambda\mbf I)^{-1}\nabla_p\mbf E \text{\hspace{5mm}\myno{(LM method)}}\]\par
+\[ \delta\mbf p=-(\mbf H_a+\lambda\mbf I)^{-1}\nabla_p\mbf E \text{\hspace{5mm}\myno{(LM method)}}\]
+
 The parameter estimates
 \[ \delta\hat{\mbf p}=-\mbf H^\dagger\nabla_p\mbf E=\gamma\delta\mbf p,\gamma=-\mbf H^\dagger\myRe\{\mbf J^t\mbf J^*\} \]
-where $\gamma$ is the resolution matrix.\par
+where $\gamma$ is the resolution matrix.
+
 Another interpretation for $\delta\mbf p$:
 \[ \delta\mbf p=-(\mbf K^t\mbf K+\lambda\mbf I)^{-1}\mbf K^t\delta\mbf d^\prime=-\mbf K^t(\mbf K\mbf K^t+\lambda\mbf I)^{-1}\delta\mbf d^\prime \]
 where
 \begin{equation*}
-\mbf K=\left[ \begin{array}{c}
-\myRe\{\mbf J\} \\
-\myIm\{\mbf J\}
-\end{array}\right],
-\delta\mbf d^\prime=\left[ \begin{array}{c}
-\myRe\{\delta\mbf d\} \\
-\myIm\{\delta\mbf d\}
-\end{array}\right]
-\end{equation*}\par
+  \mbf K=\left[ \begin{array}{c}
+    \myRe\{\mbf J\} \\
+    \myIm\{\mbf J\}
+  \end{array}\right],
+  \delta\mbf d^\prime=\left[ \begin{array}{c}
+    \myRe\{\delta\mbf d\} \\
+    \myIm\{\delta\mbf d\}
+  \end{array}\right]
+\end{equation*}
+
 \subsubsection{Full Newton method}
 Use the exact Hessian matrix:
 \[ \delta\mbf p=-(\mbf H_a+\mbf R)^{-1}\nabla_p\mbf E \]
 where
 \[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial\mbf p^t}\mbf J^t\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]
 \[ R_{ij}=\myRe\Big\{\Big[\frac{\partial^2\mbf u^t}{\partial p_i\partial p_j}\Big]\delta\hat{\mbf d}^*\Big\},i=(1,2,\ldots,m),j=(1,2,\ldots,m) \]
-with the augment of $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$.\par
+with the augment of $\mbf d_{n\times 1}$ to $\hat{\mbf d}_{l\times 1}$.
+
 \subsubsection{Exact Hessian}
 From
 \[ \mbf S\frac{\partial\mbf u}{\partial p_i}=-\frac{\partial\mbf S}{\partial p_i}\mbf u \]
@@ -115,9 +152,11 @@ i.e.
 \[ \mbf S\frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf f^{(ij)} \text{\hspace{5mm}or\hspace{5mm}} \frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf S^{-1}\mbf f^{(ij)} \]
 where
 \[ \mbf f^{(ij)}=\Big(\frac{\partial\mbf S}{\partial p_i}\Big)\Big(\frac{\partial\mbf u}{\partial p_j}\Big)+\Big(\frac{\partial\mbf S}{\partial p_j}\Big)\Big(\frac{\partial\mbf u}{\partial p_i}\Big)+\frac{\partial^2\mbf S}{\partial p_j\partial p_i}\mbf u \]
-is \myem{the 2nd-order virtual source term}.\par
+is \myem{the 2nd-order virtual source term}.
+
 Because of
 \[ \Big[\frac{\partial^2\mbf u}{\partial p_i\partial p_j}\Big]^t=-[\mbf f^{(ij)}]^t[\mbf S^{-1}]^t \]
 obtain:
-\[ R_{ij}=-\myRe\{[\mbf f^{(ij)}]^t\mbf v\},\mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\myno{=\mbf S^{-1}\delta\hat{\mbf d}^*} \]\par
+\[ R_{ij}=-\myRe\{[\mbf f^{(ij)}]^t\mbf v\},\mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\myno{=\mbf S^{-1}\delta\hat{\mbf d}^*} \]
+
 % vim:sw=2:wrap

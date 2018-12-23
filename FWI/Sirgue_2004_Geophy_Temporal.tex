@@ -1,15 +1,20 @@
 \renewcommand{\pmk}{Sirgue\_2004\_Geophy\_Temporal frequencies selecting}
 \renewcommand{\prf}{FWI/\pmk.pdf}
-\renewcommand{\pti}{Efficient waveform inversion and imaging: A strategy for selecting temporal frequencies}
+\renewcommand{\pti}{Efficient waveform inversion and imaging:
+A strategy for selecting temporal frequencies}
 \renewcommand{\pay}{Laurent Sirgue and R. Gerhard Pratt, 2004}
 \renewcommand{\pjo}{Geophysics}
 \renewcommand{\pda}{2016/9/23 Fri.}
+
 \section{\pinfo}
 \subsection{Introduction}
 \begin{enumerate}[\hspace{10mm}*]
-  \item Wave inversion implementation: Tarantola, 1986 \& Mora, 1987 \& Burks \etal, 1995 \& Shipp and Singh, 2002 in time domain; Pratt and Worthington, 1990 \& Liao and McMechan, 1996 in frequency domain.
+  \item Wave inversion implementation: Tarantola, 1986 \& Mora, 1987
+    \& Burks \etal, 1995 \& Shipp and Singh, 2002 in time domain;
+    Pratt and Worthington, 1990 \& Liao and McMechan, 1996 in frequency domain.
   \item \sline
-  \item Time windowing the residuals: Shipp and Singh, 2002 in time domain; Mallick and Frazer, 1987 in frequency domain.
+  \item Time windowing the residuals: Shipp and Singh, 2002 in time domain;
+    Mallick and Frazer, 1987 in frequency domain.
   \item Low-pass filter the data: Bunks \etal,1995.
   \item \sline
   \item Single frequency yields finite information of the model: Wu and Toks\"{o}z, 1987.
@@ -17,81 +22,123 @@
   \item Limited number of frequencies would suffice: Freudenreich and Singh, 2000.
   \item \sline
   \item Image stretch (NMO stretch) of prestack depth migration: Gardner \etal, 1974.
-  \item Stretch effect compensate lack of low frequencies and improve the spectral content of stacked data: Haldorsen and Farmer, 1989.
+  \item Stretch effect compensate lack of low frequencies
+    and improve the spectral content of stacked data: Haldorsen and Farmer, 1989.
   \item Prestack depth imaging for reflection data: Tarantola, 1986.
   \item Frequency domain prestack depth migration: Schleicher \etal, 1993.
   \item \sline
-  \item Compute step length of iterative gradient method using linear estimate: Tarantola, 1984a; Mora, 1987.
+  \item Compute step length of iterative gradient method using linear estimate:
+    Tarantola, 1984a; Mora, 1987.
   \item Conjugate gradient method: Concus \etal, 1976.
-  \item Compute gradient without explicitly partial derivatives of the data: Lailly, 1983; Tarantola, 1987; Pratt and Worthington, 1990; Pratt \etal, 1998.
+  \item Compute gradient without explicitly partial derivatives of the data:
+    Lailly, 1983; Tarantola, 1987; Pratt and Worthington, 1990; Pratt \etal, 1998.
   \item Wavepath as the adjoint of the \Frechet partial derivative: Woodward, 1992.
   \item Diffraction tomography: Devaney, 1981; Wu and Toks\"{o}z, 1987.
-  \item Linearized inversion in the $(\omega,k)$ domain: Clayton and Stolt, 1981; Ikelle \etal, 1986.
-\end{enumerate}\par
+  \item Linearized inversion in the $(\omega,k)$ domain:
+  Clayton and Stolt, 1981; Ikelle \etal, 1986.
+\end{enumerate}
+
 \subsection{Waveform inversion}
 Constant-density acoustic-wave equation:
 \[ \Big(\nabla^2+\frac{\omega^2}{c^2(\mbf x)}\Big)\Psi(\mbf x,\mbf s,\omega)=-\delta(\mbf x-\mbf s) \]
 and the model parameter
 \[ m(\mbf x)=\frac{1}{c^2(\mbf x)} \]
-where $\Psi(\mbf x,\mbf s,\omega)$ is the pressure field at the spatial location $\mbf x$ with the source location $\mbf s$.\par
-If $\omega$ is implicit, the complex-valued data residuals with source-receiver coordinates $\mbf s$ and $\mbf r$:
-\[ \Delta\Psi(\mbf r,\mbf s)=\Psi_{calc}(\mbf r,\mbf s)-\Psi_{obs}(\mbf r,\mbf s) \]\par
+where $\Psi(\mbf x,\mbf s,\omega)$ is the pressure field
+at the spatial location $\mbf x$ with the source location $\mbf s$.
+
+If $\omega$ is implicit, the complex-valued data residuals
+with source-receiver coordinates $\mbf s$ and $\mbf r$:
+\[ \Delta\Psi(\mbf r,\mbf s)=\Psi_{calc}(\mbf r,\mbf s)-\Psi_{obs}(\mbf r,\mbf s) \]
+
 Minimize the misfit function:
 \[ E=\frac{1}{2}\sum_s\sum_r\delta\Psi^*(\mbf r,\mbf s)\delta\Psi(\mbf r,\mbf s) \]
 where $*$ denotes complex conjugation. And the descent direction:
 \[ g(\mbf x)=-\nabla_m E=-\frac{\partial E}{\partial m(\mbf x)} \]
 The model updated by:
-\[ m(\mbf x)^{l+1}=m(\mbf x)^l+\gamma^lg(\mbf x)^l \]\par
-Compute gradient by zero-lag correlation of the forward propagated wavefield and the back-propagated wavefield (Pratt \etal, 1996, eq.12):
+\[ m(\mbf x)^{l+1}=m(\mbf x)^l+\gamma^lg(\mbf x)^l \]
+
+Compute gradient by zero-lag correlation
+of the forward propagated wavefield and the back-propagated wavefield (Pratt \etal, 1996, eq.12):
 \[ g(\mbf x)=-\omega^2\sum_s\sum_r\myRe\{P_f^*(\mbf x,\mbf s)P_b(\mbf x,\mbf r,\mbf s)\} \]
 \[ P_f(\mbf x,\mbf s)=G_0(\mbf x,\mbf s) \text{\hspace{5mm}and\hspace{5mm}} P_b(\mbf x,\mbf r,\mbf s)=G_0^*(\mbf x,\mbf r)\Delta\Psi(\mbf r,\mbf s) \]
-where $P_f(\mbf x,\mbf s)$ and $P_b(\mbf x,\mbf r,\mbf s)$ are the forward propagated wavefield of an unit impulsive point source and the back-propagated wavefield of the data residuals, respectively; $G_0(\mbf x,\mbf s)$ and $G_0(\mbf x,\mbf r)$ are the Green's functions for exciting at the source and receiver locations, respectively.\par
+where $P_f(\mbf x,\mbf s)$ and $P_b(\mbf x,\mbf r,\mbf s)$
+are the forward propagated wavefield of an unit impulsive point source
+and the back-propagated wavefield of the data residuals, respectively;
+$G_0(\mbf x,\mbf s)$ and $G_0(\mbf x,\mbf r)$ are the Green's functions
+for exciting at the source and receiver locations, respectively.
+
 The full expression:
-\[ g(\mbf x)=-\omega^2\sum_s\sum_r\myRe\{G_0^*(\mbf x,\mbf s)G_0^*(\mbf x,\mbf r)\Delta\Psi(\mbf r,\mbf s)\} \]\par
-Assume ignoring amplitude effects, the homogeneous reference medium with velocity $c_0$ and the far field, approximate by plane waves:
+\[ g(\mbf x)=-\omega^2\sum_s\sum_r\myRe\{G_0^*(\mbf x,\mbf s)G_0^*(\mbf x,\mbf r)\Delta\Psi(\mbf r,\mbf s)\} \]
+
+Assume ignoring amplitude effects,
+the homogeneous reference medium with velocity $c_0$ and the far field, approximate by plane waves:
 \[ G_0(\mbf x,\mbf s)\approx\exp(ik_0\hat{\mbf s}\cdot\mbf x) \text{\hspace{5mm}and\hspace{5mm}} G_0(\mbf x,\mbf r)\approx\exp(ik_0\hat{\mbf r}\cdot\mbf x) \]
-where $k_0=\nicefrac{\omega}{c_0}$ is the wavenumber, and $\hat{\mbf s}$ and $\hat{\mbf r}$ are unit vectors from source (incident propagation) and receiver (inverse scattering) to scatter, respectively. So that
+where $k_0=\nicefrac{\omega}{c_0}$ is the wavenumber,
+and $\hat{\mbf s}$ and $\hat{\mbf r}$ are unit vectors
+from source (incident propagation) and receiver (inverse scattering) to scatter, respectively.
+So that
 \begin{align*}
 g(\mbf x) & =-\omega^2\sum_s\sum_r\myRe\{\exp(-ik_0\hat{\mbf s}\cdot\mbf x)\times\exp(-ik_0\hat{\mbf r}\cdot\mbf x)\Delta\Psi(\mbf r,\mbf s)\} \\
           & =-\omega^2\sum_s\sum_r\myRe\{\exp(-ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x)\Delta\Psi(\mbf r,\mbf s)\}
 \end{align*}
-Note that this is an inverse Fourier summation.\par
+Note that this is an inverse Fourier summation.
+
 \subsection{Gradient analysis}
 Through the Born approximation (Miller \etal, 1987, eq.8):
 \[ \Delta\Psi(\mbf r,\mbf s)\approx-\omega^2\int d\mbf xG_0(\mbf r,\mbf x)G_0(\mbf x,\mbf s)\delta m(\mbf x) \]
-where $\delta m(\mbf x)$ is the true parameter perturbation. Because of the plane-wave approximations, obtain:
+where $\delta m(\mbf x)$ is the true parameter perturbation.
+Because of the plane-wave approximations, obtain:
 \[ \Delta\Psi(\mbf r,\mbf s)\approx-\omega^2\int d\mbf x\delta m(\mbf x)\exp(+ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x) \]
 And rewrite as
 \[ \Delta\Psi(\mbf r,\mbf s)=-\omega^2\tilde{M}(k_0(\hat{\mbf s}+\hat{\mbf r})) \]
-where $\tilde{M}(\mbf k)$ is the Fourier transform of $\delta m(\mbf x)$.\par
+where $\tilde{M}(\mbf k)$ is the Fourier transform of $\delta m(\mbf x)$.
+
 Thus,
 \[ g(\mbf x)=\omega^4\sum_s\sum_r\myRe\{\exp(-ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x)\tilde{M}(k_0(\hat{\mbf s}+\hat{\mbf r}))\} \]
-This is an inverse Fourier summation where the weights in the summation are given by the Fourier components of the model. And
+This is an inverse Fourier summation
+where the weights in the summation are given by the Fourier components of the model.
+And
 \[ g(\mbf x)\rightarrow\omega^4\delta m(\mbf x) \]
-where the gradient will recover a scaled image of the original model.\par
+where the gradient will recover a scaled image of the original model.
+
 \subsection{The 1D case}
-For a 1D earth (velocity varies only as a function of depth), the incident and scattering angles are symmetric,
+For a 1D earth (velocity varies only as a function of depth),
+the incident and scattering angles are symmetric,
 \[ k_0\hat{\mbf s}=(k_0\sin\theta,k_0\cos\theta) \text{\hspace{5mm}and\hspace{5mm}} k_0\hat{\mbf r}=(k_0\sin(-\theta),k_0\cos(-\theta))=(-k_0\sin\theta,k_0\cos\theta) \]
 where the angles $\theta$ and $-\theta$ are for the source and receiver wave, and
 \[ \cos\theta=\frac{z}{\sqrt{h^2+z^2}} \text{\hspace{5mm}and\hspace{5mm}} \sin\theta=\frac{h}{\sqrt{h^2+z^2}} \]
-in which $h$ is the half offset and $z$ is the depth of the scattering layer. So the wavenumber illumination:
+in which $h$ is the half offset and $z$ is the depth of the scattering layer.
+So the wavenumber illumination:
 \[ k_0(\hat{\mbf s}+\hat{\mbf r})=(k_x,k_z)=(0,2k_0\alpha) \text{\hspace{5mm}with\hspace{5mm}} \alpha=\cos\theta=\frac{1}{\sqrt{1+R^2}} \]
-where $R=\nicefrac{h}{z}$.\par
+where $R=\nicefrac{h}{z}$.
+
 \subsection{Strategy for choosing frequencies}
 For an offset range $[0,x_{max}]$ of a 1D thin layer, the vertical wavenumber coverage
 \[ k_z\in[k_{zmin},k_{zmax}]=[2k_0\alpha_{min},2k_0] \text{\hspace{5mm}with\hspace{5mm}} \alpha_{min}=\frac{1}{\sqrt{1+R_{max}^2}}\myno{,\alpha_{max}=1} \]
-where $R_{max}=\nicefrac{h_{max}}{z}$ and $h_{max}$ is the maximum half offset. Due to $k_0=\nicefrac{\omega}{c_0}$, in terms of frequency,
+where $R_{max}=\nicefrac{h_{max}}{z}$ and $h_{max}$ is the maximum half offset.
+Due to $k_0=\nicefrac{\omega}{c_0}$, in terms of frequency,
 \[ k_{zmin}=4\pi f\alpha_{min}/c_0 \text{\hspace{5mm}and\hspace{5mm}} k_{zmax}=4\pi f/c_0 \]
 Define \myem{the wavenumber coverage} and \myem{the wavenumber bandwidth}
 \[ \Delta k_z\triangleq|k_{zmax}-k_{zmin}|=4\pi(1-\alpha_{min})f/c_0 \]
-\[ \frac{k_{zmax}}{k_{zmin}}=\frac{1}{\alpha_{min}}=\sqrt{1+R^2} \]\par
+\[ \frac{k_{zmax}}{k_{zmin}}=\frac{1}{\alpha_{min}}=\sqrt{1+R^2} \]
+
 The strategy for choosing frequencies:
 \[ k_{zmin}(f_{n+1})=k_{zmax}(f_n) \]
 Because of the former $k=\nicefrac{4\pi f\alpha}{c_0}$, obtain the relation
 \[ f_{n+1}=\frac{f_n}{\alpha_{min}} \]
 and the frequency increment
-\[ \Delta f_{n+1}=f_{n+1}-f_n=\Big(\frac{1-\alpha_{min}}{\alpha_{min}}\Big)f_n=(1-\alpha_{min})f_{n+1} \]\par
+\[ \Delta f_{n+1}=f_{n+1}-f_n=\Big(\frac{1-\alpha_{min}}{\alpha_{min}}\Big)f_n=(1-\alpha_{min})f_{n+1} \]
+
 \subsection{The equivalence between gradient images and migration}
-Migration maps the data to ``isochrones'' in the model space, whereas the gradient maps the data residuals to the wavepath. Transmitted events map within the first Fresnel zones of the wavepath, while reflected events map to the higher order Fresnel zones.\par
-In the first iteration of a waveform inversion scheme, the starting model is normally a smoothed model, which will generate accurate transmitted arrivals but no reflected energy. The first iteration data residuals will be dominated by reflections, the first iteration image is kinematically equivalent to a migration of the data.\par
+Migration maps the data to ``isochrones'' in the model space,
+whereas the gradient maps the data residuals to the wavepath.
+Transmitted events map within the first Fresnel zones of the wavepath,
+while reflected events map to the higher order Fresnel zones.
+
+In the first iteration of a waveform inversion scheme,
+the starting model is normally a smoothed model,
+which will generate accurate transmitted arrivals but no reflected energy.
+The first iteration data residuals will be dominated by reflections,
+the first iteration image is kinematically equivalent to a migration of the data.
+
 % vim:sw=2:wrap
