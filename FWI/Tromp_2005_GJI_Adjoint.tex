@@ -99,6 +99,7 @@ where
 $\delta\ln\rho=\nicefrac{\delta\rho}{\rho}$ and $\delta\ln c_{jklm}=\nicefrac{\delta c_{jklm}}{c_{jklm}}$
 denote relative model perturbations,
 and the 3-D \mynnem{waveform misfit kernels}
+\myidx{Concept}{Kernel}{waveform misfit kernel}
 for density and the elastic parameters are respectively:
 \[ K_\rho(\mbf x)=-\int_0^T\rho(\mbf x)\mbf s^\dagger(\mbf x,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)dt \]
 \[ K_{c_{jklm}}(\mbf x)=-\int_0^T\epsilon_{jk}^\dagger(\mbf x,T-t)c_{jklm}(\mbf x)\epsilon_{lm}(\mbf x,t)dt \]
@@ -226,7 +227,9 @@ and the \mynnem{traveltime adjoint field} $\bar{\mbf s}^\dagger$:
 \end{align*}
 With this definition the isotropic traveltime \Frechet derivative is:
 \[ \delta T_r=\int_V[\bar K_\rho(\mbf x,\mbf x_r)\delta\ln\rho(\mbf x)+\bar K_\mu(\mbf x,\mbf x_r)\delta\ln\mu(\mbf x)+\bar K_\kappa(\mbf x,\mbf x_r)\delta\ln\kappa(\mbf x)]d^3\mbf x \]
-where the \mynnem{banana-doughnut kernels} $\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
+where the \mynnem{banana-doughnut kernels}
+\myidx{Concept}{Kernel}{banana-doughnut kernel}
+$\bar K_\rho$, $\bar K_\mu$ and $\bar K_\kappa$ are:
 \[ \bar K_\rho(\mbf x,\mbf x_r)=-\int_0^T\rho(\mbf x)[\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)\cdot\partial_t^2\mbf s(\mbf x,t)]dt \]
 \[ \bar K_\mu(\mbf x,\mbf x_r)=-\int_0^T2\mu(\mbf x)\bar{\mbf D}^\dagger(\mbf x,\mbf x_r,T-t):\mbf D(\mbf x,t)dt \]
 \[ \bar K_\kappa(\mbf x,\mbf x_r)=-\int_0^T\kappa(\mbf x)[\nabla\cdot\bar{\mbf s}^\dagger(\mbf x,\mbf x_r,T-t)][\nabla\cdot\mbf s(\mbf x,t)]dt \]
@@ -242,7 +245,9 @@ The \Frechet derivative of the traveltime misfit function is:
   \delta\chi & =\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\delta T_r \\
     & =\int_V[K_\rho^\prime(\mbf x)\delta\ln\rho(\mbf x)+K_\beta(\mbf x)\delta\ln\beta(\mbf x)+K_\alpha(\mbf x)\delta\ln\alpha(\mbf x)]d^3\mbf x
 \end{align*}
-where the \mynnem{traveltime misfit kernels} $K_\rho^\prime$, $K_\beta$ and $K_\alpha$ are:
+where the \mynnem{traveltime misfit kernels}
+\myidx{Concept}{Kernel}{traveltime misfit kernel}
+$K_\rho^\prime$, $K_\beta$ and $K_\alpha$ are:
 \[ K_\rho^\prime(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\rho^\prime(\mbf x,\mbf x_r) \]
 \[ K_\beta(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\beta(\mbf x,\mbf x_r) \]
 \[ K_\alpha(\mbf x)=\sum_{r=1}^N\big(T_r-T_r^{obs}\big)\bar K_\alpha(\mbf x,\mbf x_r) \]

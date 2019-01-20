@@ -59,6 +59,7 @@ where $\mbf p$ is model parameters, and the superscript t and *
 represent matrix transpose and complex conjugate, respectively.
 
 \subsubsection{Gradient method}
+\myidx{Inversion}{Iteration}{Gradient method}
 \[ \mbf p^{(k+1)}=\mbf p^{(k)}-\alpha^{(k)}\nabla_p\mbf E^{(k)} \]
 \[ \nabla_p\mbf E=\frac{\partial\mbf E}{\partial\mbf p}=\myRe\{\mbf J^t\delta\mbf d^*\} \]
 where $\mbf J$ is the \Frechet derivative matrix
@@ -95,6 +96,7 @@ For the $i$th component:
 \[ (\nabla_p\mbf E)_i=\myRe\{\mbf f^{(i)t}\mbf v\}=\myRe\{\mbf u^t\Big[\frac{\partial\mbf S^t}{\partial p_i}\Big]\mbf v\} \]
 
 \subsubsection{Newton method}
+\myidx{Inversion}{Iteration}{Newton method}
 Taylor expansion:
 \[ \mbf E(\mbf p+\delta\mbf p)=\mbf E(\mbf p)+\delta\mbf p^t\nabla_p\mbf E(\mbf p)+\frac{1}{2}\delta\mbf p^t\mbf H\delta\mbf p+O(|\delta\mbf p|^3)  \]
 where $\mbf H$ is the $m\times m$ Hessian second-derivative matrix and
@@ -111,6 +113,7 @@ where
 \[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial p_t}\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]
 
 \subsubsection{Gauss-Newton method}
+\myidx{Inversion}{Iteration}{Gauss-Newton method}
 If we neglect the 2nd term $\mbf R$, Gauss-Newton formula:
 \[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H_a^{-1}\nabla_p\mbf E \text{\hspace{5mm}and\hspace{5mm}} \delta\mbf p=-\mbf H_a^{-1}\nabla_p\mbf E \]
 
@@ -136,6 +139,7 @@ where
 \end{equation*}
 
 \subsubsection{Full Newton method}
+\myidx{Inversion}{Iteration}{full Newton method}
 Use the exact Hessian matrix:
 \[ \delta\mbf p=-(\mbf H_a+\mbf R)^{-1}\nabla_p\mbf E \]
 where

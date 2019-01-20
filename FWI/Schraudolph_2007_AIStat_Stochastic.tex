@@ -53,6 +53,7 @@ J_{ij}=\left\{
 \end{equation*}
 
 \subsubsection{Stochastic gradient descent (SGD)}
+\myidx{Inversion}{Iteration}{stochastic gradient descent}
 Simple stochastic gradient descent:
 \[ \mgbf\theta_{t+1}=\mgbf\theta_t-\eta_t\nabla f(\mgbf\theta_t,\mbf X_t), \]
 where $\eta_t>0$ is a scalar gain.
@@ -67,6 +68,7 @@ SGD takes only $O(n)$ space and time per iteration,
 and suffers from slow convergence on ill-conditioned problems.
 
 \subsubsection{Stochastic meta-descent (SMD)}
+\myidx{Inversion}{Iteration}{stochastic meta-descent}
 Giving each system parameter its own gain:
 \[ \mgbf\theta_{t+1}=\mgbf\theta_t-\mgbf\eta_t\cdot\nabla f(\mgbf\theta_t,\mbf X_t), \]
 where the vector gain $\mgbf\eta_t$ is adapted by
@@ -79,6 +81,7 @@ If $\mbf H_t\mgbf\nu_t$ can be computed efficiently (Schraudolph, 2002),
 SMD still takes only $O(n)$ space and time per iteration.
 
 \subsubsection{Natural gradient descent (NG)}
+\myidx{Inversion}{Iteration}{natural gradient descent}
 Incorporate the Riemannian metric tensor
 $\mbf G_t=\mybE_{\mbf X}[\nabla f(\mgbf\theta_t,\mbf X_t)\nabla f(\mgbf\theta_t,\mbf X_t)^T]$
 into the stochastic gradient update:

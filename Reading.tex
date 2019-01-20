@@ -1,6 +1,4 @@
 \documentclass{article}
-\usepackage{xcolor}                               % color package for colorful font
-\usepackage{fancyvrb}                             % transcribing package for Verbatim environment
 % +++++ set header and/or footer ++++++
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -8,7 +6,7 @@
 \fancyhead[L]{\sf \myleftmark}
 \fancyhead[R]{\sf Tche L.}
 \fancyfoot[L]{\thepage{}}
-\fancyfoot[R]{\hyperref[toc]{$\circlearrowright$}}
+\fancyfoot[R]{\hyperref[toc]{$\circlearrowleft$}}
 % -------------------------------------
 \usepackage[text={148mm,220mm},centering,includehead,vmarginratio=1:1]{geometry} % set paper layout
 \setlength{\headwidth}{\textwidth}                % set header width
@@ -29,12 +27,13 @@
 % \titleformat{\paragraph}{\sc}{}{}{\hspace{2em}}
 % -------------------------------------
 
+\usepackage{xcolor}                               % color package for colorful font
+\usepackage{fancyvrb}                             % transcribing package for Verbatim environment
 \usepackage{enumerate}                            % sorting package for enumerate environment
 %\usepackage{enumitem}                             % sorting package for enumitem environment
 
 \usepackage{times}                                % Times New Roman font package for main text only
-% \usepackage{mathptmx}                             % Times New Roman font package for formula
-% no difference between normal and bold Greek characters
+% \usepackage{mathptmx}                             % Times New Roman font package for formula, no difference between normal and bold Greek characters
 % \usepackage{txfonts}                              % faked Times font package for formula
 \usepackage{newtxmath}                            % faked Times font package for formula
 % \usepackage{mathastext}                           % deal math same as text package
@@ -50,9 +49,7 @@
 % \usepackage{subfig}                               % subgraph package for \subfloat command
 % \usepackage{bm}                                   % bold type package for \bm command
 % \usepackage{tikz}                                 % tikz drawing package for framed words
-
-\setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
-\renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
+\usepackage{makeidx}
 
 \renewcommand{\part}[1]{{\LARGE\bf\noindent #1}}
 \newcommand{\myleftmark}{\thesection~~~~\textsc{\pmk}} %\MakeUppercase{\pmk}}
@@ -66,10 +63,6 @@
 \newcommand{\refp}[1]{\href{run:\Ppath\prf}{#1}}
 \newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}}
 \newcommand{\sline}{*************************}
-
-\makeatletter
-\newcommand{\mybox}[1]{\textcolor{green}{\tikz[baseline={([yshift=-3pt]current bounding box.center)}] \node [rectangle, minimum width=1ex,rounded corners,draw] {\normalcolor\m@th$\displaystyle#1$};}}
-\makeatother
 
 \newcommand{\mbf}[1]{\mathbf{#1}}
 \newcommand{\mgbf}[1]{\boldsymbol{#1}}
@@ -94,6 +87,16 @@
 \newcommand{\sgn}{\text{sgn}}
 % \newcommand{\npart}{\newpage\setcounter{footnote}{0}\setcounter{section}{0}}
 \newcommand{\npart}{\newpage\setcounter{footnote}{0}}
+\newcommand{\myidx}[3]{\index{#1@{\large\textbf{#1}}!#2@\textsf{#2}!#3@\textit{#3}}}
+\newcommand{\myidxx}[4]{\index{#1@{\large\textbf{#1}}!#2@\textsf{#2}!#3@\textit{#3}|see{\textit{#4}}}}
+
+\setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
+\renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
+\renewcommand{\indexname}{\part{Index}}
+
+\makeatletter
+\makeatother
+\makeindex
 
 \begin{document}
 
@@ -158,6 +161,13 @@
 
 \input{WaveForward/ZhangW_2010_Geophy_ADE}
 \vspace{5mm}
+
+\newpage
+\myidxx{Inversion}{Iteration}{quasi-Newton algorithm}{Gauss-Newton method}
+\myidxx{Concept}{Kernel}{sensitivity kernel}{banana-doughnut kernel}
+\myidxx{Concept}{Kernel}{finite-frequency kernel}{banana-doughnut kernel}
+\myidxx{Concept}{Kernel}{Born kernel}{banana-doughnut kernel}
+\printindex
 
 \end{document}
 

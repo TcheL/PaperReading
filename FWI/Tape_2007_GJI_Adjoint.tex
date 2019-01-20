@@ -73,6 +73,8 @@ which can be set equal to zero to obtain the local minimum of misfit,
 If the gradient and (approximate) Hessian are both available,
 then the inverse approach is \myem{Newton method};
 if only the gradient is available, then it is \myem{gradient method}.
+\myidx{Inversion}{Iteration}{gradient method}
+\myidx{Inversion}{Iteration}{Newton method}
 
 \subsection{Classical tomography}
 \subsubsection{Theory}
@@ -96,10 +98,11 @@ Taking into account finite-frequency effects,
 the traveltime anomaly for the $i$th source-receiver combination may be
 \[ \delta T_i=\int_VK_i\delta\ln cd^3\mbf x \]
 where $K_i(\mbf x)$ \mynnem{`banana-doughnut', sensitivity, finite-frequency or Born kernels}.
+\myidx{Concept}{Kernel}{banana-doughnut kernel}
 
 For finite-frequency tomography,
 \[ \delta\chi=\int_VK\delta\ln cd^3\mbf x \]
-where the traveltime \myem{misfit kernel}
+where the \myem{traveltime misfit kernel}
 \[ K(\mbf x)=-\sum_{i=1}^N\Delta T_iK_i(\mbf x) \]
 Note that misfit kernels $K(\mbf x)$ depend upon the data,
 whereas the banana-doughnut kernels $K_i(\mbf x)$ are data-independent.
@@ -147,6 +150,7 @@ In matrix notation,
 \[ \tilde{\mbf H}\equiv\mbf G^T\mbf G \]
 If using the approximate Hessian instead of the exact one,
 then the inverse approach is a \myem{Gauss-Newton method}.
+\myidx{Inversion}{Iteration}{Gauss-Newton method}
 
 Therefore, the model correction $\delta\mbf m$ is determined by
 \[ \mbf G^T\mbf G\delta\mbf m=\mbf G^T\mbf d \]
@@ -163,6 +167,7 @@ For non-linear inverse problems, an iterative Gauss-Newton method to minimize th
 
 \subsubsection{Experimental set-up}
 2-D elastic wave equation for \myem{Membrane wave}
+\myidx{Concept}{Seismic}{membrane wave}
 (traveling in the $x-y$ plane with a vertical $z$ component of motion):
 \[ \rho\partial^2_ts=\partial_x(\mu\partial_xs)+\partial_y(\mu\partial_ys)+f \]
 where $s(x,y,t)$ the vertical component of displacement,
@@ -221,6 +226,7 @@ The basis functions embedded in the numerical method, using Lagrange polynomials
 
 \subsection{Optimization}
 \subsubsection{Conjugate gradient algorithm}
+\myidx{Other}{Algorithm}{conjugate gradient}
 Given an initial model $\mbf m^0$, calculate $\chi(\mbf m^0),
 \mbf g^0=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^0)$,
 and set the initial search direction $\mbf p^0=-\mbf g^0$. If $||\mbf p^0||<\epsilon$,
@@ -289,10 +295,13 @@ where $||\cdot||_2$ the L2-norm of the enclosed vector.
 \subsection{Discussion}
 \subsubsection{Three kernel types}
 Banana-doughnut kernels: a phase-specific (e.g. P) kernel
+\myidx{Concept}{Kernel}{banana-doughnut kernel}
 for an individual source-receiver combination, not incorporate the measurement;
 Event kernels: a sum of individual banana-doughnut kernels,
+\myidx{Concept}{Kernel}{event kernel}
 weighted by its corresponding measurement;
 Misfit kernel: the sum of event kernels,
+\myidx{Concept}{Kernel}{misfit kernel}
 a graphical representation of the gradient of the misfit function.
 
 \mynnno{Use the banana-doughnut kernels in classical tomography

@@ -1,6 +1,6 @@
 file := Reading
 xlx := xelatex -interaction=nonstopmode
-csuf := aux blg bbl log out synctex.gz tex.bak toc
+csuf := aux blg bbl log out idx ind ilg synctex.gz tex.bak toc
 
 all : tex2pdf backup view
 
@@ -12,6 +12,7 @@ tex2pdf :
 full :
 	$(xlx) $(file).tex
 	-bibtex $(file).aux
+	-makeindex $(file).idx
 	$(xlx) $(file).tex > /dev/null
 	$(xlx) $(file).tex > /dev/null
 

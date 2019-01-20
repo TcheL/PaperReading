@@ -38,12 +38,14 @@ Source encoding uses a linear combinations of all shots, with random weights ass
 
 \subsection{Stochastic optimization}
 \paragraph{Stochastic gradient descent}
+\myidx{Inversion}{Iteration}{stochastic gradient descent}
 Stochastic gradient descent is:
 \[ \sigma_{k+1}=\sigma_k-\eta_k\nabla J(\sigma_k,\mbf w_k) \]
 where $k$ the iteration number, $\eta_k$ the step length, $J$ the misfit function,
 $\sigma_k$ the model at iteration $k$ and \mynem{$\mbf w_k$ the current randomized weight}.
 
 \paragraph{Stochastic LBFGS}
+\myidx{Inversion}{Iteration}{stochastic LBFGS}
 Each step of the LBFGS algorithm takes:
 \[ \sigma_{k+1}=\sigma_k-\eta_k\mbf H_k\nabla J(\sigma_k,\mbf w_k) \]
 where the inverse Hessian matrix $\mbf H_k$ updated in each iteration
@@ -59,6 +61,7 @@ for the current gradient at $k+1$ and the previous one at $k$.
 The LBFGS routine is carried out in two steps.
 First, the latest $m$ iterations are calculated.
 Second, the routine updates the LBFGS direction as the following:
+\myidx{Other}{Algorithm}{LBFGS}
 \begin{enumerate}[\hspace{15mm}1:~]
 %\begin{enumitem}%[\hspace{15mm}1:~]
   \item $\mbf q\leftarrow\nabla J(\mbf m_k,\mbf w_k)$
@@ -77,6 +80,7 @@ Second, the routine updates the LBFGS direction as the following:
 %\end{enumitem}
 
 \paragraph{Stochastic oLBFGS}
+\myidx{Inversion}{Iteration}{stochastic oLBFGS}
 For better convergence, the oLBFGS method uses
 $\mbf y_k=\nabla J(\mbf m_{k+1},\mbf w_k)-\nabla J(\mbf m_k,\mbf w_k)+\lambda\mbf s_k$.
 And the step $\mbf r\leftarrow\mbf H_k^0\mbf q$ in the above procedures is replaced by:
@@ -84,6 +88,7 @@ And the step $\mbf r\leftarrow\mbf H_k^0\mbf q$ in the above procedures is repla
 where we can set $\lambda=0.1\cdot\nicefrac{||J(\mbf m_0,\mbf w_0)||_2^2}{||\mbf m_0||_2^2}$.
 
 \paragraph{Integrated stochastic gradient descent}
+\myidx{Inversion}{Iteration}{integrated stochastic gradient descent}
 To accelerate the convergence, in the integrated stochastic gradient descent (iSGD) method,
 the iteration step takes:
 \[ \sigma_{k+1}=\sigma_k-\eta_k\overline{\nabla J(\sigma_k)} \]
