@@ -67,7 +67,7 @@ and $J_{ij}=\nicefrac{\partial u_i}{\partial p_j},i=(1,2,\ldots,n),j=(1,2,\ldots
 $m$ is the number of model parameters.
 
 For linear forward problems:
-\[ \alpha^{(k)}=\frac{|\nabla_p\mbf E|^2}{|\mbf J\nabla_p E|^2}. \]
+\[ \alpha^{(k)}=\frac{|\nabla_p\mbf E|^2}{|\mbf J\nabla_p E|^2} \]
 While for nonlinear forward problems, find $\alpha^{(k)}$ using line-search method.
 
 Augment $\mbf J_{m\times n}$ to $\hat{\mbf J}_{m\times l}$
@@ -83,7 +83,7 @@ where $\mbf f^{(i)}$ is \myem{the virtual source term}.
 \[ \hat{\mbf J}=\Big[\frac{\partial\mbf u}{\partial p_1},\frac{\partial\mbf u}{\partial p_2},\ldots,\frac{\partial\mbf u}{\partial p_m}\Big]=\mbf S^{-1}[\mbf f^{(1)},\mbf f^{(2)},\ldots,\mbf f^{(m)}] \text{\hspace{5mm}or\hspace{5mm}} \hat{\mbf J}=\mbf S^{-1}\mbf F \]
 
 Gradient:
-\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t\mbf v\}. \]
+\[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\}=\myRe\{\mbf F^t\mbf v\} \]
 Because $\mbf S^{-1}$ is symmetric for seismic source-receiver reciprocal problems,
 \[ \mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*=\mbf S^{-1}\delta\hat{\mbf d}^* \]
 
@@ -107,10 +107,10 @@ Minimizing with $\delta\mbf p$, take the first-derivative, the solution is
 
 Newton method for iterative solution:
 \[ \mbf p^{(k+1)}=\mbf p^{(k)}-\mbf H^{-1}\nabla_p\mbf E \]
-\[ H_{ij}=\frac{\partial^2\mbf E}{\partial p_i\partial p_j}=\myRe\{\mbf J^t\mbf J^*\}+\myRe\Big\{\Big[\Big(\frac{\partial}{\partial p_1}\mbf J^t\Big)\delta\mbf d^*,\Big(\frac{\partial}{\partial p_2}\mbf J^t\Big)\delta\mbf d^*,\ldots,\Big(\frac{\partial}{\partial p_m}\mbf J^t\Big)\delta\mbf d^*\Big]\Big\}=\mbf H_a+\mbf R \]
+\[ H_{ij}=\frac{\partial^2\mbf E}{\partial p_i\partial p_j}=\myRe\{\mbf J^t\mbf J^*\}+\myRe\Big\{\Big[\Big(\frac{\partial}{\partial p_1}\mbf J^t\Big)\delta\mbf d^*~\Big(\frac{\partial}{\partial p_2}\mbf J^t\Big)\delta\mbf d^*~\ldots~\Big(\frac{\partial}{\partial p_m}\mbf J^t\Big)\delta\mbf d^*\Big]\Big\}=\mbf H_a+\mbf R \]
 where
 \[ \mbf H_a=\myRe\{\mbf J^t\mbf J^*\} \]
-\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial p_t}\Big)(\delta\mbf d^*,\delta\mbf d^*,\ldots,\delta\mbf d^*)\Big\} \]
+\[ \mbf R=\myRe\Big\{\Big(\frac{\partial}{\partial\mbf p_t}\mbf J^t\Big)(\delta\mbf d^*~\delta\mbf d^*~\ldots~\delta\mbf d^*)\Big\} \]
 
 \subsubsection{Gauss-Newton method}
 \myidx{Inversion}{Iteration}{Gauss-Newton method}

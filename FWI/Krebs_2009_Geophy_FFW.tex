@@ -1,0 +1,94 @@
+\renewcommand{\pmk}{Krebs\_2009\_Geophy\_FFW using encoded sources}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Fast full-wavefield seismic inversion
+using encoded sources}
+\renewcommand{\pay}{Jerome R. Krebs, John E. Anderson, David Hinkley
+\etal, 2009}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2019/3/28 Thu.}
+
+\section{\pinfo}
+
+\subsection{Intruoduction}
+The encoding step forms a single gather from many input source gathers.
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item Iterative gradient search methods: Nocedal and Wright, 2006.
+  \item \sline
+  \item Frequency-domain direct-solver technique: Marfurt, 1984;
+    Pratt and Worthington, 1990.
+  \item \sline
+  \item Explicit time-domain simulator: Tarantola, 1987.
+  \item Iterative solver-based frequency-domain simulator: Erlanga \etal, 2006;
+    Operto \etal, 2006; Riyanti \etal, 2006.
+  \item \sline
+  \item Inverting only a few frequencies: Pratt, 1999; Sirgue and Pratt, 2004.
+  \item Inverting coherent sums of sources: Berkhout, 1992; Warner \etal, 2008.
+  \item Inverting sums of widely spaced sources: Mora, 1987;
+    Capdeville \etal, 2005.
+  \item \sline
+  \item Incoherent source sums:
+    in seismic data acquisition, Neelamani and Krohn, 2008;
+    in wave-equation migration, Romero \etal, 2000;
+    in seismic simulation, Ikelle, 2007 \& Neelamani \etal, 2008.
+  \item \sline
+  \item Prefectly matched layer boundary conditions:
+    Marcinkovich and Olsen, 2003.
+  \item Random phase encoding: Romero \etal, 2000.
+  \item The Hestenes-Stiefel conjugate gradient algorithm:
+    Nocedal and Wright, 2006.
+  \item Multiscale inversion: Bunks \etal, 1995.
+  \item \sline
+  \item \myem{Marmousi II} model\myidx{Other}{Model}{Marmousi II: 2-D elastic}:
+    Martin, 2004 (please click \href{http://www.agl.uh.edu/downloads/downloads.htm}{here}
+    to download the model data).
+\end{enumerate}
+
+FWI attempts to find an earth model that best explains
+the measured seismic data and also satisfies known constrains.
+
+Popular encoding methods include phase reversal, phase shifting, time shifting,
+and convolution with random sequences.
+Most methods that exploit incoherent source sums suffer from
+large amounts of crosstalk noise.
+
+Altering the random-number seed used to generate the source-encoding functions
+between iterations can achieve large efficiency gains for FWI
+without significant crosstalk noise.
+
+\subsection{Theory}
+For the encoded simultaneous-source FWI (ESSFWI\myidx{Inversion}{FWI}{ESSFWI}),
+the objective function:
+\[ h(u(c),c) = \Bigg| u\Bigg(c,\sum_{n=1}^{N_s}e_n\otimes s_n\Bigg)
+  - \sum_{n=1}^{N_s}e_n\otimes d_n\Bigg|^2 \]
+where $e_n$: the encoding sequence,
+and $\otimes$: convolution with respect to time.
+In general, $e_n\neq e_m$ for $n\neq m$.
+
+An incoherently encoded gather illuminates more of the model
+than a point-source gather,
+and has a much broder spectrum of wave-propagation directions
+than a coherently encoded gather.
+
+\subsection{Methods}
+A normalized random phase code with only one sample
+(\mynem{randomly multiplying the shot gathers by $+1$ or $-1$})
+gives the best convergence rate and the most efficient inversion.
+
+\subsection{Test}
+If multiscale techniques (Bunks \etal, 1995) are used
+in FWI to avoid local minima,
+the measured data must have high S/N at very low frequencies or
+the initial model must accurately predict seismic traveltimes.
+
+\subsection{Conclusions}
+ESSFWI is significantly more sensitive to ambient noise levels than is FWI,
+so we must be careful to limite the number of sources encoded into
+a simultaneous-source gather if ambient noise levels are high.
+
+ESSFWI efficiency gains are relatively insensitive to
+the accuracy of the starting model.
+
+Single-sample codes work as well as longer, more orthogonal codes.
+
+% vim:sw=2:wrap

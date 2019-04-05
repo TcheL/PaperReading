@@ -1,0 +1,423 @@
+\renewcommand{\pmk}{Virieux\_2009\_Geophy\_Overview of FWI}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{An overview of full-waveform inversion
+in exploration geophysics}
+\renewcommand{\pay}{J. Virieux and S. Operto, 2009}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2019/2/8 Fri.}
+
+\section{\pinfo}
+
+%%% === dividing line: 1.0 ===
+\subsection{Introduction}
+Key ingredients of FWI are an efficient forward-modeling engine
+and a local differential approach,
+in which the gradient and the Hessian operators are efficiently estimated.
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item Main discoveries by using traveltime information:
+    Oldham, 1906; Gutenberg, 1914; Lehmann, 1936.
+  \item Differential seismograms estimated through the Born approximation:
+    Gilbert and Dziewonski, 1975; Woodhouse and Dziewonski, 1984.
+  \item \sline
+  \item Exploding-reflector after some kinematic corrections and
+    amplitide summation: Claerbout, 1971 \& 1976.
+  \item \sline
+  \item Two-step workflow - construct the macromodel, and then
+    the amplitude projection: Claerbout and Doherty, 1972; Gazdag, 1978;
+    Stolt, 1978; Baysal \etal, 1983; Yilmaz, 2001; Biondi and Symes, 2004.
+  \item Various approaches for iterative updating of
+    the macromodel reconstruction: Snieder \etal, 1989; Docherty \etal, 2003.
+  \item \sline
+  \item Forward-modeling: reflectivity techniques in layered media,
+    Kormendi and Dietrich, 1991; finite-difference techniques,
+    Kolb \etal, 1986 \& Ikelle \etal, 1988 \& Crase \etal, 1990 \&
+    Pica \etal, 1990 \& Djikp\'ess\'e and Tarantola, 1999;
+    finite-element methods, Choi \etal, 2008; extended ray theory,
+    Cary and Chapman, 1988 \& Koren \etal, 1991 \&
+    Sambridge and Drijkoningen, 1992.
+  \item Generalized Radon reconstruction techniques: Beylkin, 1985;
+    Bleistein, 1987; Beylkin and Burridge, 1990.
+  \item Recast the asymptotic Radon transform as an iterative least-squares
+    optimization after diagonalization the Hessian opeartor:
+    theory, Jin \etal, 1992 \& Lambar\'e \etal, 1992;
+    2D application, Thierry \etal, 1999b \& Operto \etal, 2000;
+    3D extension, Thierry \etal, 1999a \& Operto \etal, 2003.
+  \item \sline
+  \item Volumetric methods: finite-element methods, Marfurt, 1984 \&
+    Min \etal, 2003; finite-difference methods, Virieux, 1986;
+    finite-volume methods, Brossier \etal, 2008;
+    pseudospectral methods, Danecek and Seriani, 2008.
+  \item Boundary integral methods: reflectivity methods, Kennett, 1983.
+  \item Generalized screen methods: Wu, 2003.
+  \item Discrete wavenumber methods: Bouchon \etal, 1989.
+  \item Generalized ray methods: WKBJ; Maslov seismograms, Chapman, 1985.
+  \item Full-wave theory: de Hoop, 1960.
+  \item Diffraction theory: Klem-Musatov and Aizenbery, 1985.
+  \item \sline
+  \item Matrix notations to denote the partial-differential operators
+    of the wave equation: Marfurt, 1984; Carcione \etal, 2002.
+  \item Finite-difference method: Virieux, 1986; Levander, 1988;
+    Graves, 1996; Operto \etal, 2007.
+  \item Direct-solver approach for 2D forward problems:
+    Jo \etal, 1996; Stekl and Pratt, 1998; Hustedt \etal, 2004.
+  \item Iterative solvers for the time-harmonic wave equation:
+    Riyanti \etal, 2006 \& 2007; Plessix, 2007;
+    Erlangga and Herrmann, 2008; Saad, 2003 (Krylov subspace methods).
+  \item Hybrid direct-iterative approach based on
+    a domain decomposition method and the Schur complement system:
+    Saad, 2003; Sourbier \etal, 2008.
+  \item Time windowing to mitigate the nonlinearity of the inversion:
+    Sears \etal, 2008; Brossier \etal, 2009a.
+  \item More detailed complexity analyses of seismic modeling
+    based on different numerical approaches:
+    Plessix, 2007 \& 2009; Virieux \etal, 2009.
+  \item Discussion on time-domain versus frequency-domain
+    seismic modeling with application to FWI:
+    Vigh and Starr, 2008b; Warner \etal, 2008.
+  \item \sline
+  \item Length method: Menke, 1984.
+  \item Probabilistic maximum likelihood or generalized inverse formulations:
+    Menke, 1984; Tarantola, 1987; Scales and Smith, 1994; Sen and Stoffa, 1995.
+  \item Discussion on alternative parameterizations:
+    Appendix A in Pratt \etal, 1998.
+  \item Line search method: Gauthier \etal, 1986; Tarantola, 1987;
+    Sambridge \etal, 1991 (extend to multiple-parameter classes
+    using a subspace approach).
+  \item The pseudo-Hessian, dividing the gradient by the diagonal terms of
+    the Hessian: Shin \etal, 2001a.
+  \item Conjugate gradient method in FWI: Mora, 1987;
+    Tarantola, 1987; Crase \etal, 1990.
+  \item Polak-Ribi\`ere formula: Polak and Ribi\`ere, 1969.
+  \item The BFGS algorithm: Nocedal, 1980.
+  \item Comparison between CG and L-BFGS for a realistic application of
+    multiparameter FWI: Brossier \etal, 2009a.
+  \item Gauss-Newton and Newton algorithms: Akcelik, 2002; Askan \etal, 2007;
+    Askan and Bielak, 2008; Epanomeritakis \etal, 2008.
+  \item Apply some regularizations to the inversion of FWI:
+    Menke, 1984; Tarantola, 1987; Scales \etal, 1990.
+  \item Bayesian formulation of FWI: Tarantola, 1987.
+  \item Weighting by a power of the source-receiver offset to strengthen
+    the contribution of large-offset data for crustal-scale imaging:
+    Operto \etal, 2006.
+  \item Review on regularization methods: Hansen, 1998.
+  \item Multidimensional adaptive Gaussian smoother:
+    Ravaut \etal, 2004; Operto \etal, 2006.
+  \item Low-pass filter in the wavenumber domain: Sirgue, 2003.
+  \item Implement total variation regularization as a multiplicative constraint
+    in the original misfit function: van den Berg and Abubakar, 2001.
+  \item The weighted $L_2$-norm regularization to frequency-domain FWI:
+    Hu \etal, 2009; Abubakar \etal, 2009.
+  \item A clear interpretation of the gradient and Hessian: Pratt \etal, 1998.
+  \item Radiation patterns ofr the isotropic acoustic, elastic,
+    and viscoelastic wave equations: Wu and Aki, 1985; Tarantola, 1986;
+    Ribodetti and Virieux, 1996; Forgues and Lambar\'e, 1997.
+  \item The adjoint-state method of the optimization theory:
+    Lions, 1972; Chavent, 1974.
+  \item The assimilation method in fluid mechanics:
+    Talagrand nad Courtier, 1987.
+  \item The adjoint-state method for seismic problems: Tromp \etal, 2005;
+    Askan, 2006; Plessix, 2006; Epanomeritakis \etal, 2008.
+  \item Compute the diagonal terms of the approximate Hessian
+    for a decimated shot acquisition: Operto \etal, 2006.
+  \item An approximation of the diagonal Hessian: Shin \etal, 2001a.
+  \item The scattering-integral method based on the explicit building
+    of the sensitivity matrix: Chen \etal, 2007.
+  \item LSQR algorithm: Paige and Saunders, 1982a.
+  \item A comparative complexity analysis of the adjoint approach and
+    the scattering-integral approach: Chen \etal, 2007.
+  \item The derivation in the frequency domain of the gradient of
+    the misfit function in the matrix and functional formalisms:
+    Gelis \etal, 2007.
+  \item The differential semblance optimization: Pratt and Symes, 2002.
+  \item Heuristic criteria to stop the iteration of the inversion:
+    Jaiswal \etal, 2009.
+  \item Source-independent misfit functions: Lee and Kim, 2003;
+    Zhou and Greenhalgh, 2003.
+  \item \sline
+  \item Generalized diffraction tomography: Devaney and Zhang, 1991;
+    Gelius \etal, 1991.
+  \item Diffraction tomographyc: Devaney, 1982; Wu and Toksoz, 1987;
+    Sirgue and Pratt, 2004; Lecomte \etal, 2005.
+  \item Generalized Radon transform: Miller \etal, 1987.
+  \item Ray + Born migration/inversion: Lambar\'e \etal, 2003.
+  \item Decimate the wavenumber-converage redundancy in frequency-domain FWI
+    by limiting the inversion to a few discrete frequencies:
+    Pratt and Worthington, 1990; Sirgue and Pratt, 2004;
+    Brenders and Pratt, 2007a.
+  \item A guideline for selecting the frequencies for
+    the frequency-domain FWI: Sirgue and Pratt, 2004.
+  \item \mynem{Wavepath}: a frequency-domain sensitivity kernel
+    for point sources: Woodward, 1992.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{enumerate}
+
+The limited offsets recorded by seismic reflection surveys and
+the limited-frequency bandwidth of seismic sources make seismic imaging
+poorly sensitive to intermediate wavelengths.
+In complex geologic environments, building an accurate velocity
+background model for migration is challenging.
+
+The gradient of the misfit function
+along which the perturbation model is searched
+can be built by crosscorrelating the incident wavefield
+emitted from the source and
+the back-propagated residual wavefields.
+The perturbation model obtained after the first iteration
+looks like a migrated image obtained by reverse-time migration.
+Difference: the seismic wavefield recorded at the receiver
+is back-propagated in reverse-time migration,
+whereas the data misfit is back-propagated in the scheme.
+
+%%% === dividing line: 2.0 ===
+\subsection{The Forward Problem}
+\myno{Explicit time-marching algorithm}: The value of the wavefield at a time step
+at a spatial position is inferred from the value of the wavefields
+at previous time steps.
+
+In the time domain,
+\[ \mbf M(\mbf x)\frac{d^2\mbf u(\mbf x,t)}{dt^2}=
+\mbf A(\mbf x)\mbf u(\mbf x,t)+\mbf s(\mbf x,t) \]
+where $\mbf M$: the mass matrix; $\mbf A$: the stiffness matrix.
+
+In the frequency domain,
+\[ \mbf B(\mbf x,\omega)\mbf u(\mbf x,\omega)=\mbf s(\mbf x,\omega) \]
+where the impedance matrix $\mbf B$ has a symmetirc pattern
+but is not symmetirc.
+Once the decomposition is performed in the direct-solver approach,
+the equation is efficiently solved for multiple sources
+using forward and backward substitutions.
+
+The spatial reciprocity of Green's functions can be exploited in FWI
+to mitigate the number of forward problems if the number of receivers
+is significantly smaller than the number of sources.
+Of note, the spatial reciprocity is satisfied theoretically for
+the unidirectional sensor and the unidirectional impulse soruce,
+but also can be used for explosive sources.
+
+%%% === dividing line: 3.0 ===
+\subsection{Least-squares local optimization}
+The misfit vector:
+\[ \Delta\mbf d=\mbf d_{obs}-\mbf d_{cal}(\mbf m) \]
+\[ \mbf d_{cal}=\mycR\mbf u \]
+where $\mycR$: the detection operator.
+
+%% --- dividing line: 3.1 ---
+\subsubsection{Born approximation and linearization}
+The least-squares norm:
+\[ C(\mbf m)=\frac{1}{2}\Delta\mbf d^\dagger\Delta\mbf d \]
+where $\dagger$: the adjoint operator (\mynno{transpose conjugate}).
+In the vicinity of $\mbf m_0$ ($\mbf m=\mbf m_0+\Delta\mbf m$):
+\[ C(\mbf m_0+\Delta\mbf m)=C(\mbf m_0)
+  +\sum_{j=1}^M\frac{\partial C(\mbf m_0)}{\partial m_j}\Delta m_j
+  +\frac{1}{2}\sum_{j=1}^M\sum_{k=1}^M\frac{\partial^2C(\mbf m_0)}{\partial m_j\partial m_k}\Delta m_j\Delta m_k
+  +\mathcal O(\mbf m^3) \]
+\[ \frac{\partial C(\mbf m)}{\partial m_l}=\frac{\partial C(\mbf m_0)}{\partial m_l}
+  +\sum_{j=1}^M\frac{\partial^2C(\mbf m_0)}{\partial m_j\partial m_l}\Delta m_j \]
+When the first derivative vanishes, the perturbation model:
+\[ \Delta\mbf m=-\Big[\frac{\partial^2C(\mbf m_0)}{\partial\mbf m^2}\Big]^{-1}
+  \frac{\partial C(\mbf m_0)}{\partial\mbf m)} \]
+
+The above equation gives the minimum of the misfit function in one iteration
+in the case of linear forward.
+Because of the nolinear relationship between the data and the model in FWI,
+the inversion needs to be iterated several times.
+
+%% --- dividing line: 3.2 ---
+\subsubsection{Normal equations}
+The derivative:
+\begin{align*}
+  \frac{\partial C(\mbf m)}{\partial m_l} & =-\frac{1}{2}\sum_{i=1}^N
+      \Big[\Big(\frac{\partial d_{cal_i}}{\partial m_l}\Big)(d_{obs_i}-d_{cal_i})^*
+      +(d_{obs_i}-d_{cal_i})\frac{\partial d_{cal_i}^*}{\partial m_l}\Big] \\
+    & =-\sum_{i=1}^N\myRe\Big[\Big(\frac{\partial d_{cal_i}}{\partial m_l}\Big)^*
+      (d_{obs_i}-d_{cal_i})\Big]
+      \myno{=-\sum_{i=1}^N\myRe\Big[\Big(\frac{\partial d_{cal_i}}{\partial m_l}\Big)
+      (d_{obs_i}-d_{cal_i})^*\Big]} \\
+  \nabla C_{\mbf m} & =\frac{\partial C(\mbf m)}{\partial\mbf m}
+      =-\myRe\Big[\Big(\frac{\partial\mbf d_{cal}(\mbf m)}{\partial\mbf m}\Big)^*
+      \big(\mbf d_{obs}-\mbf d_{cal}(\mbf m)\big)\Big] \\
+    & =-\myRe[\mbf J^\dagger\Delta\mbf d] \myno{=-\myRe[\mbf J^T\Delta\mbf d^*]}
+\end{align*}
+where $\myRe$ and $*$: the real part and the conjugate, respectively;
+$\mbf J$: the sensitivity or the \Frechet derivative matrix.
+
+The Hessian:
+\[ \frac{\partial^2 C(\mbf m_0)}{\partial\mbf m^2}=\myRe[\mbf J_0^\dagger\mbf J_0]
+  +\myRe\Big[\frac{\partial\mbf J_0^{\myde t\dagger}}{\partial\mbf m^{\myde t}}
+  (\Delta\mbf d_0^{\myde *}~\Delta\mbf d_0^{\myde *}~\cdots~\Delta\mbf d_0^{\myde *})\Big] \]
+and the normal equation:
+\[ \Delta\mbf m=-\Big\{\myRe\Big[\mbf J_0^\dagger\mbf J_0
+  +\frac{\partial\mbf J_0^{\myde t\dagger}}{\partial\mbf m^{\myde t}}
+  (\Delta\mbf d_0^{\myde *}~\Delta\mbf d_0^{\myde *}~\cdots~\Delta\mbf d_0^{\myde *})
+  \Big]\Big\}^{-1}\myRe[\mbf J_0^t\Delta\mbf d_0] \]
+
+% ... dividing line: 3.2 (1) ...
+\paragraph{The conjugate gradient method}
+The direction of updating model:
+\[ \mbf p^{(n)}=\nabla C^{(n)}+\beta^{(n)}\mbf p^{(n-1)} \]
+\[ \beta^{(n)}=\frac{(\nabla C^{(n)}-\nabla C^{(n-1)})^t\nabla C^{(n)}}{||\nabla C^{(n)}||^2} \]
+In FWI, the preconditioned gradient
+$W^{-1}\nabla C^{(n)}$ is used for $\mbf p^{(n)}$,
+and $W$: the weighting operator.
+
+% ... dividing line: 3.2 (2) ...
+\paragraph{Quasi-Newton algorithms}
+The L-BFGS algorithm needs a negligible storage and computational cost
+compared to the conjugate gradient algorithm.
+For multiparameter FWI, the L-BFGS algorithm provides a suitable scaling of the gardients
+computed for each parameter class.
+
+%% --- dividing line: 3.3 ---
+\subsubsection{Regularization and precoditioning}
+Augment the misfit:
+\[ \mathcal{C}(\mbf m)=\frac{1}{2}\Delta\mbf d^\dagger\mbf W_d\Delta\mbf d
+  +\frac{1}{2}\varepsilon(\mbf m-\mbf m_{prior})^\dagger\mbf W_m(\mbf m-\mbf m_{prior}) \]
+where $\mbf W_d$: the data-weighting operator;
+$\mbf W_m$: the model-roughness operator.
+
+For linear problems,
+\[ \Delta\mbf m=-\{\myRe(\mbf J_0^\dagger\mbf W_d\mbf J_0)+\varepsilon\mbf W_m\}^{-1}
+  \myRe[\mbf J_0^\dagger\mbf W_d\Delta\mbf d_0] \]
+\[ \Delta\mbf m=-\mbf W_m^{-1}\{\myRe(\mbf J_0\mbf W_m^{-1}\mbf J_0^\dagger)
+  +\varepsilon\mbf W_d^{-1}\}^{-1}\myRe[\mbf J_0^\dagger\Delta\mbf d_0] \]
+where $\mbf W_m^{-1}$: the smoothing operator.
+
+For the steepest-descent algorithm,
+\[ \Delta\mbf m=-\alpha\mbf W_m^{-1}\myRe[\mbf J_0^\dagger\mbf W_d\Delta\mbf d_0] \]
+
+%% --- dividing line: 3.4 ---
+\subsubsection{The gradient and Hessian}
+The gradient is formed by the zero-lag correlation between
+the partial-derivative wavefield and the data residual.
+It represents perturbation wavefields scattered by the missing heterogeneities
+in the starting model.
+
+The approximate Hessian is formed by the zero-lag correlation between
+the partial-derivative wavefields.
+Scaling the gradient by the diagonal terms of the approximate Hessian
+removes from the gradient the geometric amplitude of the partial-derivative
+wavefields and the residuals.
+
+The back propagation in time is indicated by the conjugate operator
+in the frequency domain.
+
+The underlying imaging principle is reverse-time migration, which relies on
+the correspondence of the arrival times of the incident wavefield and
+the back-propagated wavefield at the position of heterogeneity.
+
+The scattering-integral approach outperforms the adjoint approach
+for a regional tomographic problem (Chen \etal, 2007).
+But the superiority is dependent on the acquisition geometry and
+the number of model parameters.
+
+%% --- dividing line: 3.5 ---
+\subsubsection{Source estimation}
+The solution for the source is given by the expression:
+\[ \mbf s=\frac{\mbf g_{cal}(\mbf m_0) \mbf d_{obs}^t}
+  {\mbf g_{cal}(\mbf m_0) \mbf g_{cal}(\mbf m_0)^t} \]
+where $\mbf g_{cal}(\mbf m_0)$ the Green's functions with
+the starting model $\mbf m_0$.
+
+The source and the medium are updated alternatively
+over iterations of the FWI.
+
+To normalize each seismogram of a shot gather by the sum of
+all the seismograms removes the dependency of data with respect
+to the source (Lee and Kim, 2003; Zhou and Greenhalgh, 2003).
+
+%%% === dividing line: 4.0 ===
+\subsection{Some key features}
+
+%% --- dividing line: 4.1 ---
+\subsubsection{Resolution power of FWI}
+For plane wave propagating in a homogeneous background model,
+if no amplitude effects, the gradient has the form of
+a truncated Fourier series:
+\[ \nabla C(\mbf m) = -\omega^2\sum_\omega\sum_s\sum_r \myRe\{
+  e^{-ik_0(\hat{\mbf s}+\hat{\mbf r})\cdot\mbf x} \Delta\mbf d\} \]
+
+The relationship between the experimental setup and
+the spatial resolution of the reconstruction:
+\[ \mbf k=\frac{2f}{c_0}\cos\Big(\frac{\theta}{2}\Big)\mbf n \]
+where $\mbf n$: the unit vector of the slowness.
+
+Some conclusions:
+Frequency and aperture have redundant control of the wavenumber coverage.
+The low frequencies of the data and the wide apertures help resolve
+the intermediate and large wavelengths of the medium;
+The highest frequency leads to a maximum resolution of half a wavelength
+if normal-incidence reflections are recorded.
+
+The width of the first Fresnel zone is $\sqrt{\lambda L}$,
+where $L$: the source-receiver offset.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%% --- dividing line: 4.2 ---
+\subsubsection{Multiscale FWI}
+
+%% --- dividing line: 4.3 ---
+\subsubsection{Parallel implementation of FWI}
+
+%% --- dividing line: 4.4 ---
+\subsubsection{Variants of classic FWI}
+
+%% --- dividing line: 4.5 ---
+\subsubsection{Starting models for FWI}
+
+
+
+
+% vim:sw=2:wrap

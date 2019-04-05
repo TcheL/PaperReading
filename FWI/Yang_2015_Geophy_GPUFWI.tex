@@ -1,0 +1,92 @@
+\renewcommand{\pmk}{Yang\_2015\_Geophy\_GPU implementation of FWI}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{A graphics processing unit implementation of
+  time-domain full-waveform inversion}
+\renewcommand{\pay}{Pengliang Yang, Jinghuai Gao, and Baoli Wang, 2015}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2019/2/28 Thu.}
+
+\section{\pinfo}
+
+%%% === dividing line: 1.0 ===
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Classical time-domain full-waveform inversion: Tarantola, 1984.
+  \item Minimize data difference in the least-squares sence: Symes, 2008.
+  \item Applications of FWI to elastic cases: Tarantola, 1986; Pica \etal, 1990.
+  \item Frequency-domain multiscale FWI: Pratt \etal, 1998.
+  \item The Laplace-domain FWI: Shin and Cha, 2008.
+  \item The Laplace-Fourier-domain FWI: Shin and Cha, 2009.
+  \item \sline
+  \item GPU in seismic: imaging, Micikevicius, 2009 \& Yang \etal, 2014;
+    inversion, Boonyasiriwat \etal, 2010 \& Shin \etal, 2014.
+  \item \sline
+  \item $45^\circ$ Clayton-Engquist absorbing boundary condition:
+    Clayton and Engquist, 1977; Engquist and Majda, 1977.
+  \item \sline
+  \item Sequential addressing scheme for CUDA reduction: Harris \etal, 2007
+    (please click \href{http://vuduc.org/teaching/cse6230-hpcta-fa12/slides/cse6230-fa12--05b-reduction-notes.pdf}{here}
+    for more details).
+  \item \sline
+  \item Preconditioning operator for fast convergence rate and
+    geologically consistent results: Ayeni \etal, 2009;
+    Virieux and Operto, 2009; Guitton \etal, 2012.
+  \item Multishooting and the source encoding method:
+    Moghaddam \etal, 2013; Schiemenz and Igel, 2013.
+  \item FWI on GPU: Wang \etal, 2011.
+\end{enumerate}
+
+There are many drawbacks in FWI, such as the nonlinearity,
+the nonuniqueness of the solution, and the expensive computational cost.
+
+%%% === dividing line: 2.0 ===
+\subsection{FWI and its implementation}
+
+%% --- dividing line: 2.1 ---
+\subsubsection{Data mismatch minimization}
+The goal of FWI is to match the misfit between the synthetic and
+the observed data by iteratively updating the velocity model.
+
+The objective function:
+\[ E(\mbf m_{k+1}) = E(\mbf m_k+\alpha_k\mbf d_k) = E(\mbf m_k) +
+  \alpha_k\langle\nabla E(\mbf m_k),\mbf d_k\rangle +
+  \frac{1}{2}\alpha_k^2\mbf d_k^\dagger\mbf H_k\mbf d_k \]
+Due to the misfit vector $\Delta\mbf p=\mbf p_{cal}-\mbf p_{obs}$,
+$\nabla E=\mbf J^\dagger\Delta\mbf p$ and $\mbf H_k=\mbf J_k^\dagger\mbf J_k$,
+differentiation to $\alpha_k$,
+\[ \alpha_k = -\frac{\langle\mbf d_k, \nabla E(\mbf m_k)\rangle}
+  {\mbf d_k^\dagger\mbf H_k\mbf d_k} =
+  \frac{\langle\mbf J_k\mbf d_k, \mbf p_{obs}-\mbf p_{cal}\rangle}
+  {\langle\mbf J_k\mbf d_k, \mbf J_k\mbf d_k\rangle} \]
+
+%% --- dividing line: 2.2 ---
+\subsubsection{Nonlinear conjugate gradient method}
+The CG direction:
+\[ \mbf d_k=\left\{
+  \begin{aligned}
+    & -\nabla E(\mbf m_0) & & k=0, \\
+    & -\nabla E(\mbf m_k)+\beta_k\mbf d_{k-1} & & k\geq 1 \\
+  \end{aligned} \right. \]
+A hybrid scheme (Hager and Zhang, 2006):
+\[ \beta_k = \max(0,\min(\beta_k^{HS},\beta_k^{DY})) \]
+\[ \left\{
+  \begin{aligned}
+    & \beta_k^{HS}=\frac{\langle\nabla E(\mbf m_k), \nabla E(\mbf m_k)-\nabla E(\mbf m_{k-1})\rangle}
+      {\langle\mbf d_{k-1},\nabla E(\mbf m_k)-\nabla E(\mbf m_{k-1})\rangle} \\
+    & \beta_k^{DY}=\frac{\langle\nabla E(\mbf m_k), \nabla E(\mbf m_k)\rangle}
+      {\langle\mbf d_{k-1},\nabla E(\mbf m_k)-\nabla E(\mbf m_{k-1})\rangle}
+  \end{aligned} \right. \]
+
+%% --- dividing line: 2.3 ---
+\subsubsection{Wavefield reconstruction}
+For the left boundary, the $45^\circ$ Clayton-Engquist
+absorbing boundary condition is
+\[ \frac{\partial^2 p}{\partial x\partial t} \mynno{+} \frac{1}{v}
+  \frac{\partial^2 p}{\partial t^2} = \frac{v}{2}
+  \frac{\partial^2 p}{\partial z^2} \]
+
+%%% === dividing line: x.0 ===
+\subsection{Appendix}
+FWI is essentially a local optimization.
+
+% vim:sw=2:wrap
