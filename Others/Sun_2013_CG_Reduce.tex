@@ -1,0 +1,88 @@
+\renewcommand{\pmk}{Sun\_2013\_CG\_Reduce storage in RTM}
+\renewcommand{\prf}{Others/\pmk.pdf}
+\renewcommand{\pti}{Two effective approaches to reduce data storage
+  in reverse time migartion}
+\renewcommand{\pay}{Weijia Sun, Li-Yun Fu}
+\renewcommand{\pjo}{Computers \& Geosciences}
+\renewcommand{\pda}{2019/4/28 Sun.}
+
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Reverse time migration: proposed by Baysal \etal, 1983; Whitmore, 1983.
+  \item RTM for: VTI, Alkhalifah, 1998;
+    TTI, Alkhalifah, 2000 \& Zhang and Zhang, 2009.
+  \item RTM for elastic media: Yan and Sava, 2008; Yan and Xie, 2012.
+  \item RTM for viscoelastic media: Deng and McMechan, 2008.
+  \item \sline
+  \item Optimal checkpointing for RTM: Symes, 2007.
+  \item Checkpointing strategy for full waveform inversion:
+    Andreson \etal, 2012.
+  \item Pseudo-random boundary method: Clapp, 2009;
+    Fletcher and Robertsson, 2011.
+  \item \sline
+  \item Reduce storage: in RTM, Symes, 2007; in FWI, Imbert \etal, 2011.
+  \item Numerical algorithm:
+    the finite-difference method, Etgen, 1986 \& Virieux, 1986;
+    the pseudospectral method, Fornberg, 1987;
+    the convolutional differentiator method, Zhou \etal, 1993;
+    the Chebyshev expansion method, Pestana and Stoffa, 2010.
+  \item Temporal interpolation for seismic records:
+    Larner \etal, 1981; G\"ul\"unay, 2003.
+  \item The sinc interpolation: Claerbout, 1985.
+  \item Compression techniques in computer sciences: Salomon and Motta, 2010.
+  \item The wavelet compression method in geophysics:
+    Fomel and Liu, 2010; Wang \etal, 2010.
+  \item \mynem{The DEFLATE algorithm}: Feldspar, 1997 (combine
+    static Huffman coding: Huffman, 1952; with
+    the LZ77 algorithm: Ziv and Lempel, 1977).
+  \item The open-source package about the DEFLATE algorithm in C/C++:
+    Gailly and Adler, 1995 (please click \href{http://www.zlib.net}{here}
+    to download the package).
+  \item \sline
+  \item Data compression on GPUs: Nikitin \etal, 2011.
+\end{enumerate}
+
+The time step required by a numerical algorithm is generally much smaller
+than the Nyquist time step.
+
+\subsection{Reverse time migration}
+The cross-correlation imaging condition for prestack depth migration:
+\[ I(\mbf x) = \int_0^T S(\mbf x, t) R(\mbf x, t) dt \]
+where $S(\mbf x, t)$: the source wavefields;
+$R(\mbf x, t)$: the receiver wavefields.
+
+\subsubsection{The Nyquist approach}
+The Nyquist time step:
+\[ \Delta t_{Nyq} = \frac{1}{2 (f_{max} - f_{min})} \]
+where $f_{max}$ and $f_{min}$: the highest and lowest frequency
+of seismic records.
+
+The Nyquist approach \myidx{Other}{Method}{Nyquist approach}
+stores the source wavefields and cross-correlates the source wavefields
+with the receiver wavefields at every Nyquist time step,
+and applies an anti-alias temporal interpolation
+before extrapolating the receiver wavefields.
+
+\paragraph{The sinc interpolation}
+The sinc function:
+\[ sinc(t) = \left\{
+  \begin{array}{cc}
+    \frac{sin(\pi f_N t)}{\pi f_N t} & t \neq 0 \\
+    1                                & t = 0 \\
+  \end{array}
+\right. \]
+where $f_N$: the Nyquist frequency, not smaller than $f_{max}$.
+The reconstructed signal $f(t)$:
+\[ f(t) = \sum_{n = 0}^N sinc(t - n\Delta t) u(n\Delta t) \]
+where $N$: the sampling number.
+
+\subsubsection{The compression approach}
+Basic ways of data compression (Salomon and Motta, 2010):
+the statistical method, the dictionary method, and the wavelet method.
+
+\subsection{Conclusions}
+Temporal interpolation of receiver wavefields extrapolation
+should be performed to avoid high-frequency aliasing.
+
+% vim:sw=2:wrap

@@ -1,7 +1,7 @@
 file := Reading
 xlx := xelatex -interaction=nonstopmode
 csuf := aux blg bbl log out idx ind ilg toc nav snm synctex.gz tex.bak
-cdir := FWI WaveForward
+cdir := FWI WaveForward Others
 
 all : tex2pdf backup view
 
