@@ -73,9 +73,9 @@
 
 \newcommand{\mbf}[1]{\mathbf{#1}}
 \newcommand{\mgbf}[1]{\boldsymbol{#1}}
-\newcommand{\myem}[1]{{\color{red}\uline{#1}}}
+\newcommand{\myem}[1]{\textsl{\uline{#1}}}
 \newcommand{\mynem}[1]{{\color{blue}\uline{#1}}}
-\newcommand{\mynnem}[1]{\textsl{\uline{#1}}}
+\newcommand{\mynnem}[1]{{\color{red}\uline{#1}}}
 \newcommand{\myno}[1]{{\color{blue}#1}}
 \newcommand{\mynno}[1]{{\color{red}#1}}
 \newcommand{\mynnno}[1]{{\color{green}#1}}
@@ -96,6 +96,9 @@
 \newcommand{\npart}{\newpage\setcounter{footnote}{0}}
 \newcommand{\myidx}[3]{\index{#1@{\large\textbf{#1}}!#2@\textsf{#2}!#3@\textit{#3}}}
 \newcommand{\myidxx}[4]{\index{#1@{\large\textbf{#1}}!#2@\textsf{#2}!#3@\textit{#3}|see{\textit{#4}}}}
+\newcommand{\myidxox}[3]{\index{zz#1@{\large\textbf{#1}}!#2@\textsf{#2}!#3@\textit{#3}}}
+\newcommand{\myidxxo}[3]{\index{#1@{\large\textbf{#1}}!zz#2@\textsf{#2}!#3@\textit{#3}}}
+\newcommand{\myidxoo}[3]{\index{zz#1@{\large\textbf{#1}}!zz#2@\textsf{#2}!#3@\textit{#3}}}
 
 \setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
 \renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
@@ -165,6 +168,9 @@
 \vspace{5mm}
 
 \input{FWI/Krebs_2009_Geophy_FFW}
+\vspace{5mm}
+
+\input{FWI/Bleibinhaus_2009_Geophy_Surface}
 \vspace{5mm}
 
 % ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -20,7 +20,7 @@
   \item \mynem{The adjoint-state method} to avoid the computation of sensitivity matrix:
     Lions and Magenes, 1972; Lailly, 1983; Tarantola, 1984; Giles \etal, 2003;
     Plessix, 2006; Virieux and Operto, 2009.
-  \item The limited-memory Broyden-Fletcher-Goldfarb-Shanno (\myem{LBFGS}) method:
+  \item The limited-memory Broyden-Fletcher-Goldfarb-Shanno (\mynnem{LBFGS}) method:
     Byrd \etal, 1995; Mulder and Plessix, 2004; Nocedal and Wright, 2006; Plessix, 2004.
   \item Preconditioned conjugate gradient method: Ravaut \etal, 2004.
   \item Gauss-Newton method: Virieux and Operto, 2009.
@@ -61,7 +61,7 @@ for the current gradient at $k+1$ and the previous one at $k$.
 The LBFGS routine is carried out in two steps.
 First, the latest $m$ iterations are calculated.
 Second, the routine updates the LBFGS direction as the following:
-\myidx{Other}{Algorithm}{LBFGS}
+\myidxox{Other}{Algorithm}{LBFGS}
 \begin{enumerate}[\hspace{15mm}1:~]
 %\begin{enumitem}%[\hspace{15mm}1:~]
   \item $\mbf q\leftarrow\nabla J(\mbf m_k,\mbf w_k)$
@@ -95,4 +95,4 @@ the iteration step takes:
 \[ \overline{\nabla J(\sigma_k)}=\frac{\sum_{i=k-m}^ke^{\alpha(i-k)}\nabla J(\sigma_i,\mbf w_i)}{\sum_{i=k-m}^ke^{\alpha(i-k)}} \]
 where we can set $m=10$.
 
-% vim:sw=2:wrap
+% vim:sw=2:wrap:cc=100

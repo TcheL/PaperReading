@@ -77,7 +77,7 @@ rewrite:
 
 Assuming source is independent of parameter, because of $\mbf S\mbf u=\mbf f$:
 \[ \mbf S\frac{\partial\mbf u}{\partial p_i}=-\frac{\partial\mbf S}{\partial p_i}\mbf u \hspace{5mm}\Rightarrow\hspace{5mm} \frac{\partial\mbf u}{\partial p_i}=\mbf S^{-1}\mbf f^{(i)} \text{,\hspace{5mm}with~} \mbf f^{(i)}=-\frac{\partial\mbf S}{\partial p_i}\mbf u\]
-where $\mbf f^{(i)}$ is \myem{the virtual source term}.
+where $\mbf f^{(i)}$ is \mynem{the virtual source term}.
 
 \subsubsection{Gradient direction}
 \[ \hat{\mbf J}=\Big[\frac{\partial\mbf u}{\partial p_1},\frac{\partial\mbf u}{\partial p_2},\ldots,\frac{\partial\mbf u}{\partial p_m}\Big]=\mbf S^{-1}[\mbf f^{(1)},\mbf f^{(2)},\ldots,\mbf f^{(m)}] \text{\hspace{5mm}or\hspace{5mm}} \hat{\mbf J}=\mbf S^{-1}\mbf F \]
@@ -90,7 +90,7 @@ Because $\mbf S^{-1}$ is symmetric for seismic source-receiver reciprocal proble
 Another development:
 \[ \nabla_p\mbf E=\myRe\{\hat{\mbf J}^t\delta\hat{\mbf d}^*\}=\myRe\{\hat{\mbf J}^{t*}\delta\hat{\mbf d}\} \]
 \[ \mbf w=\mbf v^*=[\mbf S^{-1}]^{t*}\delta\hat{\mbf d}=[\mbf S^{-1}]^*\delta\hat{\mbf d} \]
-where $\mbf v$ and $\mbf w$ are \myem{the backpropagated fields}.
+where $\mbf v$ and $\mbf w$ are \mynem{the backpropagated fields}.
 
 For the $i$th component:
 \[ (\nabla_p\mbf E)_i=\myRe\{\mbf f^{(i)t}\mbf v\}=\myRe\{\mbf u^t\Big[\frac{\partial\mbf S^t}{\partial p_i}\Big]\mbf v\} \]
@@ -156,11 +156,11 @@ i.e.
 \[ \mbf S\frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf f^{(ij)} \text{\hspace{5mm}or\hspace{5mm}} \frac{\partial^2\mbf u}{\partial p_j\partial p_i}=-\mbf S^{-1}\mbf f^{(ij)} \]
 where
 \[ \mbf f^{(ij)}=\Big(\frac{\partial\mbf S}{\partial p_i}\Big)\Big(\frac{\partial\mbf u}{\partial p_j}\Big)+\Big(\frac{\partial\mbf S}{\partial p_j}\Big)\Big(\frac{\partial\mbf u}{\partial p_i}\Big)+\frac{\partial^2\mbf S}{\partial p_j\partial p_i}\mbf u \]
-is \myem{the 2nd-order virtual source term}.
+is \mynem{the 2nd-order virtual source term}.
 
 Because of
 \[ \Big[\frac{\partial^2\mbf u}{\partial p_i\partial p_j}\Big]^t=-[\mbf f^{(ij)}]^t[\mbf S^{-1}]^t \]
 obtain:
 \[ R_{ij}=-\myRe\{[\mbf f^{(ij)}]^t\mbf v\},\mbf v=[\mbf S^{-1}]^t\delta\hat{\mbf d}^*\myno{=\mbf S^{-1}\delta\hat{\mbf d}^*} \]
 
-% vim:sw=2:wrap
+% vim:sw=2:wrap:cc=100

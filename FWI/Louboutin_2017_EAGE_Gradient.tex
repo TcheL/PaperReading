@@ -20,7 +20,7 @@ By working with local neighborhoods instead with a single model,
 the algorithm is able to reap global information on the objective from local gradient at small cost.
 
 Minimize the objective function $\Phi(\mbf x)$ with respect to $\mbf x\in R^N$ by
-\myidx{Other}{Algorithm}{gradient sampling algorithm}
+\myidxox{Other}{Algorithm}{gradient sampling algorithm}
 \begin{enumerate}[\hspace{10mm}$\bullet$]
   \item sampling $N+1$ vectors $\mbf x_{ki}$ in a ball $B_{\epsilon_k}(\mbf x_k)$
     defined as all $\mbf x_{ki}$ such that $||\mbf x_k-\mbf x_{ki}||_2^2<\epsilon_k$,
@@ -61,4 +61,4 @@ Another way to avoid storage and explicit calculations of gradients is:
 where $\overline I=[t_1,t_2,\ldots,t_n]$ are the jitered time sampled from $[1,2,\ldots,n_t]$,
 and random weights $\sum\alpha_t=1$.
 
-% vim:sw=2:wrap
+% vim:sw=2:wrap:cc=100

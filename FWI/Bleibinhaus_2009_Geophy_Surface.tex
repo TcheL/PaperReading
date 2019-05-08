@@ -1,0 +1,78 @@
+\renewcommand{\pmk}{Bleibinhaus\_2009\_Geophy\_Surface scattering in FWI}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Effects of surface scattering in full-waveform inversion}
+\renewcommand{\pay}{Florian Bleibinhaus and St\'ephance Rondenay, 2009}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2019/5/6 Mon.}
+
+\section{\pinfo}
+\subsection{Introduction}
+Resulting waveform models show artifacts and a loss of resolution
+from neglecting the free suface in the inversion,
+but the inversions are stable.
+%, and they still improve the resolution of kinematic models.
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item 2D, isotropic, acoustic or viscoacoustic, and FD frequency-domain
+    methods: Hicks and Pratt, 2001; Operto \etal, 2004; Ravaut \etal, 2004;
+    Operto \etal, 2006; Bleibinhaus \etal, 2007; Gao \etal, 2007;
+    Malinowski and Operto, 2008.
+  \item FWI study on a physical scale model: Pratt, 1999.
+  \item \sline
+  \item Invert elastic phases in the acoustic approximation:
+    Barnes and Charara, 2008; Choi \etal, 2008.
+  \item The impact of attenuation and the possibility of
+    retrieving attenuation structure: Kamei and Pratt, 2008.
+  \item \sline
+  \item Compute the pressure field from the divergence of
+    the particle velocity: Dougherty and Stephen, 1988.
+  \item Compute the frequency-domain wavefields with
+    the phase-sensitive detection method: Nihei and Li, 2007.
+  \item \sline
+  \item \mynnem{Gardner's formula} (from velocity to density):
+    \myidxoo{Other}{Other}{Gardner's formula}
+    Gardner \etal, 1974.
+  \item \sline
+  \item Viscoelastic finite-difference time-domain code:
+    Robertsson \etal, 1994; Robertsson, 1996; Robertsson and Holliger, 1997.
+  \item Image method for an irregular free surface: Levander, 1988.
+  \item Viscoelastic 3D code: Bohlen and Saenger, 2006.
+  \item \sline
+  \item Travel time tomography using the eikonal solver: Hole, 1992.
+  \item \sline
+  \item Multiscale approach to mitigate the nonlinearities inherent to FWI:
+    Bunks \etal, 1995; Pratt \etal, 1996.
+  \item Viscoelastic frequency-domain code:
+    Pratt and Worthington, 1990; Pratt \etal, 1998.
+\end{enumerate}
+
+\subsection{Test model}
+The strong attenuation could mitigate the effects of surface-scattered waves.
+
+\subsection{Starting model}
+Wavelengths than can be resolved by full-waveform inversion are
+closely related to the bandwidth of the data.
+In particular, low frequencies are required to resolve
+the long-wavelength structure of the model.
+
+Typically, real applications derive starting models from traveltime tomography.
+
+\subsection{Waveform inversion}
+Real data amplitudes are too strongly affected by variations of
+near surface attenuation and coupling conditions.
+
+The amplitudes are sensitive only to the spatial gradient of the velocities,
+not to the velocities themselves, and their resolving power is
+relatively poor compared to the phase
+(\myno{I did not find the conclusion from} Shin and Min, 2006).
+
+\subsection{Conclusions}
+Strong topography produces additional scattering,
+and this scattering generally reduces the resolution.
+However, strong topography also destroys the coherency of multiples and
+mitigates reverberations, and the corresponding artifacts are reduced.
+
+It is possible to mimic some effects of an irregular surface by
+a weak contrast along a staircase function.
+
+% vim:sw=2:wrap

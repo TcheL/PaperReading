@@ -28,7 +28,8 @@
   \item Perfectly matched layer (PML) methodology: \Berenger, 1994; Collino and Tsogka, 2001;
     Komatitsch and Tromp, 2003; Festa and Vilotte, 2005.
   \item The width of the 1st Fresnel zone is $\sqrt{\lambda L}$: Dahlen \etal, 2000.
-  \item Los Angeles basin model: Hauksson, 2000 (background model); S\"{u}ss and Shaw, 2003 (detailed).
+  \item Los Angeles basin model: Hauksson, 2000 (background model);
+    S\"{u}ss and Shaw, 2003 (detailed).
   \item 3D source inversion technique: Liu \etal, 2004.
   \item Salton Trough model: Hauksson, 2000 (background model); Lovely \etal, 2006.
   \item $P_{nl}$ wave train: Helmberger and Engen, 1980 (combination of the $P_n$ and $PL$ phases).
@@ -39,10 +40,10 @@ The main benefit of the adjoint approach is that the \Frechet derivatives of the
 may be obtained based on two 3D simulations for each earthquake.
 A disadvantage is the fact that the Hessian is unavailable,
 which leads to the use of iterative methods in the inversion problem.
-\myidx{Other}{Conclusion}{benefit and disadvantage of the adjoint approach}
+\myidxox{Other}{Conclusion}{benefit and disadvantage of the adjoint approach}
 
 \subsection{Lagrange multiplier method}
-\myidx{Other}{Method}{Lagrange multiplier method}
+\myidxox{Other}{Method}{Lagrange multiplier method}
 To minimize the least-squares waveform misfit function:
 \[ \chi=\frac{1}{2}\sum_r\int_0^T||\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)||^2dt \]
 where $[0,T]$ denotes the time series of interest, $\mbf s(\mbf x_r,t)$ the synthetic
@@ -64,7 +65,7 @@ and source time function $S(t)$ as:
 
 Minimizing the misfit function when $\mbf s$ satisfies wave equation implies
 \[ \chi=\frac{1}{2}\sum_r\int_0^T[\mbf s(\mbf x_r,t)-\mbf d(\mbf x_r,t)]^2dt-\int_0^T\int_\Omega\lambda\cdot(\rho\partial_t^2\mbf s-\nabla\cdot\mbf T-\mbf f)d^3\mbf xdt \]
-where the vector \myem{Lagrange multiplier} $\lambda(\mbf x,t)$ remains to be determined.
+where the vector \mynem{Lagrange multiplier} $\lambda(\mbf x,t)$ remains to be determined.
 Using Hooke's law, upon integrating by parts
 \myno{(more detials refer to eq.9 of the original noted paper)},
 because of the free surface boundary condition and the initial conditions,
@@ -156,4 +157,4 @@ For regional simulations, by saving the wave field on the absorbing boundaries a
 and the entire wave field at the end, reconstruct the forward wave field in reverse time
 by solving the backward wave equation, reinjecting the absorbed wave field as going along.
 
-% vim:sw=2:wrap
+% vim:sw=2:wrap:cc=100

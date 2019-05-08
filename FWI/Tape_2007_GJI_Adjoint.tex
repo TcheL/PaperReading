@@ -49,8 +49,8 @@ Methodology and examples using membrane surface waves}
   \item Data weighting in waveform inversion: Takeuchi and Kobayashi, 2004.
   \item Add an explicit damping term to the misfit function to smooth the inversion:
     Akcelik \etal, 2002 \& 2003.
-  \item \myem{Conjugate gradient method}: Fletcher and Reeves, 1964.
-  \item \myem{Multiscale inversion method}: Bunks \etal, 1995.
+  \item \mynem{Conjugate gradient method}: Fletcher and Reeves, 1964.
+  \item \mynem{Multiscale inversion method}: Bunks \etal, 1995.
 \end{enumerate}
 
 Seismic tomography based upon a 3-D reference model, 3-D numerical simulations depends largely on:
@@ -71,8 +71,8 @@ which can be set equal to zero to obtain the local minimum of misfit,
 \[ \myno{\delta\mbf m=-\frac{\mbf g(\mbf m)}{\mbf H(\mbf m)}} \]
 
 If the gradient and (approximate) Hessian are both available,
-then the inverse approach is \myem{Newton method};
-if only the gradient is available, then it is \myem{gradient method}.
+then the inverse approach is \mynem{Newton method};
+if only the gradient is available, then it is \mynem{gradient method}.
 \myidx{Inversion}{Iteration}{gradient method}
 \myidx{Inversion}{Iteration}{Newton method}
 
@@ -92,17 +92,17 @@ respectively.
 In ray-based tomography,
 the predicted traveltime anomaly $\delta T_i$ along the $i$th ray path may be
 \[ \delta T_i=-\int_{ray_i}c^{-1}\delta\ln cds \]
-where \myem{fractional wave speed perturbations} $\delta\ln c=\nicefrac{\delta c}{c}$,
+where \mynem{fractional wave speed perturbations} $\delta\ln c=\nicefrac{\delta c}{c}$,
 and $ds$ a segment of the $i$th ray.
 Taking into account finite-frequency effects,
 the traveltime anomaly for the $i$th source-receiver combination may be
 \[ \delta T_i=\int_VK_i\delta\ln cd^3\mbf x \]
-where $K_i(\mbf x)$ \mynnem{`banana-doughnut', sensitivity, finite-frequency or Born kernels}.
+where $K_i(\mbf x)$ \myem{`banana-doughnut', sensitivity, finite-frequency or Born kernels}.
 \myidx{Concept}{Kernel}{banana-doughnut kernel}
 
 For finite-frequency tomography,
 \[ \delta\chi=\int_VK\delta\ln cd^3\mbf x \]
-where the \myem{traveltime misfit kernel}
+where the \mynem{traveltime misfit kernel}
 \[ K(\mbf x)=-\sum_{i=1}^N\Delta T_iK_i(\mbf x) \]
 Note that misfit kernels $K(\mbf x)$ depend upon the data,
 whereas the banana-doughnut kernels $K_i(\mbf x)$ are data-independent.
@@ -149,7 +149,7 @@ and the approximate Hessian $\tilde{\mbf H}$
 In matrix notation,
 \[ \tilde{\mbf H}\equiv\mbf G^T\mbf G \]
 If using the approximate Hessian instead of the exact one,
-then the inverse approach is a \myem{Gauss-Newton method}.
+then the inverse approach is a \mynem{Gauss-Newton method}.
 \myidx{Inversion}{Iteration}{Gauss-Newton method}
 
 Therefore, the model correction $\delta\mbf m$ is determined by
@@ -166,7 +166,7 @@ More details about how to add a regularization term to the misfit function
 For non-linear inverse problems, an iterative Gauss-Newton method to minimize the misfit function.
 
 \subsubsection{Experimental set-up}
-2-D elastic wave equation for \myem{Membrane wave}
+2-D elastic wave equation for \mynem{Membrane wave}
 \myidx{Concept}{Seismic}{membrane wave}
 (traveling in the $x-y$ plane with a vertical $z$ component of motion):
 \[ \rho\partial^2_ts=\partial_x(\mu\partial_xs)+\partial_y(\mu\partial_ys)+f \]
@@ -226,7 +226,7 @@ The basis functions embedded in the numerical method, using Lagrange polynomials
 
 \subsection{Optimization}
 \subsubsection{Conjugate gradient algorithm}
-\myidx{Other}{Algorithm}{conjugate gradient}
+\myidxox{Other}{Algorithm}{conjugate gradient}
 Given an initial model $\mbf m^0$, calculate $\chi(\mbf m^0),
 \mbf g^0=\nicefrac{\partial\chi}{\partial\mbf m}(\mbf m^0)$,
 and set the initial search direction $\mbf p^0=-\mbf g^0$. If $||\mbf p^0||<\epsilon$,
@@ -307,4 +307,4 @@ a graphical representation of the gradient of the misfit function.
 \mynnno{Use the banana-doughnut kernels in classical tomography
 and the misfit kernels in adjoint tomography.}
 
-% vim:sw=2:wrap
+% vim:sw=2:wrap:cc=100
