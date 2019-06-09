@@ -5,6 +5,11 @@ Backup.tar.gz
 *.bbl
 *.log
 *.out
+*.idx
+*.ind
+*.ilg
+*.toc
+*.nav
+*.snm
 *.synctex.gz
 *.tex.bak
-*.toc

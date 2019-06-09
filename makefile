@@ -17,7 +17,6 @@ full :
 	$(xlx) $(file).tex > /dev/null
 	-makeindex $(file).idx
 	$(xlx) $(file).tex > /dev/null
-#	$(xlx) $(file).tex > /dev/null
 
 view :
 	evince $(file).pdf &
