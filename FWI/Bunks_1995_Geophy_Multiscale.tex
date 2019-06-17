@@ -1,0 +1,62 @@
+\renewcommand{\pmk}{Bunks\_1995\_Geophy\_Multiscale waveform inversion}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Multiscale seismic waveform inversion}
+\renewcommand{\pay}{Carey Bunks, Fatimetou M. Saleck, S. Zaleski,
+  and G. Chavent, 1995}
+\renewcommand{\pjo}{Geophysics}
+\renewcommand{\pda}{2019/6/16 Sun.}
+
+\section{\pinfo}
+
+\subsection{Intruoduction}
+At long scales there are fewer local minima, and those that remain
+are further apart from each other.
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item Linearized waveform inversion: Berkhout, 1984; Devaney, 1984;
+    Esmersoy, 1986; Levy and Esmersoy, 1988; Tarantola, 1984.
+  \item \sline
+  \item Full nonlinear waveform velocity inversion: Mora, 1987;
+    Pica \etal, 1990; Tarantola, 1986 \& 1988.
+  \item \sline
+  \item Reflection tomography method: Bishop \etal, 1985; Bording \etal, 1987.
+  \item \sline
+  \item Reduce the number of local minima in the objective function by
+    introducing geometrically coherent constrains on the observed seismic
+    data after depth migration: Al-Yahya, 1987; Bunks, 1991 \& 1992;
+    Chavent and Jacewitz, 1990; Symes and Carazzone, 1991; van Trier, 1990.
+  \item \sline
+  \item Linear search: Luenberger, 1969.
+  \item Lagrange multiplier technique: Alex\'eev \etal, 1982; Hildebrand, 1965;
+    Lanczos, 1962; Luenberger, 1969.
+  \item The classic second-order finite-difference scheme:
+    Bamberger \etal, 1980; Kelly \etal, 1976.
+  \item The multigrid method: Brandt, 1977; Briggs, 1987;
+    Press and Teukolsky, 1991.
+  \item The Jacobi and the Gauss-Seidel operators: Briggs, 1987.
+  \item A quasi-Newton algorithm: Luenberger, 1989.
+  \item Simulated annealing: Geman and Geman, 1984; Kirkpatrick \etal, 1983;
+    Marroquin, 1985; Metropolis \etal, 1953.
+  \item FIR Hamming windowed low-pass filter: Oppenheim and Schafer, 1975;
+    Rabiner and Gold, 1975.
+\end{enumerate}
+
+Linearized inversion is justified when the initial velocity model is
+in the neighborhood of the global minimum of the the objective function.
+
+The observable wave vector components of the velocity field are bounded
+above by the highest frequency in the source and
+below by the effective opening of the seismic array.
+
+The main theoretical difficulty for nonlinear seismic inversion is
+the presence of numerous local minima in the objective function.
+
+\subsection{The multigrid method}
+The implementation of this algorithm requires three elements.
+The restriction operator (go down to longer scale from shorter scale):
+a leaky (large transition band) low-pass filter;
+The relaxation operator (solve the longer scale): a quasi-Newton algorithm;
+The injection operator (back up to shorter scale from longer scale):
+the adjoint of a nine-point nearest-neighbor smoothing filter.
+
+% vim:sw=2:wrap
