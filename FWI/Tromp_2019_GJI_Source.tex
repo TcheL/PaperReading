@@ -1,0 +1,158 @@
+\renewcommand{\pmk}{Tromp\_2019\_GJI\_Source encoding adjoint}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Source encoding for adjoint tomography}
+\renewcommand{\pay}{Jeroen Tromp and Etienne Bachmann, 2019}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2019/8/2 Fri.}
+
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm*}]
+  \item FWI as an importand inversion tool: Pratt \etal, 1998; Pratt, 1999;
+    Pratt and Shipp, 1999; Plessix, 2006; Virieux and Operto, 2009;
+    Operto \etal, 2014.
+  \item Adjoint tomography 3-D inversion: on regional sacles, Tape \etal, 2009
+    and 2010 \& Fichtner \etal, 2009 \& Luo \etal, 2009 \& Zhu \etal, 2012 \&
+    Zhu and Tromp, 2013 \& Chen \etal, 2015;
+    on global scales, Bozdag \etal, 2016 \& Lei \etal, 2019.
+  \item \sline
+  \item Source encoding in exploration seismology: Krebs \etal, 2009;
+    Ben-Hadj-Ali \etal, 2009; Choi and Alkhalifah, 2011; Schuster \etal, 2011;
+    Schiemenz and Igel, 2013; Castellanos \etal, 2015; Zhao \etal, 2016.
+  \item Crosstalk in phase encoding: Romero \etal, 2000.
+  \item Crosstalk-free source encoding: Huang and Schuster, 2013 \& 2018;
+    Zhang \etal, 2018; Krebs \etal, 2013.
+  \item \sline
+  \item Source stacking in earthquake seismology: Capdeville \etal, 2005.
+  \item \sline
+  \item Trigonometric interpolation: Wright \etal, 2015.
+  \item Time-domain source-encoded RTM acoustic imaging condition:
+    Dai \etal, 2013.
+  \item Wavefield reconstruction algorithm: Komatitsh \etal, 2016.
+  \item Global Rayleigh wave phase speed: Trampert and Woodhouse, 2003.
+  \item SeisFlows framework: Modrak \etal, 2018.
+  \item \mynnem{Marmousi} model\myidxox{Other}{Model}{Marmousi}: Versteeg, 2001.
+\end{enumerate}
+
+\subsection{Source encoding}
+Randomly assigning each source $s$ a unique frequency, $\omega_s$,
+$s=1,\ldots,S$, defined by
+\[ \omega_s = \omega_{\text{min}} + (s - 1) \Delta\omega \]
+\[ \Delta\omega = \frac{\omega_{\text{max}} - \omega_{\text{min}}}{S - 1} \]
+thereby covering the frequency band of interest,
+$[\omega_{\text{min}}, \omega_{\text{max}}]$.
+
+The time interval, a period of integration required for 'deblending' or
+'decoding' the encoded forward and adjoint wavefields:
+\[ \Delta\tau = \frac{2\pi}{\Delta\omega}
+  = \frac{2\pi(S - 1)}{\omega_{\text{max}} - \omega_{\text{min}}}
+  \myno{ = \frac{S - 1}{f_{\text{max}} - f_{\text{min}}} } \]
+
+\subsection{Encoded forward wavefield}
+The encoded forward wavefield:
+\[ S_i(\mbf x, t) = \myRe \sum_{s=1}^S s_i^s(\mbf x) e^{i\omega_s t}
+  = \int_{-\infty}^t \int G_{ij}(\mbf x, \mbf x'; t - t') F_j(\mbf x', t')
+  d^3\mbf x' dt' \]
+\[ F_j(\mbf x, t) = \myRe \sum_{s=1}^S f_j^s(\mbf x, \omega_s)
+  e^{i\omega_s t} \]
+where $f_j^s(\mbf x, \omega_s)$ the Fourier transform of body force
+associated with source $s$.
+
+\subsection{Decoding the encoded forward wavefield}
+Simulate until the encoded forward wavefield reaches steady state
+at a time $T_\text{ss}$,
+\[ S_i(\mbf x, t) = \myRe \sum_{s=1}^S s_i^s(\mbf x) e^{i\omega_s t}
+  = \sum_{s=1}^S [ A_i^s(\mbf x) \cos(\omega_s t)
+  + B_i^s(\mbf x) sin(\omega_s t) ] \]
+where $s_i^s(\mbf x) = A_i^s(\mbf x) - i B_i^s(\mbf x)$.
+
+Decode the stationary parts of the encoded forward wavefield:
+\[ A_i^s(\mbf x) = \frac{2}{\Delta\tau} \int_{T_\text{ss}}^{T_\text{ss}
+  + \Delta\tau} S_i(\mbf x, t) \cos(\omega_s, t) dt \]
+\[ B_i^s(\mbf x) = \frac{2}{\Delta\tau} \int_{T_\text{ss}}^{T_\text{ss}
+  + \Delta\tau} S_i(\mbf x, t) \sin(\omega_s, t) dt \]
+
+\subsection{Full waveform inversion}
+For a given shot or source $s$, the associated adjoint source:
+\[ f_j^{\dagger s}(\mbf x, t) = \sum_{r=1}^{R_s}
+  [ s_i^s(\mbf x_r, -t) - d_i^s(\mbf x_r, -t) ] \delta(\mbf x - \mbf x_r) \]
+
+Fourier transform the observed data $d_i^s(\mbf x_r, t)$:
+\[ d_i^s(\mbf x_r) = \frac{1}{k \Delta\tau} \int_0^{k \Delta\tau}
+  d_i(\mbf x_r, t) e^{i\omega_s t} dt \]
+
+The encoded waveform misfit function:
+\[ \chi = \frac{1}{2} \sum_{s=1}^S \sum_{r=1}^{R_s} [ s_i^{s*}(\mbf x_r)
+  - d_i^{s*}(\mbf x_r) ][ s_i^s(\mbf x_r) - d_i^s(\mbf x_r) ] \]
+
+The super adjoint wavefield:
+\[ S_i^\dagger(\mbf x, t) = \int_{-\infty}^t \int
+  G_{ij}(\mbf x, \mbf x'; t - t') F_j^\dagger(\mbf x', t') d^3\mbf x' dt' \]
+\[ F_j^\dagger(\mbf x, t) = \myRe \sum_{s=1}^S f_j^{\dagger s}
+  e^{i\omega_s t} \]
+where $f_j^{\dagger s}(\mbf x, \omega_s)$ the Fourier transform of
+$f_j^{\dagger s}(\mbf x, t)$.
+
+\subsection{Decoding the encoded adjoint wavefield}
+Simulate until the super adjoint wavefield reaches steady state
+at a time $T_\text{ss}$,
+\[ S_i^\dagger(\mbf x, t) = \myRe \sum_{s=1}^S s_i^{\dagger s}(\mbf x)
+  e^{-i\omega_s t} = \sum_{s=1}^S [ A_i^{\dagger s} \cos(\omega_s t)
+  - B_i^{\dagger s} \sin(\omega_s t) ] \]
+where $s_i^{\dagger s}(\mbf x) = A_i^{\dagger s}(\mbf x)
+- B_i^{\dagger s}(\mbf x)$.
+
+The stationary parts may be decoded:
+\[ A_i^{\dagger s}(\mbf x) = \frac{2}{\Delta\tau}
+  \int_{T_\text{ss}}^{T_\text{ss} + \Delta\tau}
+  S_i^\dagger \cos(\omega_s t) dt \]
+\[ B_i^{\dagger s}(\mbf x) = \frac{2}{\Delta\tau}
+  \int_{T_\text{ss}}^{T_\text{ss} + \Delta\tau}
+  S_i^\dagger \sin(\omega_s t) dt \]
+
+\subsection{\Frechet derivatives}
+The variation in the encoded misfit function may be:
+\[ \delta\chi = \int (\delta\ln\rho K_\rho + \delta\ln\kappa K_\kappa
+  + \delta\ln\mu K_\mu) d^3\mbf x \]
+where the \Frechet derivatives:
+\begin{align*}
+  K_\rho(\mbf x) & = - \frac{2}{\Delta\tau} \int_{T_\text{ss}}^{T_\text{ss}
+      +\Delta\tau} \rho(\mbf x) S_i^\dagger(\mbf x, -t)\partial_t^2
+      S_i(\mbf x, t) dt \\
+    & = \sum_{s=1}^S \omega_s^2 \rho(\mbf x) [ A_i^{\dagger s}(\mbf x)
+      A_i^s(\mbf x) + B_i^{\dagger s}(\mbf x) B_i^s(\mbf x) ] \\
+    & = \myRe \sum_{s=1}^S \omega_s^2 \rho(\mbf x) s_i^{\dagger s*}(\mbf x)
+      s_i^s(\mbf x) \\
+\end{align*}
+\begin{align*}
+  K_\kappa(\mbf x) & = - \frac{2}{\Delta\tau} \int_{T_\text{ss}}^{T_\text{ss}
+      +\Delta\tau} \kappa(\mbf x) [ \nabla_i S_i^\dagger(\mbf x, -t) ]
+      [ \nabla_j S_j(\mbf x, t) ] dt \\
+    & = - \sum_{s=1}^S \kappa(\mbf x) \{ [ \nabla_i A_i^{\dagger s}(\mbf x) ]
+      [ \nabla_j A_j^s(\mbf x) ] + [ \nabla_i B_i^{\dagger s}(\mbf x) ]
+      [ \nabla_j B_j^s(\mbf x) ] \} \\
+    & = - \myRe \sum_{s=1}^S \kappa(\mbf x) [ \nabla_i
+      s_i^{\dagger s*}(\mbf x) ] [ \nabla_j s_j^s(\mbf x) ] \\
+\end{align*}
+\begin{align*}
+  K_\mu(\mbf x) = & - \frac{2}{\Delta\tau} \int_{T_\text{ss}}^{T_\text{ss}
+      +\Delta\tau} 2\mu(\mbf x) D_{ij}^\dagger(\mbf x, -t)
+      D_{ij}(\mbf x, t) dt \\
+    = & - \sum_{s=1}^S 2\mu(\mbf x) \Big\{ \Big[ \frac{1}{2} ( \nabla_i
+      A_j^{\dagger s} + \nabla_j A_i^{\dagger s}) - \frac{1}{3} \nabla_k
+      A_k^{\dagger } \delta_{ij} \Big] \Big[ \frac{1}{2} (\nabla_i A_j^s
+      + \nabla_j A_i^s) - \frac{1}{3} \nabla_k A_k^s \delta_{ij} \Big] \\
+    & + \Big[ \frac{1}{2} (\nabla_i B_j^{\dagger s} + \nabla_j
+      B_i^{\dagger s}) - \frac{1}{3} \nabla_k B_k^{\dagger s} \delta_{ij} \Big]
+      \Big[ \frac{1}{2} (\nabla_i B_j^s + \nabla_j B_i^s) - \frac{1}{3}
+      \nabla_k B_k^s \delta_{ij} \Big] \Big\} \\
+    = & - \myRe \sum_{s=1}^S 2\mu(\mbf x) D_{ij}^{\dagger s*}(\mbf x)
+      D_{ij}^s(\mbf x) \\
+\end{align*}
+and the strain deviators:
+\[ D_{ij}^s = \frac{1}{2} (\nabla_i s_j^s + \nabla_j s_i^s)
+  - \frac{1}{3} \nabla_k s_k^s \delta{ij} \]
+\[ D_{ij}^{\dagger s} = \frac{1}{2} (\nabla_i s_j^{\dagger s} + \nabla_j
+  s_i^{\dagger s}) - \frac{1}{3} \nabla_k s_k^{\dagger s} \delta_{ij} \]
+
+% vim:sw=2:wrap
