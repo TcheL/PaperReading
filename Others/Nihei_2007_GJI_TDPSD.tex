@@ -1,0 +1,113 @@
+\renewcommand{\pmk}{Nihei\_2007\_GJI\_TD phase sensitive detection}
+\renewcommand{\prf}{Others/\pmk.pdf}
+\renewcommand{\pti}{Frequency response modelling of seismic waves using
+finite difference time domain with phase sensitive detection (TD-PSD)}
+\renewcommand{\pay}{Kurt T. Nihei and Xiaoye Li, 2007}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2019/8/17 Sun.}
+
+\section{\pinfo}
+\subsection{Introduction}
+The approach consists of running an explicit finite difference time domain (TD)
+code with a time harmonic source out to steady-state.
+The magnitudes and phases at locations in the model are computed using
+phase sensitive detection (PSD).
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item Compute the frequency response by reformulating the finite difference
+    equations in the frequency domain: Marfurt, 1984; Stekl and Pratt, 1998;
+    Hustedt \etal, 2004.
+  \item Direct solution of the 2-D matrix using LU-factorization with nested
+    dissection re-ordering: George and Liu, 1981.
+  \item High performance sparse direct solution of the frequency domain system
+    via nested dissection: Li and Demmel, 2003.
+  \item A separation-of-variables preconditioner and a bi-conjugate gradient
+    (BICGSTAB) Krylov iterative solver: Plessix and Mulder, 2003.
+  \item \sline
+  \item Frequency domain boundary element method (BEM): Nihei, 2005.
+  \item \mynnem{2-D SEG/EAGE salt model}
+    \myidxox{Other}{Model}{2-D SEG/EAGE salt}: 
+    Aminzadeh \etal, 1994.
+\end{enumerate}
+
+\subsection{TD-PSD}
+The PSD algorithm uses a reference waveform and a $90^\circ$ phase shifted
+version of this reference waveform to compute the magnitude $E_\text{sig}$ and
+phase $\theta_\text{sig}$ of the recorded signal $\varepsilon_\text{sig}$:
+\begin{align*}
+  \varepsilon_\text{sig} & = E_\text{sig} \cos(\omega t + \theta_\text{sig})
+    & & \text{signal} \\
+  \varepsilon_{\text{ref0}^\circ} & = E_\text{ref} \cos(\omega t
+    + \theta_\text{ref}) & & \text{reference (in-phase)} \\
+  \varepsilon_{\text{ref90}^\circ} & = E_\text{ref} \cos(\omega t
+    + \theta_\text{ref} + 90^\circ) & & \text{reference (out-of-phase)} \\
+\end{align*}
+
+The cross-correlation over an integer number of periods $mT$ gives
+the in-phase component of the signal:
+\[ X = \frac{1}{mT} \int_{t_S}^{t_S + mT} [ \varepsilon_\text{sig} \cdot
+  \varepsilon_{\text{ref0}^\circ} ] dt \myno{ = \frac{1}{2} E_\text{sig}
+  E_\text{ref} \cos(\theta_\text{sig} - \theta_\text{ref}) } \]
+And the cross-correlation gives the out-of-phase component of signal:
+\[ Y = \frac{1}{mT} \int_{t_S}^{t_S + mT} [ \varepsilon_\text{sig} \cdot
+  \varepsilon_{\text{rer90}^\circ} ] dt \myno{ = \frac{1}{2} E_\text{sig}
+  E_\text{ref} \sin(\theta_\text{sig} - \theta_\text{ref}) } \]
+So, the magnitude and phase of the signal are computed from the in-phase
+and out-of-phase components:
+\[ E_\text{sig} = \frac{2 \sqrt{X^2 + Y^2}}{E_\text{ref}} \]
+\[ \theta_\text{sig} = \tan^{-1} \Big( \frac{Y}{X} \Big) + \theta_\text{ref} \]
+
+\subsection{Multisource modelling using TD-PSD}
+Consider the case of two consine waves with different frequencies $\omega_1$ and
+$\omega_2$ being injected into a medium,
+\begin{align*}
+  \varepsilon_\text{sig} & = E_\text{sig1} \cos(\omega_1 t + \theta_\text{sig1})
+    + E_\text{sig2} \cos(\omega_2 t + \theta_\text{sig2}) & & \text{signal} \\
+  \varepsilon_\text{ref1($0^\circ$)} & = E_\text{ref1} \cos(\omega_1 t
+    + \theta_\text{ref1}) & & \text{reference (in-phase $\omega_1$)} \\
+  \varepsilon_\text{ref1($90^\circ$)} & = E_\text{ref1} \cos(\omega_1 t
+    + \theta_\text{ref1} + 90^\circ)
+    & & \text{reference (out-of-phase $\omega_1$)} \\
+\end{align*}
+
+If the integration time is selected with the following properties,
+\[ T_B = \frac{2\pi}{\Delta\omega_B} \]
+\[ \mynno{ \omega_1 = n \Delta\omega_B } \]
+where $\Delta\omega_B = \omega_2 - \omega_1$ and $n \geq 1$ is an integer.
+Form the in-phase component for frequency $\omega_1$ by cross-correlation
+with the reference:
+\begin{align*}
+  X_1 = & \frac{1}{T_B} \int_0^{T_B} [ \varepsilon_\text{sig} \cdot
+      \varepsilon_\text{ref1($0^\circ$)} ] dt \\
+    = & \frac{E_\text{sig1} E_\text{ref1}}{2 T_B} \int_0^{T_B} \big[
+      \cos(\theta_\text{sig1} - \theta_\text{ref1})
+      + \cos(2\omega_1 t + \theta_\text{sig1} + \theta_\text{ref1}) \big] dt \\
+    & + \frac{E_\text{sig2} E_\text{ref1}}{2 T_B} \int_0^{T_B} \big\{
+      \cos(\Delta\omega_B t + \theta_\text{sig2} - \theta_\text{ref1})
+      + \cos[(2\omega_1 + \Delta\omega_B) t + \theta_\text{sig2}
+      + \theta_\text{ref1}] \big\} dt \\
+    = & \frac{\Delta\omega_B E_\text{sig1} E_\text{ref1}}{4\pi}
+      \int_0^{\frac{2\pi}{\Delta\omega_B}} \big[ \cos(\theta_\text{sig1}
+      - \theta_\text{ref1}) + \cos(2n\Delta\omega_B t + \theta_\text{sig1}
+      + \theta_\text{ref1}) \big] dt \\ 
+    & + \frac{\Delta\omega_B E_\text{sig2} E_\text{ref1}}{4\pi}
+      \int_0^{\frac{2\pi}{\Delta\omega_B}} \big\{ \cos(\Delta\omega_B t
+      + \theta_\text{sig2} - \theta_\text{ref1}) + \cos[(2n + 1)\Delta\omega_B t
+      + \theta_\text{sig2} + \theta_\text{ref1}] \big\} dt \\
+    = & \frac{E_\text{sig1} E_\text{ref1}}{2}
+      \cos(\theta_\text{sig1} - \theta_\text{ref1}) \\
+\end{align*}
+where for simplicity the limits of the integral are relative to
+the simulation time at which the steady-state condition is achieved.
+And for the out-of-phase component,
+\[ Y_1 = \frac{1}{T_B} \int_0^{T_B} [ \varepsilon_\text{sig1} \cdot
+  \varepsilon_\text{ref1($90^\circ$)} ] dt
+  = \frac{E_\text{sig1} E_\text{ref1}}{2}
+  \sin(\theta_\text{sig1} - \theta_\text{ref1}) \]
+
+This result demonstrates that recovery of the magnitude and phase for
+a signal composed of two harmonic waves with different frequencies is possible
+if the integration time is set to the beating period
+$T_B = \nicefrac{2\pi}{\Delta\omega_B}$.
+
+% vim:sw=2:wrap

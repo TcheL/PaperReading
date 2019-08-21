@@ -56,8 +56,8 @@ $R(\mbf x, t)$: the receiver wavefields.
 
 \subsubsection{The Nyquist approach}
 The Nyquist time step:
-\[ \Delta t_{Nyq} = \frac{1}{2 (f_{max} - f_{min})} \]
-where $f_{max}$ and $f_{min}$: the highest and lowest frequency
+\[ \Delta t_{Nyq} = \frac{1}{2 (f_\text{max} - f_\text{min})} \]
+where $f_\text{max}$ and $f_\text{min}$: the highest and lowest frequency
 of seismic records.
 
 The Nyquist approach \myidxox{Other}{Method}{Nyquist approach}
@@ -68,15 +68,15 @@ before extrapolating the receiver wavefields.
 
 \paragraph{The sinc interpolation}
 The sinc function:
-\[ sinc(t) = \left\{
-  \begin{array}{cc}
-    \frac{sin(\pi f_N t)}{\pi f_N t} & t \neq 0 \\
+\[ \text{sinc}(t) = \left\{
+  \begin{array}{lc}
+    \frac{\sin(\pi f_N t)}{\pi f_N t} & t \neq 0 \\
     1                                & t = 0 \\
   \end{array}
 \right. \]
-where $f_N$: the Nyquist frequency, not smaller than $f_{max}$.
+where $f_N$: the Nyquist frequency, not smaller than $f_\text{max}$.
 The reconstructed signal $f(t)$:
-\[ f(t) = \sum_{n = 0}^N sinc(t - n\Delta t) u(n\Delta t) \]
+\[ f(t) = \sum_{n = 0}^N \text{sinc}(t - n\Delta t) u(n\Delta t) \]
 where $N$: the sampling number.
 
 \subsubsection{The compression approach}

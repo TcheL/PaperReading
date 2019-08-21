@@ -63,7 +63,6 @@ First, the latest $m$ iterations are calculated.
 Second, the routine updates the LBFGS direction as the following:
 \myidxox{Other}{Algorithm}{LBFGS}
 \begin{enumerate}[\hspace{15mm}1:~]
-%\begin{enumitem}%[\hspace{15mm}1:~]
   \item $\mbf q\leftarrow\nabla J(\mbf m_k,\mbf w_k)$
   \item $\mbf H_k^0\leftarrow\nicefrac{(\mbf y_k^T\mbf s_k)}{(\mbf y_k^T\mbf y_k)}$
   \item FOR $i=k$ to $k-m+1$
@@ -77,7 +76,6 @@ Second, the routine updates the LBFGS direction as the following:
   \item END FOR
   \item Stop with $\mbf r=\mbf H_{k+1}\nabla J(\mbf m_{k+1},\mbf w_{k+1})$
 \end{enumerate}
-%\end{enumitem}
 
 \paragraph{Stochastic oLBFGS}
 \myidx{Inversion}{Iteration}{stochastic oLBFGS}
