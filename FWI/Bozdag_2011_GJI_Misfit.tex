@@ -136,17 +136,17 @@ so the perturbation
 \begin{align*}
   \delta\phi_r & =\nicefrac{\delta\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]}{\big\{1+\big[\frac{\mycI(\tilde s_r)}{\mycR(\tilde s_r)}\big]^2\big\}} \\
     & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{s_r^2+(\mycH s_r)^2} \myno{\text{\hspace{2mm}(some problem on derivation)}} \\
-    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{E_r^2} \\
+    & =\frac{(\mycH s_r)\delta s_r-s_r\delta(\mycH s_r)}{E_r^2}
 \end{align*}
 and the gradient
 \begin{align*}
   \delta\chi & =-\sum_{r=1}^N\int_0^T(\phi_r^{obs}-\phi_r)\Big[\frac{(\mycH s_r)\delta s_r}{E_r^2}-\frac{s_r\delta(\mycH s_r)}{E_r^2}\Big]dt \\
-    & =-\sum_{r=1}^N\int_0^T\Big[(\phi_r^{obs}-\phi_r)\frac{(\mycH s_r)}{E_r^2}\delta s_r+\mycH\Big\{(\phi_r^{obs}-\phi_r)\frac{s_r}{E_r^2}\Big\}\delta s_r\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[(\phi_r^{obs}-\phi_r)\frac{(\mycH s_r)}{E_r^2}\delta s_r+\mycH\Big\{(\phi_r^{obs}-\phi_r)\frac{s_r}{E_r^2}\Big\}\delta s_r\Big]dt
 \end{align*}
 Then the adjoint source
 \begin{align*}
   f_i^\dagger(\mbf x,t)= & -\sum_{r=1}^N\Big[[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
-    & +\mycH\Big\{[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+    & +\mycH\Big\{[\phi_i^{obs}(\mbf x_r,T-t)-\phi_i(\mbf x_r,T-t,\mbf m)]\frac{w_r(T-t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r)
 \end{align*}
 where $w_r$ the weighting function, generically defined as $\nicefrac{1}{E_i^2}$.
 
@@ -163,12 +163,12 @@ so the perturbation
 and the gradient
 \begin{align*}
   \delta\chi & =-\sum_{r=1}^N\int_0^T\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\Big[\frac{s_r\delta s_r}{E_r^2}+\frac{(\mycH s_r)\delta(\mycH s_r)}{E_r^2}\Big]dt \\
-    & =-\sum_{r=1}^N\int_0^T\Big[\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{s_r}{E_r^2}\delta s_r-\mycH\Big\{\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{(\mycH s_r)}{E_r^2}\Big\}\delta s_r\Big]dt \\
+    & =-\sum_{r=1}^N\int_0^T\Big[\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{s_r}{E_r^2}\delta s_r-\mycH\Big\{\ln\Big(\frac{E_r^{obs}}{E_r}\Big)\frac{(\mycH s_r)}{E_r^2}\Big\}\delta s_r\Big]dt
 \end{align*}
 Then the adjoint source
 \begin{align*}
   f_i^\dagger(\mbf x,t) & =-\sum_{r=1}^N\Big[\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)s_i(\mbf x_r,T-t,\mbf m)}{E_i(\mbf x_r,T-t,\mbf m)^2} \\
-    & =-\mycH\Big\{\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r) \\
+    & =-\mycH\Big\{\ln\Big[\frac{E_r^{obs}(\mbf x_r,t)}{E_r(\mbf x_r,t,\mbf m)}\Big]\frac{w_r(t)\mycH\{s_i(\mbf x_r,T-t,\mbf m)\}}{E_i(\mbf x_r,T-t,\mbf m)^2}\Big\}\Big]\delta(\mbf x-\mbf x_r)
 \end{align*}
 where $w_r$ the weighting function.
 

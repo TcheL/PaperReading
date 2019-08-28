@@ -1,0 +1,146 @@
+\renewcommand{\pmk}{Yuan\_2016\_GJI\_Double-difference adjoint tomography}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Double-difference adjoint seismic tomography}
+\renewcommand{\pay}{Yanhua O. Yuan, Frederik J. Simons and Jeroen Tromp, 2016}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2019/8/25 Sun.}
+
+\section{\pinfo}
+
+\subsection{Introduction}
+Differential measurements between stations reduce the influence of
+the source signature and systematic errors.
+
+\begin{enumerate}[\hspace{10mm}*]
+  \item Jointly update source terms and structural model parameters:
+    Pavlis and Booker, 1980; Spencer and Gubbins, 1980; Abers and Roecker, 1991;
+    Thurber, 1992; Widiyantoro \etal, 2000; Panning and Romanowicz, 2006;
+    Tian \etal, 2011; Simmons \etal, 2012.
+  \item \sline
+  \item The fundamental ideas of making differential measurements:
+    Brune and Dorman, 1963; Passier and Snieder, 1995.
+  \item Double-differnece inversion in earthquake location:
+    Poupinet \etal, 1984 \& Got \etal, 1994; \mynnem{hypoDD}
+    \myidxox{Other}{Software}{hypoDD: double-difference event location},
+    Waldhauser and Ellsworth, 2000.
+  \item The double-difference tomography code \mynnem{tomoDD}
+    \myidxox{Other}{Software}{tomoDD: double-difference tomography}:
+    Zhang and Thurber, 2003.
+  \item Differencing differentail measurements between pairs of stations:
+    Monteiller \etal, 2005; Fang and Zhang, 2014.
+  \item The double-difference technique in earthquake and source studies:
+    Rubin \etal, 1999; Rietbrock and Waldhauser, 2004;
+    Schaff and Richards, 2004.
+  \item \sline
+  \item \Frechet kernel for differential traveltimes:
+    Dahlen \etal, 2000; Hung \etal, 2000.
+  \item Measure the sensitivities of relative time delays between
+    two nearby stations: Hung \etal, 2004.
+  \item The elastic adjoint method in global seismology: Tromp \etal, 2005.
+  \item \sline
+  \item Re- or pre-condition to avoid overemphasizing areas with high-density
+    ray path coverage: Curtis and Snieder, 1997; Spakman and Bijwaard, 2001;
+    Fichtner and Trampert, 2011; Luo \etal, 2015.
+  \item \sline
+  \item Calculate relative times from a catalogue of absolute arrival times:
+    VanDecar and Crosson, 1990.
+  \item Calculate relative traveltime delays:
+    from waveform cross-correlation analysis, Luo and Schuster, 1991;
+    from the cross-correlation of envelopes, Yuan \etal, 2015.
+  \item \sline
+  \item Membrane surface wave: Tanimoto, 1990; Peter \etal, 2007.
+  \item \mynnem{SPECFEM2D}
+    \myidxox{Other}{Software}{SPECFEM2D}:
+    Komatitsch and Vilotte, 1998.
+  \item \mynnem{Global phase velocity map} at periods between 40 and 150 s:
+    \myidxox{Other}{Model}{Global phase velocity map}
+    Trampert and Woodhouse, 1995.
+  \item \mynnem{seisDD}
+    \myidxox{Other}{Software}{seisDD: double-difference adjoint tomography}:
+    \refp{this paper} (please click \href{https://github.com/yanhuay/seisDD}{here}
+    to download the code).
+\end{enumerate}
+
+While considering pairs of earthquakes recorded at each station to reduce
+the effects of structural uncertainty on the source locations,
+differencing differential measurements between pairs of stations recording
+the same earthquake lessens the effect of uncertainties in the source terms
+on the determination of Earth structure.
+
+Types of seismic `measurement': absolute, relative, and differential.
+
+By the partial cancellation of common sensitivities, double-difference
+tomography illuminates areas of the model domain where ray paths are not
+densely overlapping.
+
+\subsection{The classical approach}
+The cross-correlation traveltime difference between synthetic signals $s_i(t)$
+and observation $d_i(t)$ over a window of length $T$:
+\[ \Delta t_i = \mathop{\arg\max}_\tau \int_0^T s_i(t + \tau) d_i(t) dt \]
+The objective function:
+\[ \chi_\text{cc} = \frac{1}{2} \sum_i [\Delta t_i]^2 \]
+The traveltime perturbation:
+\[ \delta \Delta t_i = \frac{ \int_0^T \partial_t s_i(t) \delta s_i(t) dt }
+  { \int_0^T \partial_t^2 s_i(t) s_i(t) dt }
+  \myno{ = - \frac{ \int_0^T \partial s_i(t) \delta s_i(t) dt }
+  { \int_0^T [ \partial_t s_i(t) ]^2 dt } } \]
+The adjoint source:
+\[ f_i^\dagger(\mbf x, t) = \Delta t_i \frac{ \partial_t s_i(T - t) }
+  { \int_0^T \partial_t^2 s_i(t) s_i(t) dt } \delta(\mbf x - \mbf x_i) \]
+
+\subsection{The double-difference way}
+The differential cross-correlation traveltimes, between a pair of stations
+indexed $i$ and $j$, are:
+\[ \Delta t_{ij}^\text{syn} = \mathop{\arg\max}_\tau
+  \int_0^T s_i(t + \tau) s_j(t) dt \]
+\[ \Delta t_{ij}^\text{obs} = \mathop{\arg\max}_\tau
+  \int_0^T d_i(t + \tau) d_j(t) dt \]
+and the double-difference traveltime measurement is:
+\[ \Delta\Delta t_{ij} = \Delta t_{ij}^\text{syn} - \Delta t_{ij}^\text{obs} \]
+
+The misfit function:
+\[ \chi_\text{cc}^\text{dd} = \frac{1}{2} \sum_i \sum_{j>i}
+  [ \Delta\Delta t_{ij} ]^2 \]
+and the derivative of the function:
+\begin{align*}
+  \delta\chi_\text{cc}^\text{dd} & = \sum_i \sum_{j>i} [ \Delta\Delta t_{ij} ]
+    \delta\Delta t_{ij}^\text{syn} \\
+  & = \int_0^T \bigg\{ \sum_i \bigg[ \sum_{j>i} \frac{\Delta\Delta t_{ij}}
+    {N_{ij}} \partial_t s_j(t - \Delta t_{ij}^\text{syn}) \bigg] \delta s_i(t)
+    - \sum_j \bigg[ \sum_{i<j} \frac{\Delta\Delta t_{ij}}{N_{ij}} \partial_t s_i
+    (t + \Delta t_{ij}^\text{syn}) \bigg] \delta s_j(t) \bigg\} dt \\
+  & \myno{ = \int_0^T \bigg\{ \sum_k \bigg[ \sum_{j>k} \frac{\Delta\Delta t_{kj}}
+    {N_{kj}} \partial_t s_j(t - \Delta t_{kj}^\text{syn}) - \sum_{i<k}
+    \frac{\Delta\Delta t_{ik}}{N_{ik}} \partial_t s_i(t
+    + \Delta t_{ik}^\text{syn}) \bigg] \delta s_k(t) \bigg\} dt } \\
+  & \myno{ = \int_0^T \bigg\{ \sum_k \bigg[ \sum_{i \neq k}
+    \frac{\Delta\Delta t_{ki}}{N_{ki}} \partial_t s_i(t
+    - \Delta t_{ki}^\text{syn}) \bigg] \delta s_k(t) \bigg\} dt
+    = \int_0^T \bigg\{ \sum_k \bigg[ \sum_i \frac{\Delta\Delta t_{ki}}{N_{ki}}
+    \partial_t s_i(t - \Delta t_{ki}^\text{syn}) \bigg] \delta s_k(t)
+    \bigg\} dt }
+\end{align*}
+where
+\[ N_{ij} = \int_0^T \partial_t^2 s_i(t + \Delta t_{ij}^\text{syn}) s_j(t) dt
+  \myno{ = - \int_0^T \partial_t s_i(t + \Delta t_{ij}^\text{syn})
+  \partial_t s_j(t) dt } \]
+Thus, the corresponding adjoint sources are:
+\[ f_i^\dagger(\mbf x, t) = + \sum_{j>i} \frac{\Delta\Delta t_{ij}}{N_{ij}}
+  \partial_t s_j(T - [t - \Delta t_{ij}^\text{syn}])
+  \delta(\mbf x - \mbf x_i) \]
+\[ f_j^\dagger(\mbf x, t) = - \sum_{i<j} \frac{\Delta\Delta t_{ij}}{N_{ij}}
+  \partial_t s_i(T - [t + \Delta t_{ij}^\text{syn}])
+  \delta(\mbf x - \mbf x_j) \]
+\[ \myno{ f_k^\dagger(\mbf x, t) = \sum_i \frac{\Delta\Delta t_{ki}}{N_{ki}}
+  \partial_t s_i(T - [t - \Delta t_{ki}^\text{syn}])
+  \delta(\mbf x - \mbf x_k) } \]
+
+\subsection{Numerical experiments}
+The double-difference approach provides powerful interstation constrains
+on seismic structure, and is less sensitive to error or uncertainty
+in the source.
+
+The double-difference technique is ideal for the high-resolution investigation
+of well-instrumented areas with limited natural seismic activity.
+
+% vim:sw=2:wrap
