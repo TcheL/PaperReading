@@ -4,10 +4,11 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\sf \myleftmark}
-\fancyhead[R]{\sf Tche L.}
+\fancyhead[L]{$\xleftswishingghost{\hyperref[sec:\exprsum{-1}{\thesection}]{\sf Prev}}$}
+\fancyhead[C]{\textsc{\pmk}}
+\fancyhead[R]{$\xrightswishingghost{\hyperref[sec:\exprsum{+1}{\thesection}]{\sf Next}}$}
 \fancyfoot[L]{\thepage{}}
-\fancyfoot[R]{\hyperref[toc]{$\circlearrowleft$}}
+\fancyfoot[R]{\hyperref[sec:0]{$\circlearrowleft$}}
 % -------------------------------------
 \usepackage[text={148mm,220mm},centering,includehead,vmarginratio=1:1]{geometry} % set paper layout
 \setlength{\headwidth}{\textwidth}                % set header width
@@ -51,15 +52,16 @@
 
 \usepackage{ulem}                                 % underline package for \uline commmand
 \usepackage[stable]{footmisc}                     % footnote package for \footnote in chapter or section title
-\usepackage[colorlinks,linkcolor=blue,anchorcolor=yellow,citecolor=green]{hyperref}      % hyperreference package
+\usepackage[colorlinks, breaklinks, linkcolor=blue, anchorcolor=yellow, citecolor=green]{hyperref}      % hyperreference package
 % \usepackage{graphicx}                             % drawing package for \includegraphics command
 % \usepackage{subfig}                               % subgraph package for \subfloat command
 % \usepackage{bm}                                   % bold type package for \bm command
 % \usepackage{tikz}                                 % tikz drawing package for framed words
 \usepackage{makeidx}
+\usepackage{halloweenmath}                        % symbol package for \xleftswishingghost and \xrightswishingghost commands
 
 \renewcommand{\part}[1]{{\LARGE\bf\noindent #1}}
-\newcommand{\myleftmark}{\thesection~~~~\textsc{\pmk}} %\MakeUppercase{\pmk}}
+\newcommand{\myleftmark}{\textsc{\pmk}} %\MakeUppercase{\pmk}}
 \newcommand{\Ppath}{/home/tche/Learning/Learning/Paper/}
 \newcommand{\prf}{This is relative path from \Papth to the paper file}
 \newcommand{\pmk}{This is the brief info.}
@@ -68,7 +70,7 @@
 \newcommand{\pjo}{This is the journal}
 \newcommand{\pda}{This is the date}
 \newcommand{\refp}[1]{\href{run:\Ppath\prf}{#1}}
-\newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}}
+\newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}\label{sec:\thesection}}
 \newcommand{\sline}{*************************}
 
 \newcommand{\mbf}[1]{\mathbf{#1}}
@@ -100,6 +102,8 @@
 \newcommand{\myidxxo}[3]{\index{#1@{\large\textbf{#1}}!zz#2@\textsf{#2}!#3@\textit{#3}}}
 \newcommand{\myidxoo}[3]{\index{zz#1@{\large\textbf{#1}}!zz#2@\textsf{#2}!#3@\textit{#3}}}
 
+\newcommand{\exprsum}[2]{\the\numexpr #1 + #2 \relax}
+
 \setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
 \renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
 \renewcommand{\indexname}{\part{Index}}
@@ -112,14 +116,14 @@
 
 \maketitle
 \renewcommand{\pmk}{Contents}
-\tableofcontents\label{toc}
+\tableofcontents\label{sec:0}
 \newpage
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 \part{Full Waveform Inversion}
 
-\input{FWI/Pratt_1997_GJI_Newton}
+\input{FWI/Pratt_1998_GJI_Newton}
 \vspace{5mm}
 
 \input{FWI/Pratt_1999_Geophy_Frequency}
