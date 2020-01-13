@@ -1,0 +1,61 @@
+\renewcommand{\pmk}{Gallovic\_2019\_JGRse\_Bayesian dynamic inversion}
+\renewcommand{\prf}{Inversion/\pmk.pdf}
+\renewcommand{\pti}{Bayesian dynamic finite-fault inversion:
+  1. method and synthetic test}
+\renewcommand{\pay}{F. Gallovi\v{c}, \'L. Valentov\'a, J.-P. Ampuero,
+  and A.-A. Gabriel}
+\renewcommand{\pjo}{JGR Solid Earth}
+\renewcommand{\pda}{2019/11/20 Wed.}
+
+\section{\pinfo}
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Review of Monte Carlo methods in geophysical inversion:
+    Sambridge and Mosegaard, 2002.
+  \item \mynnem{Fd3d\_xy}
+    \myidxox{Other}{Software}{Fd3d\_xy},
+    dynamic rupture simulator based on a fourth-order staggered-grid
+    velocity-stress method: Madariaga \etal, 1998 (please click
+    \href{http://www.geologie.ens.fr/madariag/Programs/programs.html}{here}
+    to download the code).
+  \item \mynnem{WaveQLab3D}
+    \myidxox{Other}{Software}{WaveQLab3D}:
+    Duru and Dunham, 2016.
+  \item The parallel tempering: Falcioni and Deem, 1999; Sambridge \etal, 2013.
+  \item \sline
+  \item Community benchmarks to assess the performance of earthquake-source
+    inversioin methods: Mai \etal, 2016,
+    \href{http://equake-rc.info/SIV}{Mainpage}.
+  \item \mynnem{LinSlipInv}
+    \myidxox{Other}{Software}{LinSlipInv},
+    linear kinematic inversion: Gallovi\v{c} \etal, 2015.
+\end{enumerate}
+
+\subsection{Method}
+\subsubsection{Bayesian formulation}
+Denoting the prior PDF $p(\mbf m)$ of model parameters $\mbf m$ and
+the PDF of data $\mbf d$ given the model parameters as $p(\mbf d | \mbf m)$,
+the posterior PDF $p(\mbf m | \mbf d)$,
+which is the solution of the inverse problem, reads
+\[ p(\mbf m | \mbf d) = \frac{p(\mbf m) p(\mbf d | \mbf m)}{p(\mbf d)} \]
+where the Bayesian evidence $p(\mbf d)$ serves as a normalization constants.
+$p(\mbf m)$ is specified by some data-independent
+constraints on the model parameters.
+$p(\mbf d | \mbf m)$, is assumed to be Gaussian:
+\[ p(\mbf d | \mbf m) = c_1 e^{ - \frac{1}{2} \sum_{i = 1}^N
+  \frac{|| \mbf s_i(\mbf m) - \mbf d_i ||^2}{\sigma_i^2} } \]
+where $\mbf d_i$ and $\mbf s_i(\mbf m)$: the observed data and synthetics
+at station $i$; N: the number of stations; $||\cdot||$: the L2 norm;
+$\sigma_i$: the assumed standard deviations representing
+the combined uncertainty of the modeling and data errors.
+
+\subsubsection{The posterior PDF}
+In the parallel tempering method,
+the posterior PDF is modified by a parameter temperature $T$:
+\[ p(\mbf m | \mbf d, T) \myno{ = p(\mbf m) p(\mbf d | \mbf m, T) }
+  = c_1 p(\mbf m) e^{ - \frac{1}{2 T} \sum_{i = 1}^N
+  \frac{|| \mbf s_i(\mbf m) - \mbf d_i ||^2}{\sigma_i^2} } \]
+and a set of Markov chains with different temperatures
+advance through the model space.
+
+% vim:sw=2:wrap

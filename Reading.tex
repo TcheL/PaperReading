@@ -59,6 +59,7 @@
 % \usepackage{tikz}                                 % tikz drawing package for framed words
 \usepackage{makeidx}
 \usepackage{halloweenmath}                        % symbol package for \xleftswishingghost and \xrightswishingghost commands
+\usepackage{pifont}                               % symbol package for \ding command
 
 \renewcommand{\part}[1]{{\LARGE\bf\noindent #1}}
 \newcommand{\myleftmark}{\textsc{\pmk}} %\MakeUppercase{\pmk}}
@@ -103,10 +104,10 @@
 \newcommand{\myidxoo}[3]{\index{zz#1@{\large\textbf{#1}}!zz#2@\textsf{#2}!#3@\textit{#3}}}
 
 \newcommand{\exprsum}[2]{\the\numexpr #1 + #2 \relax}
-
 \setlength{\arraycolsep}{4.0pt}                   % set array colunm spacing by 4.0 pt
 \renewcommand{\arraystretch}{1.35}                % set array row spacing by the multiple 1.35
 \renewcommand{\indexname}{\part{Index}}
+\renewcommand{\see}[2]{\ding{43} #1}
 
 \makeatletter
 \makeatother
@@ -189,12 +190,20 @@
 % ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 \npart
-\part{Wave Field Forward}
+\part{Wavefield Forward Modelling}
 
-\input{WaveForward/ZhangW_2006_GJI_Traction}
+\input{Modelling/ZhangW_2006_GJI_Traction}
 \vspace{5mm}
 
-\input{WaveForward/ZhangW_2010_Geophy_ADE}
+\input{Modelling/ZhangW_2010_Geophy_ADE}
+\vspace{5mm}
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\npart
+\part{General Inversion}
+
+\input{Inversion/Gallovic_2019_JGRse_Bayesian}
 \vspace{5mm}
 
 % ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
