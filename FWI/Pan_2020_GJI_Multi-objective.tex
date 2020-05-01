@@ -1,0 +1,97 @@
+\renewcommand{\pmk}{Pan\_2020\_GJI\_Multi-objective waveform inversion}
+\renewcommand{\prf}{FWI/\pmk.pdf}
+\renewcommand{\pti}{Multi-objective waveform inversion of
+  shallow seismic wavefields}
+\renewcommand{\pay}{Yudi Pan, Lingli Gao and Renat Shigapov, 2020}
+\renewcommand{\pjo}{Geophys. J. Int.}
+\renewcommand{\pda}{2020/4/28 Tue.}
+
+\section{\pinfo}
+
+\subsection{Introduction}
+\begin{enumerate}[\hspace{10mm}*]
+  \item Calculate the envelope of seismic waveform by the Hilbert transform:
+    Wu \etal, 2014.
+  \item The $f$-$k$ spectra in waveform inversion: Masoni \etal, 2013;
+    P\'erez Solano \etal, 2014.
+  \item The vector-valued objective function of multiple data types:
+    Heyburn and Fox, 2010.
+\end{enumerate}
+
+\subsection{Methodology}
+\subsubsection{Multi-objective function}
+In the multi-obective waveform inversion (MOWI),
+find a set of optimal models $\mbf m$ which minimizes:
+\[ \Phi(\mbf m) = [ \phi_1(\mbf m), \phi_2(\mbf m), \phi_3(\mbf m) ] \]
+where
+\[ \phi_1(\mbf m) = \frac{1}{2} \sum_\text{src}
+  || \mbf d(\mbf m) - \mbf d^\text{obs} ||_2^2 \]
+\[ \phi_2(\mbf m) = \frac{1}{2} \sum_\text{src}
+  || \mbf e(\mbf m) - \mbf e^\text{obs} ||_2^2 \]
+\[ \phi_3(\mbf m) = \frac{1}{2} \sum_\text{src}
+  || \mbf D(\mbf m) - \mbf D^\text{obs} ||_2^2 \]
+\[ \mbf e = \sqrt{\mbf d^2 + \mathcal H^2(\mbf d)} \]
+\[ \mbf D = | \mathcal F_\text{2D}(\mbf d) | \]
+and $\mbf d$: the waveform;
+$\mbf e$: the envelope of $\mbf d$;
+$\mbf D$: the absolute value of the $f$-$k$ spectra of $\mbf d$;
+$\mathcal H(\cdot)$: the Hilbert transform;
+$\mathcal F_\text{2D}(\cdot)$: the 2-D Fourier transform;
+$||\cdot||_2$: the $l_2$-norm;
+$|\cdot|$: the absolute value of a complex number.
+
+$\phi_1$ provides an `optimal' resolution in the result;
+$\phi_2$ is sensitive to the group velocity and the amplitude of surface wave,
+and provide low non-linearity and convexity to the inverse problem;
+$\phi_3$ takes one of the most important characteristics of surface wave,
+dispersion, into account.
+
+\subsubsection{The $\epsilon$-constraint method}
+In the original $\epsilon$-constraint method (Miettinen, 2012),
+sequentially optimize each single-objective function and
+use the other objective functions as constraints during the inversion:
+\[ \min \phi_i(\mbf m) \text{ s.t. } \phi_j(\mbf m) \leq \epsilon_j,
+  \text{ for } j \neq i \]
+where the $\epsilon$ value needs to be predefined.
+
+Modify the $\epsilon$-constraint method:
+\[ \min \phi_i(\mbf m) \text{ s.t. } \phi_j(\mbf m_{k + 1})
+  \leq \phi_j(\mbf m_k), \text{ for } j \neq i \]
+where $k$ and $k + 1$: the last and current iteration number.
+
+The choice of $epsilon$ value depends on the consistency of
+the multiple objective functions,
+and the less consistent they are,
+the higher the $\epsilon$ value should be adopted.
+
+Firstly minimize $\phi_3$, then $\phi_2$ and $\phi_1$, respectively,
+in the modified $epsilon$-constraint method.
+Use the switching criterion to move to another single-objective function
+in the modified $epsilon$-constraint method:
+(I) the current objective function does not decrease or
+(II) the current objective value has been reduced to a certain level.
+
+\subsubsection{Solution and uncertainty}
+A model $\mbf m_j$ dominates a model $\mbf m_k$ if
+\[ \phi_i(\mbf m_j) \leq \phi_i(\mbf m_k), \text{ for all } i = 1, 2, \ldots, n
+  \text{\hspace{10mm} and \hspace{10mm}}
+  \phi_i(\mbf m_j) < \phi_i(\mbf m_k), \text{ for at least one } i \]
+where $\mbf m_j$ and $\mbf m_k$: the estimated models
+at the $j$th and $k$th iteration.
+
+A solution $\mbf m$ is an optimal solution (i.e. \mynem{Pareto solution}
+\myidx{Concept}{Optimization}{Pareto solution}),
+if it is not dominated by any other solution.
+In a multi-objectvie inverse problem, obtain a set of optimal solutions 
+using the concept of non-dominance.
+
+Use the variance of all estimated Pareto solutions to evaluate
+the uncertainty of the inversion results:
+\[ U(\mbf m^\text{opt}) = \frac{1}{N - 1} \sum_{i = 1}^N
+  | \mbf m_i^\text{opt} - \mu |^2 \]
+where $U$: the uncertainty; $\mbf m^\text{opt}$: the set of optimal models;
+$N$: the total number of $\mbf m^\text{opt}$;
+$\mu$: the mean of $\mbf m^\text{opt}$.
+And the uncertainty of one specific Pareto solution $\mbf m_j^\text{opt}$:
+\[ U(\mbf m_j^\text{opt}) = \frac{1}{N - 1} \sum_{i = 1}^N
+  | \mbf m_i^\text{opt} - \mbf m_j^\text{opt} |^2 \]
