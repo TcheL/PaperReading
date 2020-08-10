@@ -39,12 +39,17 @@
 \usepackage{xcolor}                               % color package for colorful font
 \usepackage{fancyvrb}                             % transcribing package for Verbatim environment
 \usepackage{enumerate}                            % sorting package for enumerate environment
-%\usepackage{enumitem}                             % sorting package for enumitem environment
+% \usepackage{enumitem}                             % sorting package for enumitem environment
 
 % \usepackage{mathptmx}                             % Times New Roman font package for formula, no difference between normal and bold Greek characters
 % \usepackage{txfonts}                              % faked Times font package for formula
-\usepackage{newtxmath}                            % faked Times font package for formula
-% \usepackage{mathastext}                           % deal math same as text package
+% \let\iint\relax
+% \let\iiint\relax
+% \let\iiiint\relax
+% \let\idotsint\relax
+\usepackage{newtxmath}                            % faked Times font package for formula, no difference between normal and bold characters
+\let\Bbbk\relax
+% \usepackage[noendash]{mathastext}                 % deal math same as text package
 
 \usepackage{nicefrac}                             % fraction package for \nicefrac command
 \usepackage{amsmath}
@@ -74,7 +79,8 @@
 \newcommand{\pinfo}{\refp{\pmk}\footnote{\pay,~\pjo,~\pti.~Date:~\pda}\label{sec:\thesection}}
 \newcommand{\sline}{*************************}
 
-\newcommand{\mbf}[1]{\mathbf{#1}}
+% \newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\mbf}[1]{\boldsymbol{#1}}
 \newcommand{\mgbf}[1]{\boldsymbol{#1}}
 \newcommand{\myem}[1]{\textsl{\uline{#1}}}
 \newcommand{\mynem}[1]{{\color{blue}\uline{#1}}}
@@ -145,7 +151,7 @@
 \input{FWI/Tape_2009_S_Adjoint}
 \vspace{5mm}
 
-\input{FWI/Liu_2006_BSSA_Finite-frequency}
+\input{FWI/LiuQY_2006_BSSA_Finite-frequency}
 \vspace{5mm}
 
 \input{FWI/Tape_2007_GJI_Adjoint}
@@ -169,7 +175,7 @@
 % \input{FWI/Virieux_2009_Geophy_OverviewFWI}
 % \vspace{5mm}
 
-\input{FWI/Yang_2015_Geophy_GPUFWI}
+\input{FWI/YangPL_2015_Geophy_GPUFWI}
 \vspace{5mm}
 
 \input{FWI/Krebs_2009_Geophy_FFW}
@@ -184,10 +190,10 @@
 \input{FWI/Tromp_2019_GJI_Source}
 \vspace{5mm}
 
-\input{FWI/Yuan_2016_GJI_Double-difference}
+\input{FWI/YuanYH_2016_GJI_Double-difference}
 \vspace{5mm}
 
-\input{FWI/Pan_2020_GJI_Multi-objective}
+\input{FWI/PanYD_2020_GJI_Multi-objective}
 \vspace{5mm}
 
 % ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -214,7 +220,7 @@
 \npart
 \part{Others}
 
-\input{Others/Sun_2013_CG_Reduce}
+\input{Others/SunWJ_2013_CG_Reduce}
 \vspace{5mm}
 
 \input{Others/Kennett_2016_GGG_Multiscale}

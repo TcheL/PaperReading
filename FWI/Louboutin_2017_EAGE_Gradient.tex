@@ -57,7 +57,7 @@ where $f_0$ is the peak frequency of the source wavelet,
 guaranty wavefields not to be shifted by more that half a wavelength.
 
 Another way to avoid storage and explicit calculations of gradients is:
-\[ \overline{\nabla\Phi_s(\mbf m)}=-\sum_{t\in\overline I}\big[\text{diag}(\overline{\mbf u}[t])(\overline{\mbf D^T\mbf v}[t])\big],\overline{\mbf u}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf u[t], \overline{\mbf D^T\mbf v}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt\alpha_t}\mbf D^T\mbf v[t] \]
+\[ \overline{\nabla\Phi_s(\mbf m)}=-\sum_{t\in\overline I}\big[\text{diag}(\overline{\mbf u}[t])(\overline{\mbf D^T\mbf v}[t])\big],\overline{\mbf u}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt{\alpha_t}}\mbf u[t], \overline{\mbf D^T\mbf v}=\sum_{t=t_i}^{t_{i+1}}\mynno{\sqrt{\alpha_t}}\mbf D^T\mbf v[t] \]
 where $\overline I=[t_1,t_2,\ldots,t_n]$ are the jitered time sampled from $[1,2,\ldots,n_t]$,
 and random weights $\sum\alpha_t=1$.
 
