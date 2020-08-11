@@ -1,7 +1,21 @@
 file := Reading
 xlx := xelatex -interaction=nonstopmode
-csuf := aux blg bbl log out idx ind ilg toc nav snm synctex.gz tex.bak
-cdir := FWI Modelling Inversion Others
+csuf := \
+  aux \
+  bbl blg \
+  fdb_latexmk fls \
+  idx ind ilg \
+  log \
+  nav \
+  out \
+  snm synctex.gz \
+  toc \
+  xdv
+cdir := \
+  FWI \
+  Modelling \
+  Inversion \
+  Others
 
 all : tex2pdf backup view
 
