@@ -1,0 +1,29 @@
+%! TeX root = ../*.tex
+\renewcommand{\pmk}{Belouchrani\_1998\_IEEEtsp\_Blind source separation}
+\renewcommand{\prf}{Others/\pmk.pdf}
+\renewcommand{\pti}{Blind source separation based on time-frequency
+  signal representations}
+\renewcommand{\pay}{Adel Belouchrani and Moeness G. Amin, 1998}
+\renewcommand{\pjo}{IEEE Transactions on Signal Processing}
+\renewcommand{\pda}{2020/9/13 Sun.}
+
+\section{\pinfo}
+\subsection{Introduction}
+Blind source separation consists of recovering a set of singals
+of which only instantaneous linear mixtures are observed.
+
+\subsection{Spatial time-frequency distributions}
+\myidxox{Other}{Method}{Time-frequency distributions (TFD)}
+The discrete-time form of spatial time-frequency distributions (TFD)
+for signal $ x(t) $, is given by
+\[ D_{xx}(t, f) = \sum_{l = - \infty}^{\infty} \sum_{m = - \infty}^{\infty}
+  \phi(m, l) x(t + m + l) \times x^{\ast}(t + m - l) e^{ - j 4 \pi f l} \]
+where $t$ and $f$: the time and frequency index.
+The kernel $\phi(m, l)$ characterizes the distribution and is a function
+of both the time and lag variables.
+
+The cross-TFD of two signals $ x_1(t) $ and $ x_2(t) $ is:
+\[ D_{x_1 x_2}(t, f) = \sum_{l = - \infty}^{\infty} \sum_{m = - \infty}^{\infty}
+  \phi(m, l) x_1(t + m + l) \times x_2^{\ast}(t + m - l) e^{ - j 4 \pi f l} \]
+
+% vim:sw=2:wrap
