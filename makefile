@@ -1,52 +1,65 @@
-file := Reading
-xlx := xelatex -interaction=nonstopmode
-csuf := \
-  aux \
-  bbl blg \
-  fdb_latexmk fls \
-  idx ind ilg \
-  log \
-  nav \
-  out \
-  snm synctex.gz \
-  toc \
-  xdv
-cdir := \
+TEXE := xelatex
+OUTDIR := build
+CFLAGS := -synctex=1 -interaction=nonstopmode
+TEXD :=
+MAIN := Reading
+DIRS := \
   FWI \
   Modelling \
   Inversion \
   Others
 
-all : tex2pdf backup view
+SUFS := \
+  aux \
+  bbl blg \
+  fdb_latexmk fls \
+  idx ind ilg \
+  listing loc lof log lol los lot ltx \
+  nav nlo nls \
+  out \
+  run.xml \
+  snm synctex.gz synctex\(busy\) \
+  toc \
+  vrb \
+  xdv
 
-cc : clean clear
+ifeq ($(TEXE), xelatex)
+  MKFLAGS := -pdfxe
+else ifeq ($(TEXE), pdflatex)
+  MKFLAGS := -pdf
+else ifeq ($(TEXE), lualatex)
+  MKFLAGS := -pdflua
+else
+  MKFLAGS :=
+endif
+
+all : prep tex2pdf backup view
+
+prep :
+	ln -fs $(OUTDIR)/$(MAIN).pdf
+	mkdir -p $(OUTDIR)
 
 tex2pdf :
-	$(xlx) $(file).tex
+	$(TEXD)$(TEXE) $(CFLAGS) -output-directory="$(OUTDIR)" $(MAIN)
 
 full :
-	$(xlx) $(file).tex
-	-bibtex $(file).aux
-	-makeindex $(file).idx
-	$(xlx) $(file).tex > /dev/null
-	-makeindex $(file).idx
-	$(xlx) $(file).tex > /dev/null
+	$(TEXD)latexmk $(MKFLAGS) $(CFLAGS) -outdir=$(OUTDIR) $(MAIN)
 
 view :
-	evince $(file).pdf &
+	evince $(MAIN).pdf &
 
 edit :
-	vim $(file).tex
+	vim $(MAIN).tex
 
 backup :
-	tar -zpcv -f Backup.tar.gz $(file).tex $(file).pdf \
-        $(foreach cd,$(cdir),$(cd)/*.tex)
+	tar -zpcv -f Backup.tar.gz $(MAIN).tex $(MAIN).pdf \
+        $(foreach d,$(DIRS),$(d)/*.tex)
 
 clean :
-	-rm -f $(foreach cs,$(csuf),$(file).$(cs))
-	-rm -f $(foreach cd,$(cdir),$(foreach cs,$(csuf),$(cd)/*.$(cs)))
+	-rm -f $(foreach s,$(SUFS),$(OUTDIR)/$(MAIN).$(s))
 
 clear :
-	-rm -f $(file).pdf
+	-rm -f $(MAIN).pdf
+	-rm -rf $(OUTDIR)
 
 # vim:ft=make:noet:noai:ts=4

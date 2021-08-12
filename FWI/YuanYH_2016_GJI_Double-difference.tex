@@ -83,7 +83,7 @@ The objective function:
 The traveltime perturbation:
 \[ \delta \Delta t_i = \frac{ \int_0^T \partial_t s_i(t) \delta s_i(t) dt }
   { \int_0^T \partial_t^2 s_i(t) s_i(t) dt }
-  \myno{ = - \frac{ \int_0^T \partial s_i(t) \delta s_i(t) dt }
+  \myno{ = - \frac{ \int_0^T \partial_t s_i(t) \delta s_i(t) dt }
   { \int_0^T [ \partial_t s_i(t) ]^2 dt } } \]
 The adjoint source:
 \[ f_i^\dagger(\mbf x, t) = \Delta t_i \frac{ \partial_t s_i(T - t) }
